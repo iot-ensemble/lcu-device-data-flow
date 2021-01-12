@@ -69,11 +69,20 @@ export class TelemetryDownloadDialogComponent implements OnInit {
  */
   public ZIPDownloadSelected(){
     
-    this.iotEnsCtxt.ColdQuery(new Date(new Date().setDate(new Date().getDate() - 30)), new Date(),10,1,this.DeviceIDs,false,ColdQueryDataTypes.Telemetry,ColdQueryResultTypes.JSON,false,false);
-    let that = this;
-    setTimeout(function(){
-      that.getHeaders();
-    },1000);
+    this.iotEnsCtxt.ColdQuery(new Date(new Date().setDate(new Date().getDate() - 30)), new Date(),10,1,this.DeviceIDs,false,ColdQueryDataTypes.Telemetry,ColdQueryResultTypes.JSON,false,true).then((obs) =>{
+      // console.log("OBS: ", obs)
+      obs.subscribe((resp: any) =>{
+        console.log("RESPONSE: ", resp);
+      });
+    })
+
+   
+    
+  
+    // let that = this;
+    // setTimeout(function(){
+      // that.getHeaders();
+    // },1000);
 
 
       // var zip = new JSZip();

@@ -1,5 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { StateContext } from '@lcu/common';
+import { Observable } from 'rxjs';
 import {
   ColdQueryResultTypes,
   IoTEnsembleDeviceEnrollment,
@@ -31,9 +32,9 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     resultType: ColdQueryResultTypes = ColdQueryResultTypes.JSON,
     flatten: boolean = false,
     zip: boolean = false
-  ) {
+  ): Promise<Observable<Object>> {
     console.log("Calling ColdQuery", startDate, endDate, pageSize, page, selectedDeviceIds, includeEmulated, dataType, resultType, flatten, zip)
-    this.Execute({
+    return this.Execute({
       Arguments: {
         DataType: dataType,
         EndDate: endDate,
@@ -48,6 +49,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
       },
       Type: 'ColdQuery',
     });
+    
   }
 
   public EnrollDevice(device: IoTEnsembleDeviceEnrollment): void {
