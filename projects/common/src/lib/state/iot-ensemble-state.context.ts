@@ -117,7 +117,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   public UpdateTelemetrySync(refreshRate: number, pageSize: number) {
     this.Execute({
       Arguments: {
-        RefreshRate: refreshRate,
+        RefreshRate: 30,
         PageSize: pageSize,
       },
       Type: 'UpdateTelemetrySync',
