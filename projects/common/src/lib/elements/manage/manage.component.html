@@ -1,7 +1,11 @@
 <div fxFlexFill class="manage" *ngIf="!Loading">
   <div fxFlexFill fxLayout="column" fxLayoutGap="5px">
     <div fxLayout="row" fxLayoutGap="5px">
-      <div fxFlex="75" fxLayoutAlign="start end" class="welcome-bg background-fill">
+      <div
+        fxFlex="75"
+        fxLayoutAlign="start end"
+        class="welcome-bg background-fill"
+      >
         <div class="welcome-index" fxLayout="row" fxLayoutGap="30px">
           <div fxFlex="30">
             <h1 fxLayout="column">
@@ -35,14 +39,25 @@
     <div fxFlexFill fxLayout="row">
       <div fxFlex fxLayout="row" fxLayoutGap="5px">
         <!-- left side -->
-        <div [@onSideNavOpenClose]="
+        <div
+          [@onSideNavOpenClose]="
             SideNavSrvc.SideNavToggleVal ? 'open' : 'close'
-          " (@onSideNavOpenClose.done)="OnSideNavOpenCloseDoneEvent($event)" fxFlex="25" fxLayout="row" fxFill
-          fxLayoutAlign="start start" class="background-fill box-side-triangle">
+          "
+          (@onSideNavOpenClose.done)="OnSideNavOpenCloseDoneEvent($event)"
+          fxFlex="25"
+          fxLayout="row"
+          fxFill
+          fxLayoutAlign="start start"
+          class="background-fill box-side-triangle"
+        >
           <div fxLayout="column" class="side-column">
-            <div class="side-toggle-container" [@onSideNavOpenClose]="
+            <div
+              class="side-toggle-container"
+              [@onSideNavOpenClose]="
                 SideNavSrvc.SideNavToggleVal ? 'open' : 'close'
-              " fxLayoutAlign="end">
+              "
+              fxLayoutAlign="end"
+            >
               <button mat-icon-button (click)="ToggleSideNav()">
                 <mat-icon *ngIf="SideNavSrvc.SideNavToggleVal">
                   arrow_left
@@ -53,9 +68,14 @@
               </button>
             </div>
 
-            <div [ngStyle]="{
+            <div
+              [ngStyle]="{
                 display: SideNavOpenCloseEvent === true ? 'none' : 'block'
-              }" fxLayout="column" fxFlex="90" class="padding-left-5 padding-right-5 padding-top-5">
+              }"
+              fxLayout="column"
+              fxFlex="90"
+              class="padding-left-5 padding-right-5 padding-top-5"
+            >
               <div class="divider-fill-hor"></div>
 
               <h3 class="mat-display-5 plain-text whats-next-text">
@@ -64,7 +84,11 @@
 
               <p>
                 Check out our getting started
-                <a mat-link-button href="https://www.iot-ensemble.com/docs/getting-started/setup" target="_blank">
+                <a
+                  mat-link-button
+                  href="https://www.iot-ensemble.com/docs/getting-started/setup"
+                  target="_blank"
+                >
                   documentation
                 </a>
               </p>
@@ -76,13 +100,21 @@
         <!--^^^ Left Side ^^^-->
 
         <!-- Content -->
-        <div fxFlex fxLayout="column" fxLayoutGap="1em"
-          class="background-fill padding-left-2 padding-right-2 padding-top-2">
+        <div
+          fxFlex
+          fxLayout="column"
+          fxLayoutGap="1em"
+          class="background-fill padding-left-2 padding-right-2 padding-top-2"
+        >
           <!-- Emulated Devices -->
           <div>
             <mat-card>
               <mat-card-header>
-                <div mat-card-avatar fxLayoutAlign="center center" class="orange-accent">
+                <div
+                  mat-card-avatar
+                  fxLayoutAlign="center center"
+                  class="orange-accent"
+                >
                   <mat-icon>contactless</mat-icon>
                 </div>
 
@@ -90,8 +122,11 @@
 
                 <div fxFlex></div>
 
-                <lcu-enabled-toggle [enabled]="Emulated?.Enabled" [loading]="Emulated?.Loading"
-                  (enabled-toggled)="ToggleEmulatedEnabledChanged($event)"></lcu-enabled-toggle>
+                <lcu-enabled-toggle
+                  [enabled]="Emulated?.Enabled"
+                  [loading]="Emulated?.Loading"
+                  (enabled-toggled)="ToggleEmulatedEnabledChanged($event)"
+                ></lcu-enabled-toggle>
 
                 <a href="https://www.iot-ensemble.com/docs/getting-started/emulated-data" target="_blank">
                   <mat-icon matTooltip="More info">help_outline</mat-icon>
@@ -112,11 +147,23 @@
           <!--^^^ Emulated Devices ^^^-->
 
           <!-- Connected Devices -->
-          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em" class="connected">
-            <mat-card [fxFlex]="ConnectedDevicesInfoCardFlex" fxFlex.lt-md="100%">
+          <div
+            fxLayout="row"
+            fxLayout.lt-md="column"
+            fxLayoutGap="1em"
+            class="connected"
+          >
+            <mat-card
+              [fxFlex]="ConnectedDevicesInfoCardFlex"
+              fxFlex.lt-md="100%"
+            >
               <mat-card-header>
-                <div mat-card-avatar fxLayoutAlign="center center" [class.orange-accent]="!AddingDevice"
-                  [class.green-accent]="AddingDevice">
+                <div
+                  mat-card-avatar
+                  fxLayoutAlign="center center"
+                  [class.orange-accent]="!AddingDevice"
+                  [class.green-accent]="AddingDevice"
+                >
                   <mat-icon>loop</mat-icon>
                 </div>
                 <mat-card-title> Connected Devices </mat-card-title>
@@ -145,35 +192,52 @@
                       Click "Upgrade Now" to see other plans where you can connect more than
                       {{ Devices.MaxDevicesCount }}
                       {{
-                      Devices.MaxDevicesCount > 1
-                      ? "devices"
-                      : "device"
+                        Devices.MaxDevicesCount > 1
+                          ? "devices"
+                          : "device"
                       }}, increase your data velocity, increase your data retention and other great benefits.
                     </p>
                   </ng-container>
                 </div>
 
                 <div class="device-list" *ngIf="!AddingDevice">
-                  <lcu-devices-table [devices]="Devices?.Devices" (issued-sas-token)="IssueDeviceSASToken($event)"
-                    (page-size-changed)="DeviceTablePageEvent($event)" (revoked)="RevokeDeviceEnrollmentClick($event)">
-                  </lcu-devices-table>
+                  <lcu-devices-table
+                    [devices]="Devices?.Devices"
+                    (issued-sas-token)="IssueDeviceSASToken($event)"
+                    (page-size-changed)="DeviceTablePageEvent($event)"
+                    (revoked)="RevokeDeviceEnrollmentClick($event)"
+                  ></lcu-devices-table>
                 </div>
               </mat-card-content>
 
               <mat-card-actions>
                 <div fxFlex></div>
 
-                <a mat-raised-button color="accent" (click)="ToggleAddingDevice()" *ngIf="!AddingDevice">
+                <a
+                  mat-raised-button
+                  color="accent"
+                  (click)="ToggleAddingDevice()"
+                  *ngIf="!AddingDevice"
+                >
                   Enroll New Device
                 </a>
 
                 <ng-container *ngIf="AddingDevice && MaxDevicesReached">
-                  <a mat-button href="https://www.iot-ensemble.com/docs/getting-started/buy-and-scale" target="_blank"
-                    *ngIf="AddingDevice">
+                  <a
+                    mat-button
+                    href="https://www.iot-ensemble.com/docs/getting-started/buy-and-scale"
+                    target="_blank"
+                    *ngIf="AddingDevice"
+                  >
                     Read Documentation
                   </a>
 
-                  <a mat-raised-button href="/billing/iot" color="accent" target="_blank">
+                  <a
+                    mat-raised-button
+                    href="/billing/iot"
+                    color="accent"
+                    target="_blank"
+                  >
                     Upgrade now
                   </a>
 
@@ -185,8 +249,12 @@
               </mat-card-actions>
             </mat-card>
 
-            <form fxFlex="50%" [formGroup]="AddDeviceFormGroup" (ngSubmit)="EnrollDeviceSubmit()"
-              *ngIf="AddingDevice && !MaxDevicesReached">
+            <form
+              fxFlex="50%"
+              [formGroup]="AddDeviceFormGroup"
+              (ngSubmit)="EnrollDeviceSubmit()"
+              *ngIf="AddingDevice && !MaxDevicesReached"
+            >
               <mat-card>
                 <mat-card-content>
                   <div>
@@ -194,7 +262,12 @@
                       <h2>Enroll a New Device</h2>
 
                       <mat-form-field>
-                        <input matInput formControlName="deviceName" placeholder="The Name of your Device" required />
+                        <input
+                          matInput
+                          formControlName="deviceName"
+                          placeholder="The Name of your Device"
+                          required
+                        />
                       </mat-form-field>
                     </div>
                   </div>
@@ -204,8 +277,13 @@
                   <div fxFlex></div>
 
                   <ng-container>
-                    <button mat-raised-button type="submit" color="primary" *ngIf="!Devices?.Loading"
-                      [disabled]="!AddDeviceFormGroup.valid">
+                    <button
+                      mat-raised-button
+                      type="submit"
+                      color="primary"
+                      *ngIf="!Devices?.Loading"
+                      [disabled]="!AddDeviceFormGroup.valid"
+                    >
                       Enroll Device
                     </button>
 
@@ -224,48 +302,73 @@
           <div class="telemetry">
             <mat-card>
               <mat-card-header class="border-bottom">
-                <div mat-card-avatar fxLayoutAlign="center center" class="orange-accent">
+                <div
+                  mat-card-avatar
+                  fxLayoutAlign="center center"
+                  class="orange-accent"
+                >
                   <mat-icon>compare_arrows</mat-icon>
                 </div>
 
                 <mat-card-title>Devices Telemetry</mat-card-title>
 
-                <mat-card-subtitle fxLayout="row" fxLayoutAlign="start center" class="telemetry-update">
-                  <lcu-loader [loading]="Telemetry?.Loading" [diameter]="20"></lcu-loader>
+                <mat-card-subtitle
+                  fxLayout="row"
+                  fxLayoutAlign="start center"
+                  class="telemetry-update"
+                >
+                  <lcu-loader
+                    [loading]="Telemetry?.Loading"
+                    [diameter]="20"
+                  ></lcu-loader>
 
-                  <div matTooltip="Updates successful" *ngIf="!Telemetry?.Loading"
-                    [class.success-dot]="Telemetry?.Enabled" [class.error-dot]="!Telemetry?.Enabled"></div>
+                  <div
+                    matTooltip="Updates successful"
+                    *ngIf="!Telemetry?.Loading"
+                    [class.success-dot]="Telemetry?.Enabled"
+                    [class.error-dot]="!Telemetry?.Enabled"
+                  ></div>
 
                   Last Updated: {{ LastSyncedAt }}
                 </mat-card-subtitle>
 
-                <div fxFlex fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="end center">
-                  <!-- <lcu-refresh-select
+                <div
+                  fxFlex
+                  fxLayout="row"
+                  fxLayoutGap="20px"
+                  fxLayoutAlign="end center"
+                >
+                  <lcu-refresh-select
                     [telemetry]="Telemetry"
                     (refresh-rate-changed)="RefreshRateChanged($event)"
                   >
-                  </lcu-refresh-select> -->
+                  </lcu-refresh-select>
 
-                  <lcu-enabled-toggle [enabled]="Telemetry?.Enabled" enabled-text="Live" [loading]="Telemetry?.Loading"
-                    (enabled-toggled)="ToggleTelemetryEnabledChanged($event)">
+                  <lcu-enabled-toggle
+                    [enabled]="Telemetry?.Enabled"
+                    enabled-text="Live"
+                    [loading]="Telemetry?.Loading"
+                    (enabled-toggled)="ToggleTelemetryEnabledChanged($event)"
+                  >
                   </lcu-enabled-toggle>
                 </div>
-                <a href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#devices-telemetry"
-                  target="_blank">
+                <a href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#devices-telemetry" target="_blank">
                   <mat-icon matTooltip="More info">help_outline</mat-icon>
                 </a>
               </mat-card-header>
 
               <mat-card-content [class.margin-left-5]="Telemetry?.Payloads?.length <= 0">
-                <lcu-telemetry-list [telemetry]="Telemetry" (page-size-changed)="HandlePageSizeChange($event)">
+                <lcu-telemetry-list
+                  [telemetry]="Telemetry"
+                  (page-size-changed)="HandlePageSizeChange($event)"
+                >
                 </lcu-telemetry-list>
               </mat-card-content>
 
               <mat-card-actions>
                 <div fxFlex></div>
 
-                <button mat-raised-button color="primary" (click)="PayloadFormModal()"
-                  *ngIf="Devices?.Devices?.length >= 1">
+                <button mat-raised-button color="primary" (click)="PayloadFormModal()" *ngIf="Devices?.Devices?.length >= 1">
                   Send Device Message
                 </button>
 
@@ -281,24 +384,33 @@
           <div class="dashboard">
             <mat-card>
               <mat-card-header>
-                <div mat-card-avatar fxLayoutAlign="center center" class="orange-accent">
+                <div
+                  mat-card-avatar
+                  fxLayoutAlign="center center"
+                  class="orange-accent"
+                >
                   <mat-icon>dashboard</mat-icon>
                 </div>
 
                 <mat-card-title>Devices Dashboard</mat-card-title>
                 <div fxFlex></div>
-                <a href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#freeboard-dashboard"
-                  target="_blank">
+                <a href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#freeboard-dashboard" target="_blank">
                   <mat-icon matTooltip="More info">help_outline</mat-icon>
                 </a>
               </mat-card-header>
+
               <mat-card-content>
                 <div class="margin-left-5 padding-bottom-2 margin-top-2">
                   Here we have provided an example open-source dashboard Freeboard to show how your data can be
                   visualized. Freeboard provides simple and easy to use dashboards for your devices.
                 </div>
                 <div class="freeboard-display padding-top-2">
-                  <iframe [src]="DashboardIFrameURL" width="100%" height="750px" frameborder="0"></iframe>
+                  <iframe
+                    [src]="DashboardIFrameURL"
+                    width="100%"
+                    height="750px"
+                    frameborder="0"
+                  ></iframe>
                 </div>
               </mat-card-content>
             </mat-card>
@@ -318,14 +430,17 @@
           <div>
             <mat-card>
               <mat-card-header>
-                <div mat-card-avatar fxLayoutAlign="center center" class="orange-accent">
+                <div
+                  mat-card-avatar
+                  fxLayoutAlign="center center"
+                  class="orange-accent"
+                >
                   <mat-icon>storage</mat-icon>
                 </div>
 
                 <mat-card-title>Storage Access</mat-card-title>
                 <div fxFlex></div>
-                <a href="https://www.iot-ensemble.com/docs/getting-started/connecting-downstream-services"
-                  target="_blank">
+                <a href="https://www.iot-ensemble.com/docs/getting-started/connecting-downstream-services" target="_blank">
                   <mat-icon matTooltip="More info">help_outline</mat-icon>
                 </a>
               </mat-card-header>
@@ -335,8 +450,11 @@
                   Use the API keys to get your data downstream to the dashboards and services of your choice for
                   visualization, application development, ML/AI, and more.
                 </div>
-                <lcu-api-access [api-keys]="Storage?.APIKeys" [api-options]="Storage?.APIOptions"
-                  (regenerated)="RegenerateAPIKey($event)"></lcu-api-access>
+                <lcu-api-access
+                  [api-keys]="Storage?.APIKeys"
+                  [api-options]="Storage?.APIOptions"
+                  (regenerated)="RegenerateAPIKey($event)"
+                ></lcu-api-access>
               </mat-card-content>
 
               <mat-card-actions></mat-card-actions>

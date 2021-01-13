@@ -1,10 +1,13 @@
 <div class="table-container">
-  <lcu-data-grid expand [config]="GridParameters" [dynamic-components]="DynamicComponents"
-    (page-event)="HandlePageEvent($event)">
+  <lcu-data-grid
+    expand
+    [config]="GridParameters"
+    [dynamic-components]="DynamicComponents"
+    (page-event)="HandlePageEvent($event)"
+  >
     <!-- When data isn't available, show a message with content projection -->
     <div>
       <h4>No telemetry to show at this time.</h4>
-
       <p>
         The devices telemetry table displays payload messages of emulated and your connected device data. To view
         connected device telemetry only, disable emulated devices. You can view and copy payload schema. Click the send
