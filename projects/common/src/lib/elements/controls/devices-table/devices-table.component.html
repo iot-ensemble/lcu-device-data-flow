@@ -1,3 +1,4 @@
+
 <div class="table-container">
   <lcu-data-grid
     expand
@@ -5,13 +6,22 @@
     (page-event)="HandlePageEvent($event)"
   >
     <!-- When data isn't available, show a message with content projection -->
-    <div>
-      <h4>No devices enrolled yet.</h4>
-
-      <p>
-        Enroll a device to get started.
-      </p>
-    </div>
+    
+    <mat-card>
+      <div>
+        <h4>No devices enrolled yet.</h4>
+  
+        <p>
+          Enroll a device to get started.
+        </p>
+      </div>
+      <!-- <div fxLayout="row" fxLayoutGap="10px">
+        <mat-icon color="warn" svgIcon="svghome"></mat-icon>
+        <mat-icon color="primary" svgIcon="add"></mat-icon>
+        <mat-icon color="accent" svgIcon="twitter"></mat-icon>
+        <mat-icon color="primary">face</mat-icon>
+      </div> -->
+    </mat-card>
   </lcu-data-grid>
 </div>
 

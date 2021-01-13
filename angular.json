@@ -193,6 +193,11 @@
                 "input": "./projects/demo/",
                 "output": "/"
               },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@lcu/common/assets/images/svgs/icons",
+                "output": "/assets/"
+              },
               "projects/demo/src/docs"
             ],
             "styles": ["projects/demo/src/styles.scss"],
@@ -301,6 +306,11 @@
                 "glob": "package.json",
                 "input": "./projects/app-host/",
                 "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@lcu/common/assets",
+                "output": "/assets/"
               }
             ],
             "styles": [

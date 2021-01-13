@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { ClipboardCopyFunction, DataPipeConstants } from '@lcu/common';
+import { ClipboardCopyFunction, DataPipeConstants, SVGIconsModel, SvgIconsService } from '@lcu/common';
 import {
   ColumnDefinitionModel,
   DataGridConfigModel,
@@ -44,7 +44,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   public Revoked: EventEmitter<string>;
 
   //  Constructors
-  constructor() {
+  constructor(protected svgIconsService: SvgIconsService) {
     this.Devices = [];
 
     this.IssuedSASToken = new EventEmitter();
@@ -52,6 +52,17 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     this.PageSizeChanged = new EventEmitter();
 
     this.Revoked = new EventEmitter();
+
+    const icons: Array<SVGIconsModel> =
+    [
+      { Name: 'svghome', IconPath: 'home-page.svg' },
+      { Name: 'twitter', IconPath: 'twitter.svg' },
+      { Name: 'add', IconPath: 'phone.svg' }
+    ];
+
+    const path: string  = '/assets/images/svgs/icons/';
+    this.svgIconsService.SetIcons(icons, path);
+    debugger
   }
 
   //  Life Cycle
@@ -108,7 +119,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     const features = this.setupGridFeatures();
 
     this.GridParameters = new DataGridConfigModel(
-      of(this.Devices),
+      of(),
       columndefs,
       features
     );
