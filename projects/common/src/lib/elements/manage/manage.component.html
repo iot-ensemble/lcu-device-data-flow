@@ -338,11 +338,11 @@
                   fxLayoutGap="20px"
                   fxLayoutAlign="end center"
                 >
-                  <lcu-refresh-select
+                  <!-- <lcu-refresh-select
                     [telemetry]="Telemetry"
                     (refresh-rate-changed)="RefreshRateChanged($event)"
                   >
-                  </lcu-refresh-select>
+                  </lcu-refresh-select> -->
 
                   <lcu-enabled-toggle
                     [enabled]="Telemetry?.Enabled"
@@ -467,5 +467,4 @@
     </div>
   </div>
 </div>
-
 <lcu-loader [loading]="Loading"></lcu-loader>
