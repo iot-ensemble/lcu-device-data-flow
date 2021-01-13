@@ -207,9 +207,10 @@ export class TelemetryListComponent implements OnChanges, OnInit {
    * Setup grid features, such as pagination, row colors, etc.
    */
   protected setupGridFeatures() {
+    console.log("TELEMETRY DATA: ", this.Telemetry)
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
-        Length: 1,
+        Length: this.Telemetry.TotalPayloads,
         PageIndex: this.Telemetry.Page,
         PageSize: this.Telemetry.PageSize,
         PageSizeOptions: [1, 5, 10, 20, 30],

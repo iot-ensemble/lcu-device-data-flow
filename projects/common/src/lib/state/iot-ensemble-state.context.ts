@@ -21,6 +21,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   protected oldState: IoTEnsembleState = {};
 
   // API Methods
+  
   public ColdQuery(
     startDate: Date = new Date(new Date().setDate(new Date().getDate() - 30)),
     endDate: Date = new Date(),
@@ -118,6 +119,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   public UpdateTelemetrySync(refreshRate: number, pageSize: number) {
+    console.log("Update Telemetry Sync page size: ", pageSize)
     this.Execute({
       Arguments: {
         RefreshRate: refreshRate,
@@ -172,13 +174,13 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
 
   protected setupReceiveState(groupName: string) {
     this.rt.RegisterHandler(`ReceiveState=>${groupName}`).subscribe((req) => {
-      console.log(`Handled state from ${groupName}`);
+      // console.log(`Handled state from ${groupName}`);
 
       const diffed = this.diffState(req);
 
       this.subject.next(diffed);
 
-      console.log(diffed);
+      // console.log(diffed);
     });
   }
 

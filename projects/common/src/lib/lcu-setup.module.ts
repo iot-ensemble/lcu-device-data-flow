@@ -28,7 +28,6 @@ import { SendMessageDialogComponent } from './elements/manage/controls/send-mess
 import { ApiAccessComponent } from './controls/api-access/api-access.component';
 import { SasTokenDialogComponent } from './elements/manage/controls/sas-token-dialog/sas-token-dialog.component';
 import { TelemetryDownloadDialogComponent } from './elements/manage/controls/telemetry-download-dialog/telemetry-download-dialog.component';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -52,7 +51,6 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     FathymSharedModule,
     BrowserAnimationsModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,

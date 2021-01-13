@@ -6,6 +6,7 @@ import * as JSZip from 'jszip';
 import { GenericModalModel } from 'projects/common/src/lib/models/generice-modal.model';
 import { IoTEnsembleStateContext } from 'projects/common/src/lib/state/iot-ensemble-state.context';
 import { ColdQueryDataTypes, ColdQueryResultTypes, IoTEnsembleState } from 'projects/common/src/lib/state/iot-ensemble.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lcu-telemetry-download-dialog',
@@ -69,7 +70,8 @@ export class TelemetryDownloadDialogComponent implements OnInit {
  */
   public ZIPDownloadSelected(){
     
-    this.iotEnsCtxt.ColdQuery(new Date(new Date().setDate(new Date().getDate() - 30)), new Date(),10,1,this.DeviceIDs,false,ColdQueryDataTypes.Telemetry,ColdQueryResultTypes.JSON,false,true).then((obs) =>{
+    this.iotEnsCtxt.ColdQuery(new Date(new Date().setDate(new Date().getDate() - 30)), new Date(),10,1,this.DeviceIDs,false,ColdQueryDataTypes.Telemetry,ColdQueryResultTypes.JSON,false,false)
+    .then((obs: Observable<Object>) =>{
       // console.log("OBS: ", obs)
       obs.subscribe((resp: any) =>{
         console.log("RESPONSE: ", resp);
@@ -97,15 +99,15 @@ export class TelemetryDownloadDialogComponent implements OnInit {
 
     //Helpers
 
-    protected getHeaders(){
+    // protected getHeaders(){
 
-    this.http.get('https://www.iot-ensemble.com/api/state/iotensemble/ColdQuery', 
-    {observe: 'response'}).subscribe(resp => {
+    // this.http.get('https://www.iot-ensemble.com/api/state/iotensemble/ColdQuery', 
+    // {observe: 'response'}).subscribe(resp => {
 
-      console.log("HEADERS", resp.headers);
+    //   console.log("HEADERS", resp.headers);
     
-    });
-    }
+    // });
+    // }
 
     protected getDeviceIDs(){
       this.State.Devices.Devices.forEach(device => {

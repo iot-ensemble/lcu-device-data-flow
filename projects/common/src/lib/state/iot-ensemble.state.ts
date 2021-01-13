@@ -101,6 +101,8 @@ export class IoTEnsembleTelemetry {
   public RefreshRate?: number;
 
   public LastSyncedAt?: string;
+
+  public TotalPayloads?: number;
 }
 
 export class IoTEnsembleTelemetryPayload {
