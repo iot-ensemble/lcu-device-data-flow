@@ -52,6 +52,16 @@ export class DynamicComponent implements OnInit {
     this.iotEnsCtxt.EnrollDevice(device);
   }
 
+  public HandleTelemetryPageEvent(event: any){
+    // console.log("Telemetry Page event recieved: ", event);
+    if(event.pageIndex+1 !== this.State.Telemetry.Page){
+      this.UpdateTelemetryPage(event.pageIndex+1);
+    }
+    else if(event.pageSize !== this.State.Telemetry.PageSize){
+      this.UpdateTelemetryPageSize(event.pageSize);
+    }
+  }
+
   public IssueDeviceSASToken(deviceName: string) {
     this.State.Devices.Loading = true;
 
@@ -91,7 +101,7 @@ export class DynamicComponent implements OnInit {
     console.log("ColdQueryModelCall: ", query);
 
     if(!query.Zip){
-      
+
       this.iotEnsCtxt.ColdQuery(query.StartDate, 
                                 query.EndDate, 
                                 query.PageSize, 
@@ -135,11 +145,24 @@ export class DynamicComponent implements OnInit {
     this.iotEnsCtxt.UpdateConnectedDevicesSync(pageSize);
   }
 
-  public UpdatePageSize(pageSize: number) {
+  public UpdateTelemetryPage(page: number) {
+    // console.log("calling update page: ", page)
     this.State.Telemetry.Loading = true;
 
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
+      page,
+      this.State.Telemetry.PageSize
+    );
+  }
+
+  public UpdateTelemetryPageSize(pageSize: number) {
+    // console.log("calling update pageSize: ", pageSize)
+    this.State.Telemetry.Loading = true;
+
+    this.iotEnsCtxt.UpdateTelemetrySync(
+      this.State.Telemetry.RefreshRate,
+      this.State.Telemetry.Page,
       pageSize
     );
   }
@@ -149,6 +172,7 @@ export class DynamicComponent implements OnInit {
 
     this.iotEnsCtxt.UpdateTelemetrySync(
       refreshRate,
+      this.State.Telemetry.Page,
       this.State.Telemetry.PageSize
     );
   }

@@ -157,11 +157,14 @@ export class LcuSetupManageElementComponent
   @Output('update-device-table-page-size')
   public UpdateDeviceTablePageSize: EventEmitter<any>;
 
-  @Output('update-page-size')
-  public UpdatePageSize: EventEmitter<any>;
+  @Output('telemetry-page-event')
+  public TelemetryPageEvent: EventEmitter<any>;
 
   @Output('update-refresh-rate')
   public UpdateRefreshRate: EventEmitter<number>;
+
+  // @Output('update-telemetry-page')
+  // public UpdateTelemetryPage: EventEmitter<number>;
 
   protected sideSlideSubscription: Subscription;
 
@@ -201,9 +204,10 @@ export class LcuSetupManageElementComponent
 
     this.UpdateDeviceTablePageSize = new EventEmitter();
 
-    this.UpdatePageSize = new EventEmitter();
+    this.TelemetryPageEvent = new EventEmitter();
 
     this.UpdateRefreshRate = new EventEmitter();
+
 
     this.sideSlideSubscription = this.SideNavSrvc.SideNavToggleChanged.subscribe(
       (res: boolean) => {
@@ -332,8 +336,9 @@ export class LcuSetupManageElementComponent
     });
   }
 
-  public HandlePageSizeChange(event: any) {
-    this.UpdatePageSize.emit(event);
+  public HandleTelemetryPageEvent(event: any) {
+    
+    this.TelemetryPageEvent.emit(event);
   }
 
   public IssueDeviceSASToken(deviceName: string) {
