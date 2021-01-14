@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as FileSaver from 'file-saver';
 import * as JSZip from 'jszip';
+import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { GenericModalModel } from 'projects/common/src/lib/models/generice-modal.model';
 import { IoTEnsembleStateContext } from 'projects/common/src/lib/state/iot-ensemble-state.context';
 import { ColdQueryDataTypes, ColdQueryResultTypes, IoTEnsembleState } from 'projects/common/src/lib/state/iot-ensemble.state';
@@ -16,7 +17,10 @@ import { Observable } from 'rxjs';
 export class TelemetryDownloadDialogComponent implements OnInit {
   //Fields
   //Properties
-  protected DeviceIDs: Array<string>;
+
+  protected coldQueryConfig: ColdQueryModel;
+
+  protected deviceIDs: Array<string>;
 
   public State: IoTEnsembleState;
 
@@ -28,7 +32,7 @@ export class TelemetryDownloadDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<TelemetryDownloadDialogComponent>
   ) { 
 
-    this.DeviceIDs = [];
+    this.deviceIDs = [];
 
     this.State = {};
     
@@ -39,7 +43,6 @@ export class TelemetryDownloadDialogComponent implements OnInit {
   ngOnInit(): void {
     this.iotEnsCtxt.Context.subscribe((state: IoTEnsembleState) => {
       this.State = state;
-      // console.log("STATE: ", this.State);
       this.stateChanged();
     })
   }
@@ -54,66 +57,41 @@ export class TelemetryDownloadDialogComponent implements OnInit {
  * Create json file and download
  */
   public JSONDownloadSelected(){
-    console.log("JSON Download selected");
-    console.log("TELE: ", this.data)
-
-    const blob = new Blob([JSON.stringify(this.data)], { type: 'text/json' });
-    const url= window.URL.createObjectURL(blob);
-
-    let link = document.createElement("a");
-        link.download = "telemetry.json";
-        link.href = url;
-        link.click();
+    
+    this.coldQueryConfig = new ColdQueryModel(ColdQueryDataTypes.Telemetry,new Date(),false,false,1,10,ColdQueryResultTypes.JSON,this.deviceIDs,new Date(new Date().setDate(new Date().getDate() - 30)),false);
+    this.closeAndDownload();
+    
   }
 /**
  * Generate zip file and download
  */
   public ZIPDownloadSelected(){
+
+    this.coldQueryConfig = new ColdQueryModel(ColdQueryDataTypes.Telemetry,new Date(),false,false,1,10,ColdQueryResultTypes.JSON,this.deviceIDs,new Date(new Date().setDate(new Date().getDate() - 30)),true);
+    this.closeAndDownload();
     
-    this.iotEnsCtxt.ColdQuery(new Date(new Date().setDate(new Date().getDate() - 30)), new Date(),10,1,this.DeviceIDs,false,ColdQueryDataTypes.Telemetry,ColdQueryResultTypes.JSON,false,false)
-    .then((obs: Observable<Object>) =>{
-      // console.log("OBS: ", obs)
-      obs.subscribe((resp: any) =>{
-        console.log("RESPONSE: ", resp);
-      });
-    })
-
-   
     
-  
-    // let that = this;
-    // setTimeout(function(){
-      // that.getHeaders();
-    // },1000);
-
-
-      // var zip = new JSZip();
-      // zip.folder("Telemetry").file("telemetry.json", JSON.stringify(this.data));
+      // obs.subscribe((resp: any) =>{
+        // console.log("RESPONSE: ", resp);
+      //   var zip = new JSZip();
+      // zip.folder("Telemetry").file("telemetry.json", JSON.stringify(obs.body));
 
       // zip.generateAsync({type:"blob"})
       //   .then(function(content) {
       //   // Force down of the Zip file
       //    FileSaver.saveAs(content, "telemetry.zip");
       //   });
+    // })
+     
   }
 
     //Helpers
 
-    // protected getHeaders(){
-
-    // this.http.get('https://www.iot-ensemble.com/api/state/iotensemble/ColdQuery', 
-    // {observe: 'response'}).subscribe(resp => {
-
-    //   console.log("HEADERS", resp.headers);
-    
-    // });
-    // }
-
     protected getDeviceIDs(){
       this.State.Devices.Devices.forEach(device => {
-        this.DeviceIDs.push(device.DeviceID);
+        this.deviceIDs.push(device.DeviceID);
       });
-      console.log("Device IDs: ", this.DeviceIDs);
+      console.log("Device IDs: ", this.deviceIDs);
     }
 
     protected stateChanged(){
@@ -123,6 +101,8 @@ export class TelemetryDownloadDialogComponent implements OnInit {
       }
       
     }
-
+    protected closeAndDownload(){
+      this.dialogRef.close(this.coldQueryConfig)
+      }
 
 }

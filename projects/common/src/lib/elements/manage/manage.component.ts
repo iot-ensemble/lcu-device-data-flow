@@ -48,6 +48,7 @@ import { PayloadFormComponent } from '../controls/payload-form/payload-form.comp
 import { SendMessageDialogComponent } from './controls/send-message-dialog/send-message-dialog.component';
 import { SasTokenDialogComponent } from './controls/sas-token-dialog/sas-token-dialog.component';
 import { TelemetryDownloadDialogComponent } from './controls/telemetry-download-dialog/telemetry-download-dialog.component';
+import { ColdQueryModel } from '../../models/cold-query.model';
 
 declare var freeboard: any;
 
@@ -144,6 +145,9 @@ export class LcuSetupManageElementComponent
   @Input('telemetry')
   public Telemetry: IoTEnsembleTelemetry;
 
+  @Output('telemetry-download')
+  public TelemetryDownload: EventEmitter<ColdQueryModel>;
+
   @Output('toggle-device-telemetry-enabled')
   public ToggleTelemetryEnabled: EventEmitter<boolean>;
 
@@ -188,6 +192,8 @@ export class LcuSetupManageElementComponent
     this.RevokeDeviceEnrollment = new EventEmitter();
 
     this.SentDeviceMessage = new EventEmitter();
+
+    this.TelemetryDownload = new EventEmitter();
 
     this.ToggleTelemetryEnabled = new EventEmitter();
 
@@ -303,8 +309,9 @@ export class LcuSetupManageElementComponent
     );
 
     this.genericModalService.ModalComponent.afterClosed().subscribe(
-      (res: any) => {
+      (res: ColdQueryModel) => {
         console.log('TELEMETRY MODAL CLOSED', res);
+        this.TelemetryDownload.emit(res)
       }
     );
 
@@ -409,20 +416,20 @@ export class LcuSetupManageElementComponent
     this.SentDeviceMessage.emit(payload);
   }
 
-  public TelemetryDownloadSelected(){
-    console.log("Download selected");
-    console.log("TELE: ", this.Telemetry.Payloads)
+  // public TelemetryDownloadSelected(){
+  //   console.log("Download selected");
+  //   console.log("TELE: ", this.Telemetry.Payloads)
 
-    const blob = new Blob([JSON.stringify(this.Telemetry.Payloads)], { type: 'text/json' });
-    const url= window.URL.createObjectURL(blob);
+  //   const blob = new Blob([JSON.stringify(this.Telemetry.Payloads)], { type: 'text/json' });
+  //   const url= window.URL.createObjectURL(blob);
 
-    let link = document.createElement("a");
-        link.download = "telemetry.json";
-        link.href = url;
-        link.click();
+  //   let link = document.createElement("a");
+  //       link.download = "telemetry.json";
+  //       link.href = url;
+  //       link.click();
     
 
-  }
+  // }
 
   public ToggleAddingDevice() {
     this.AddingDevice = !this.AddingDevice;

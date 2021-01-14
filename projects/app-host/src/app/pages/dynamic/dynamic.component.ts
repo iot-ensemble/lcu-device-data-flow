@@ -7,6 +7,7 @@ import {
   IoTEnsembleDeviceEnrollment,
   IoTEnsembleTelemetryPayload,
 } from '@iot-ensemble/lcu-setup-common';
+import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 
 @Component({
   selector: 'lcu-dynamic',
@@ -83,6 +84,37 @@ export class DynamicComponent implements OnInit {
     this.State.Telemetry.Loading = true;
 
     this.iotEnsCtxt.SendDeviceMessage(payload.DeviceID, payload);
+  }
+
+  public TelemetryDownload(query: ColdQueryModel){
+
+    console.log("ColdQueryModelCall: ", query);
+
+    if(!query.Zip){
+      
+      this.iotEnsCtxt.ColdQuery(query.StartDate, 
+                                query.EndDate, 
+                                query.PageSize, 
+                                query.PageSize, 
+                                query.SelectedDeviceIds,
+                                query.IncludeEmulated,
+                                query.DataType,
+                                query.ResultType,
+                                query.Flatten,
+                                query.Zip)
+      .then((obs: any) =>{
+          console.log("OBS: ", obs)
+          const blob = new Blob([JSON.stringify(obs.body)], { type: 'text/json' });
+          const url= window.URL.createObjectURL(blob);
+
+          let link = document.createElement("a");
+          link.download = "telemetry.json";
+          link.href = url;
+          link.click();
+    });
+}
+    
+
   }
 
   public ToggleTelemetryEnabled() {

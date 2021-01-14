@@ -33,7 +33,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     resultType: ColdQueryResultTypes = ColdQueryResultTypes.JSON,
     flatten: boolean = false,
     zip: boolean = false
-  ): Promise<Observable<Object>> {
+  ): Promise<object> {
     console.log("Calling ColdQuery", startDate, endDate, pageSize, page, selectedDeviceIds, includeEmulated, dataType, resultType, flatten, zip)
     return this.Execute({
       Arguments: {
