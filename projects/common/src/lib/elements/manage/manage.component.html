@@ -344,6 +344,16 @@
                   >
                   </lcu-refresh-select> -->
 
+                  <button 
+                    mat-button 
+                    color="primary"
+                    matTooltip="Download Telemetry Data"
+                    (click)="DownloadTelemetryModal()">
+
+                    <mat-icon id='telemetry-download-element'>download</mat-icon>
+
+                  </button>
+
                   <lcu-enabled-toggle
                     [enabled]="Telemetry?.Enabled"
                     enabled-text="Live"
@@ -360,7 +370,7 @@
               <mat-card-content [class.margin-left-5]="Telemetry?.Payloads?.length <= 0">
                 <lcu-telemetry-list
                   [telemetry]="Telemetry"
-                  (page-size-changed)="HandlePageSizeChange($event)"
+                  (page-event)="HandleTelemetryPageEvent($event)"
                 >
                 </lcu-telemetry-list>
               </mat-card-content>

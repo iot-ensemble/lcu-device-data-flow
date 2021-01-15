@@ -27,6 +27,7 @@ import { GenericModalComponent } from './elements/generic/generic-modal/generic-
 import { SendMessageDialogComponent } from './elements/manage/controls/send-message-dialog/send-message-dialog.component';
 import { ApiAccessComponent } from './controls/api-access/api-access.component';
 import { SasTokenDialogComponent } from './elements/manage/controls/sas-token-dialog/sas-token-dialog.component';
+import { TelemetryDownloadDialogComponent } from './elements/manage/controls/telemetry-download-dialog/telemetry-download-dialog.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { SasTokenDialogComponent } from './elements/manage/controls/sas-token-di
     GenericModalComponent,
     SendMessageDialogComponent,
     ApiAccessComponent,
-    SasTokenDialogComponent
+    SasTokenDialogComponent,
+    TelemetryDownloadDialogComponent
   ],
   imports: [
     FathymSharedModule,
@@ -71,7 +73,8 @@ import { SasTokenDialogComponent } from './elements/manage/controls/sas-token-di
     GenericModalComponent,
     SendMessageDialogComponent,
     ApiAccessComponent,
-    SasTokenDialogComponent
+    SasTokenDialogComponent,
+    TelemetryDownloadDialogComponent
   ],
   entryComponents: [
     LcuSetupManageElementComponent,
@@ -83,7 +86,8 @@ import { SasTokenDialogComponent } from './elements/manage/controls/sas-token-di
     GenericModalComponent,
     PayloadFormComponent,
     SendMessageDialogComponent,
-    SasTokenDialogComponent
+    SasTokenDialogComponent,
+    TelemetryDownloadDialogComponent
   ],
 })
 export class LcuSetupModule {

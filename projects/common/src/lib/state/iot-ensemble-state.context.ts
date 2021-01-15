@@ -1,5 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 import { StateContext } from '@lcu/common';
+import { Observable } from 'rxjs';
 import {
   ColdQueryResultTypes,
   IoTEnsembleDeviceEnrollment,
@@ -20,6 +21,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   protected oldState: IoTEnsembleState = {};
 
   // API Methods
+  
   public ColdQuery(
     startDate: Date = new Date(new Date().setDate(new Date().getDate() - 30)),
     endDate: Date = new Date(),
@@ -31,8 +33,9 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     resultType: ColdQueryResultTypes = ColdQueryResultTypes.JSON,
     flatten: boolean = false,
     zip: boolean = false
-  ) {
-    this.Execute({
+  ): Promise<object> {
+    console.log("Calling ColdQuery", startDate, endDate, pageSize, page, selectedDeviceIds, includeEmulated, dataType, resultType, flatten, zip)
+    return this.Execute({
       Arguments: {
         DataType: dataType,
         EndDate: endDate,
@@ -47,6 +50,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
       },
       Type: 'ColdQuery',
     });
+    
   }
 
   public EnrollDevice(device: IoTEnsembleDeviceEnrollment): void {
@@ -114,10 +118,11 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     });
   }
 
-  public UpdateTelemetrySync(refreshRate: number, pageSize: number) {
+  public UpdateTelemetrySync(refreshRate: number, page: number, pageSize: number) {
     this.Execute({
       Arguments: {
         RefreshRate: refreshRate,
+        Page: page,
         PageSize: pageSize,
       },
       Type: 'UpdateTelemetrySync',
@@ -169,13 +174,13 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
 
   protected setupReceiveState(groupName: string) {
     this.rt.RegisterHandler(`ReceiveState=>${groupName}`).subscribe((req) => {
-      console.log(`Handled state from ${groupName}`);
+      // console.log(`Handled state from ${groupName}`);
 
       const diffed = this.diffState(req);
 
       this.subject.next(diffed);
 
-      console.log(diffed);
+      // console.log(diffed);
     });
   }
 

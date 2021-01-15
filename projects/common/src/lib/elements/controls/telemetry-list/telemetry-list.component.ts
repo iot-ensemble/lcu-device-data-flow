@@ -39,8 +39,8 @@ export class TelemetryListComponent implements OnChanges, OnInit {
 
   public GridParameters: DataGridConfigModel;
 
-  @Output('page-size-changed')
-  public PageSizeChanged: EventEmitter<any>;
+  @Output('page-event')
+  public PageEvent: EventEmitter<any>;
 
   @Input('telemetry')
   public Telemetry: IoTEnsembleTelemetry;
@@ -49,7 +49,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   constructor() {
     this.Downloaded = new EventEmitter();
 
-    this.PageSizeChanged = new EventEmitter();
+    this.PageEvent = new EventEmitter();
 
     this.Telemetry = { Payloads: [] };
   }
@@ -93,8 +93,8 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   }
 
   public HandlePageEvent(event: any): void {
-    // console.log("page event t-list: ", event);
-    this.PageSizeChanged.emit(event.pageSize);
+    console.log("page event t-list: ", event);
+    this.PageEvent.emit(event);
   }
 
   //  Helpers
@@ -207,9 +207,10 @@ export class TelemetryListComponent implements OnChanges, OnInit {
    * Setup grid features, such as pagination, row colors, etc.
    */
   protected setupGridFeatures() {
+    console.log("TELEMETRY DATA: ", this.Telemetry)
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
-        Length: 1,
+        Length: this.Telemetry.TotalPayloads,
         PageIndex: this.Telemetry.Page,
         PageSize: this.Telemetry.PageSize,
         PageSizeOptions: [1, 5, 10, 20, 30],
