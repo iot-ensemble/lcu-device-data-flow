@@ -119,7 +119,6 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   public UpdateTelemetrySync(refreshRate: number, page: number, pageSize: number) {
-    console.log("Update Telemetry Sync page size: ", pageSize)
     this.Execute({
       Arguments: {
         RefreshRate: refreshRate,
