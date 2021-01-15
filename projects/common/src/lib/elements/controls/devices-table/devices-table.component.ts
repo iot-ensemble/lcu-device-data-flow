@@ -121,6 +121,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     return [
       new ColumnDefinitionModel({
         ColType: 'DeviceName',
+        ColWidth: '125',
         Title: 'Device Name',
         ShowValue: true,
       }),

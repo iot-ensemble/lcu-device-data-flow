@@ -65,7 +65,7 @@ export class AppComponent {
   }
 
   protected handleStateChanged() {
-    console.log(this.State);
+    // console.log(this.State);
   }
 
   protected setupStateHandler() {

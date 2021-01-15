@@ -21,9 +21,7 @@ import {
   LCUElementContext,
   LcuElementComponent,
   LCUServiceSettings,
-  DataPipeConstants,
-  PipeModule,
-  DataPipes,
+  DataPipeConstants
 } from '@lcu/common';
 import {
   IoTEnsembleConnectedDevicesConfig,
@@ -31,15 +29,14 @@ import {
   EmulatedDeviceInfo,
   IoTEnsembleStorageConfiguration,
   IoTEnsembleTelemetry,
-  IoTEnsembleDeviceInfo,
   IoTEnsembleDeviceEnrollment,
   IoTEnsembleTelemetryPayload,
 } from './../../state/iot-ensemble.state';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SideNavService } from '../../services/sidenav.service';
-import { animateText, onSideNavOpenClose } from '../../animations/animations';
-import { Subscription } from 'rxjs';
+import { AnimateText, OnExpandHorizontal, OnExpandVertical } from '../../animations/animations';
+import { Subscription, Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GenericModalService } from '../../services/generic-modal.service';
@@ -47,6 +44,9 @@ import { GenericModalModel } from '../../models/generice-modal.model';
 import { PayloadFormComponent } from '../controls/payload-form/payload-form.component';
 import { SendMessageDialogComponent } from './controls/send-message-dialog/send-message-dialog.component';
 import { SasTokenDialogComponent } from './controls/sas-token-dialog/sas-token-dialog.component';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
+import { map } from 'rxjs/internal/operators/map';
+import { timeStamp } from 'console';
 
 declare var freeboard: any;
 
@@ -62,8 +62,9 @@ export const SELECTOR_LCU_SETUP_MANAGE_ELEMENT = 'lcu-setup-manage-element';
   selector: SELECTOR_LCU_SETUP_MANAGE_ELEMENT,
   templateUrl: './manage.component.html',
   styleUrls: ['./manage.component.scss'],
-  animations: [onSideNavOpenClose, animateText],
+  animations: [OnExpandHorizontal, OnExpandVertical, AnimateText],
 })
+
 export class LcuSetupManageElementComponent
   extends LcuElementComponent<LcuSetupManageContext>
   implements OnChanges, OnInit, AfterViewInit, AfterContentInit, OnDestroy {
@@ -114,12 +115,24 @@ export class LcuSetupManageElementComponent
   }
 
   /**
+   * Current screen size from mediaSubscription
+   */
+  public MediaSize: string;
+
+  /**
+   * Subscription for media changes (screen width)
+   */
+  protected mediaSubscription: Subscription;
+
+  /**
    * Access the component passed into the modal
    */
   @ViewChild('ModalContainer', { read: ViewContainerRef })
   public ModalContainer: ViewContainerRef;
 
-  public onSideNavOpenClose: boolean;
+  public OnExpandHorizontal: boolean;
+
+  public OnExpandVertical: boolean;
 
   public PipeDate: DataPipeConstants;
 
@@ -135,7 +148,7 @@ export class LcuSetupManageElementComponent
   @Output('sent-device-message')
   public SentDeviceMessage: EventEmitter<IoTEnsembleTelemetryPayload>;
 
-  public SideNavOpenCloseEvent: boolean;
+  public ExpandOpenCLoseEvent: boolean;
 
   @Input('storage')
   public Storage: IoTEnsembleStorageConfiguration;
@@ -170,7 +183,8 @@ export class LcuSetupManageElementComponent
     protected lcuSvcSettings: LCUServiceSettings,
     protected snackBar: MatSnackBar,
     public SideNavSrvc: SideNavService,
-    protected resolver: ComponentFactoryResolver
+    protected resolver: ComponentFactoryResolver,
+    protected mediaObserver: MediaObserver
   ) {
     super(injector);
 
@@ -198,11 +212,6 @@ export class LcuSetupManageElementComponent
 
     this.UpdateRefreshRate = new EventEmitter();
 
-    this.sideSlideSubscription = this.SideNavSrvc.SideNavToggleChanged.subscribe(
-      (res: boolean) => {
-        this.onSideNavOpenClose = res;
-      }
-    );
   }
 
   //  Life Cycle
@@ -210,7 +219,10 @@ export class LcuSetupManageElementComponent
     // this.setupFreeboard();
   }
 
-  public ngOnDestroy(): void {}
+  public ngOnDestroy(): void {
+
+    this.mediaSubscription.unsubscribe();
+  }
 
   public ngAfterViewInit(): void {
     // this.setupFreeboard();
@@ -224,6 +236,29 @@ export class LcuSetupManageElementComponent
     super.ngOnInit();
 
     this.setupAddDeviceForm();
+
+    this.mediaSubscription = this.mediaObserver.asObservable()
+    .pipe(
+      map((changes: MediaChange[]) => changes[0])
+    ).subscribe((change: MediaChange) => {
+
+      this.MediaSize = change.mqAlias;
+
+      if (!this.SideNavSrvc.Direction) {
+        this.ToggleSideNav();
+      }
+    });
+
+    this.sideSlideSubscription = this.SideNavSrvc.ExpandToggleChanged.subscribe(
+      (res: {}) => {
+
+        if (res['direction'].toUpperCase() === 'HORIZONTAL') {
+          this.OnExpandHorizontal = res['toggle'];
+        } else {
+          this.OnExpandVertical = res['toggle'];
+        }
+      }
+    );
   }
 
   //  API Methods
@@ -265,9 +300,9 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceTablePageEvent(event: any) {
-    console.log("PAGE EVENT", event)
+    console.log('PAGE EVENT', event)
     this.UpdateDeviceTablePageSize.emit(event);
-    
+
   }
 
   public EnrollDeviceSubmit() {
@@ -288,8 +323,26 @@ export class LcuSetupManageElementComponent
    *
    * @param evt Animation event for open and closing side nav
    */
-  public OnSideNavOpenCloseDoneEvent(evt: any): void {
-    this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
+  public OnExpandHorizontalDoneEvent(evt: any): void {
+    this.ExpandOpenCLoseEvent = evt.fromState === 'open' ? true : false;
+  }
+
+  /**
+   *
+   * @param evt Animation event for open and closing side nav
+   */
+  public OnExpandVerticalDoneEvent(evt: any): void {
+    this.ExpandOpenCLoseEvent = evt.fromState === 'open' ? true : false;
+  }
+
+  public SidePanelAction(): string {
+
+    if (this.MediaSize === 'xs' || this.MediaSize === 'sm' || this.MediaSize === 'md') {
+
+      return this.SideNavSrvc.ExpandVerticalToggleVal ? 'up' : 'down';
+    }
+
+    return this.SideNavSrvc.ExpandHoizontalToggleVal ? 'open' : 'close';
   }
 
   public PayloadFormModal(): void {
@@ -373,7 +426,13 @@ export class LcuSetupManageElementComponent
   }
 
   public ToggleSideNav(): void {
-    this.SideNavSrvc.SideNavToggle();
+
+    if (!this.MediaSize) { return };
+
+    const mediaSize: string = this.MediaSize.toUpperCase();
+    const direction: string = mediaSize === 'SM' || mediaSize === 'MD' ? 'VERTICAL' : 'HORIZONTAL';
+
+    this.SideNavSrvc.ExpandToggle(direction);
   }
 
   //  Helpers
@@ -431,7 +490,6 @@ export class LcuSetupManageElementComponent
     this.setDashboardIFrameURL();
 
     if (this.Dashboard && this.Dashboard.FreeboardConfig) {
-      //   // debugger;
       //   // freeboard.initialize(true);
       //   // const dashboard = freeboard.loadDashboard(
       //   //   this.State.Dashboard.FreeboardConfig,

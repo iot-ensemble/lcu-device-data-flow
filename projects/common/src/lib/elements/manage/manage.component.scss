@@ -16,6 +16,7 @@
     .side-toggle-container {
       position: sticky;
       top: 0;
+      left: 0;
     }
 
     .devices {
@@ -93,7 +94,20 @@
   color: mat-color($accent);
 }
 
+.small-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 16px !important;
+}
 
+#loader {
+  z-index: 100000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%); 
+}
 // .box-side-triangle {
 //   $path: polygon(90% 0%, 100% 7%, 90% 12%, 90% 100%, 0% 100%, 0% 0%, 90% 0);
 //   -webkit-clip-path: $path;

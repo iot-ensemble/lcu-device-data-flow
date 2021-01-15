@@ -1,12 +1,27 @@
-<div fxFlexFill class="manage" *ngIf="!Loading">
-  <div fxFlexFill fxLayout="column" fxLayoutGap="5px">
-    <div fxLayout="row" fxLayoutGap="5px">
+<lcu-loader id="loader" fxLayoutAlign="center center" [loading]="Loading"></lcu-loader>
+<!-- *ngIf="!Loading" -->
+<div 
+  fxFlexFill 
+  class="manage">
+  <div 
+    fxFlexFill 
+    fxLayout="column" 
+    fxLayoutGap="5px">
+    <div 
+      fxLayout="row" 
+      fxLayout.lt-sm="column" 
+      fxLayoutGap="5px">
       <div
-        fxFlex="75"
+        fxFlex
+        fxLayout.lt-md="column"
         fxLayoutAlign="start end"
-        class="welcome-bg background-fill"
-      >
-        <div class="welcome-index" fxLayout="row" fxLayoutGap="30px">
+        class="welcome-bg background-fill">
+
+        <div 
+          class="welcome-index" 
+          fxLayout.lt-md="column" 
+          fxLayout="row" 
+          fxLayoutGap="30px">
           <div fxFlex="30">
             <h1 fxLayout="column">
               <span class="plain-text theme-accent-text margin-bottom-2">
@@ -16,11 +31,10 @@
             </h1>
           </div>
 
-          <div class="divider-fill-vert"></div>
+          <div ngClass.lt-md="divider-fill-hor" ngClass.gt-sm="divider-fill-vert"></div>
 
-          <div fxLayout="column">
+          <div fxFLex fxLayout="column">
             <h2 class="plain-text theme-accent-text">Device Dashboard</h2>
-
             <p>
               Emulate, simulate, and connect your devices to unlock the power of
               your IoT applications.
@@ -29,23 +43,30 @@
         </div>
       </div>
 
-      <div fxFlex class="background-fill blank-header"></div>
+      <!-- Hide div when media size is less than small -->
+      <div fxHide.lt-sm fxFlex="30" class="padding-2 background-fill blank-header">sfasdfsdf</div>
     </div>
 
-    <!-- <div style="height: 200px; width: 100px; background-color: rgb(192, 24, 24);"
-      [@onSideNavOpenClose]="SideNavSrvc.SideNavToggleVal ? 'open' : 'close'">test
-      </div> -->
-
-    <div fxFlexFill fxLayout="row">
-      <div fxFlex fxLayout="row" fxLayoutGap="5px">
+    <div 
+      fxFlexFill 
+      fxLayout="row"
+      fxLayout.lt-md="column">
+      <div 
+        fxFlex 
+        fxLayout="row" 
+        fxLayout.lt-md="column"
+        fxLayoutGap="5px">
+    
         <!-- left side -->
-        <div
-          [@onSideNavOpenClose]="
-            SideNavSrvc.SideNavToggleVal ? 'open' : 'close'
-          "
-          (@onSideNavOpenClose.done)="OnSideNavOpenCloseDoneEvent($event)"
-          fxFlex="25"
-          fxLayout="row"
+        <div 
+          [@OnExpandHorizontal]="SidePanelAction()"
+          (@OnExpandHorizontal.done)="OnExpandHorizontalDoneEvent($event)"
+          [@OnExpandVertical]="SidePanelAction()"
+          (@OnExpandVertical.done)="OnExpandVerticalDoneEvent($event)"
+          fxFlex.gt-md="25"
+          fxFlex.lt-md="25"
+          fxLayout="column"
+          fxLayout.lt-md="row"
           fxFill
           fxLayoutAlign="start start"
           class="background-fill box-side-triangle"
@@ -53,24 +74,34 @@
           <div fxLayout="column" class="side-column">
             <div
               class="side-toggle-container"
-              [@onSideNavOpenClose]="
-                SideNavSrvc.SideNavToggleVal ? 'open' : 'close'
-              "
-              fxLayoutAlign="end"
-            >
+              [@OnExpandHorizontal]="SideNavSrvc.ExpandHoizontalToggleVal ? 'open' : 'close'"
+              [@OnExpandVertical]="SideNavSrvc.ExpandVerticalToggleVal ? 'up' : 'down'"
+              >
               <button mat-icon-button (click)="ToggleSideNav()">
-                <mat-icon *ngIf="SideNavSrvc.SideNavToggleVal">
-                  arrow_left
-                </mat-icon>
-                <mat-icon *ngIf="!SideNavSrvc.SideNavToggleVal">
-                  arrow_right
-                </mat-icon>
+
+                <div *ngIf="SideNavSrvc.Direction === 'HORIZONTAL'">
+                  <mat-icon *ngIf="SideNavSrvc.ExpandHoizontalToggleVal">
+                    arrow_left
+                  </mat-icon>
+                  <mat-icon *ngIf="!SideNavSrvc.ExpandHoizontalToggleVal">
+                    arrow_right
+                  </mat-icon>
+                </div>
+               
+                <div *ngIf="SideNavSrvc.Direction === 'VERTICAL'">
+                  <mat-icon *ngIf="SideNavSrvc.ExpandVerticalToggleVal">
+                    arrow_drop_down
+                  </mat-icon>
+                  <mat-icon *ngIf="!SideNavSrvc.ExpandVerticalToggleVal">
+                    arrow_drop_up
+                  </mat-icon>
+                </div>
               </button>
             </div>
 
             <div
               [ngStyle]="{
-                display: SideNavOpenCloseEvent === true ? 'none' : 'block'
+                display: ExpandOpenCLoseEvent === true ? 'none' : 'block'
               }"
               fxLayout="column"
               fxFlex="90"
@@ -108,29 +139,29 @@
         >
           <!-- Emulated Devices -->
           <div>
-            <mat-card>
-              <mat-card-header>
-                <div
-                  mat-card-avatar
-                  fxLayoutAlign="center center"
-                  class="orange-accent"
-                >
-                  <mat-icon>contactless</mat-icon>
-                </div>
-
-                <mat-card-title>Emulated Devices</mat-card-title>
-
-                <div fxFlex></div>
-
-                <lcu-enabled-toggle
-                  [enabled]="Emulated?.Enabled"
-                  [loading]="Emulated?.Loading"
-                  (enabled-toggled)="ToggleEmulatedEnabledChanged($event)"
-                ></lcu-enabled-toggle>
-
+            <mat-card fxLayout="column">
+              <div fxFlex fxLayout="row" fxLayoutAlign="end">
                 <a href="https://www.iot-ensemble.com/docs/getting-started/emulated-data" target="_blank">
                   <mat-icon matTooltip="More info">help_outline</mat-icon>
                 </a>
+              </div>
+              <mat-card-header>
+                  <div 
+                    mat-card-avatar
+                    fxLayoutAlign="center center"
+                    class="orange-accent">
+                    <mat-icon>contactless</mat-icon>
+                  </div>
+                <mat-card-title>Emulated Devices</mat-card-title>
+              <div 
+                fxFlex 
+                fxLayoutAlign="end start">
+                <lcu-enabled-toggle
+                  [enabled]="Emulated?.Enabled"
+                  [loading]="Emulated?.Loading"
+                  (enabled-toggled)="ToggleEmulatedEnabledChanged($event)">
+                </lcu-enabled-toggle>
+              </div>
               </mat-card-header>
 
               <mat-card-content class="margin-left-5">
@@ -152,19 +183,22 @@
             fxLayout="row"
             fxLayout.lt-md="column"
             fxLayoutGap="1em"
-            class="connected"
-          >
+            class="connected">
             <mat-card
+              fxLayout="column"
               [fxFlex]="ConnectedDevicesInfoCardFlex"
-              fxFlex.lt-md="100%"
-            >
+              fxFlex.lt-md="100%">
+              <div fxFlex fxLayout="row" fxLayoutAlign="end">
+                <a href="https://www.iot-ensemble.com/docs/getting-started/connecting-first-device" target=”_blank”>
+                  <mat-icon matTooltip="More info">help_outline</mat-icon>
+                </a>
+              </div>
               <mat-card-header>
                 <div
                   mat-card-avatar
                   fxLayoutAlign="center center"
                   [class.orange-accent]="!AddingDevice"
-                  [class.green-accent]="AddingDevice"
-                >
+                  [class.green-accent]="AddingDevice">
                   <mat-icon>loop</mat-icon>
                 </div>
                 <mat-card-title> Connected Devices </mat-card-title>
@@ -172,9 +206,7 @@
                 <mat-card-subtitle *ngIf="MaxDevicesReached && AddingDevice">
                   Max number of devices reached
                 </mat-card-subtitle>
-                <a href="https://www.iot-ensemble.com/docs/getting-started/connecting-first-device" target=”_blank”>
-                  <mat-icon matTooltip="More info">help_outline</mat-icon>
-                </a>
+                
               </mat-card-header>
 
               <mat-card-content [class.margin-left-5]="AddingDevice || Devices?.Devices?.length <= 0">
@@ -299,7 +331,7 @@
           <!--^^^ Connected Devices ^^^-->
 
           <!-- Telemetry -->
-          <div class="telemetry">
+          <!-- <div class="telemetry">
             <mat-card>
               <mat-card-header class="border-bottom">
                 <div
@@ -372,16 +404,16 @@
                   Send Device Message
                 </button>
 
-                <!-- <button mat-raised-button (click)="DownloadData()">
+                <!- - <button mat-raised-button (click)="DownloadData()">
                   Download Data
-                </button> -->
+                </button> - ->
               </mat-card-actions>
             </mat-card>
-          </div>
+          </div> -->
           <!--^^^ Telemetry ^^^-->
 
           <!-- Dashboard -->
-          <div class="dashboard">
+          <!-- <div class="dashboard">
             <mat-card>
               <mat-card-header>
                 <div
@@ -410,7 +442,7 @@
                 </div>
               </mat-card-content>
             </mat-card>
-          </div>
+          </div> -->
           <!--^^^ Dashboard ^^^-->
 
           <!-- Device Reports -->
@@ -423,7 +455,7 @@
           </div> -->
 
           <!-- Storage Access -->
-          <div>
+          <!-- <div>
             <mat-card>
               <mat-card-header>
                 <div
@@ -452,7 +484,7 @@
               <mat-card-actions></mat-card-actions>
             </mat-card>
           </div>
-        </div>
+        </div> -->
         <!--^^^ Storage Access ^^^-->
       </div>
       <!--^^^ Content ^^^-->
@@ -460,4 +492,3 @@
   </div>
 </div>
 
-<lcu-loader [loading]="Loading"></lcu-loader>
