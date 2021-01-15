@@ -15,7 +15,7 @@ import {
   DataGridPaginationModel,
 } from '@lowcodeunit/data-grid';
 import { of } from 'rxjs';
-import { IoTEnsembleConnectedDevicesConfig, IoTEnsembleDeviceInfo } from '../../../state/iot-ensemble.state';
+import { IoTEnsembleDeviceInfo } from '../../../state/iot-ensemble.state';
 
 @Component({
   selector: 'lcu-devices-table',
@@ -25,8 +25,12 @@ import { IoTEnsembleConnectedDevicesConfig, IoTEnsembleDeviceInfo } from '../../
 export class DevicesTableComponent implements OnInit, OnChanges {
   //  Fields
 
+  //  Properties
   @Input('devices')
-  public Devices: IoTEnsembleConnectedDevicesConfig;
+  public Devices?: IoTEnsembleDeviceInfo[];
+
+  @Input('displayed-columns')
+  public DisplayedColumns: string[];
 
   public GridParameters: DataGridConfigModel;
 
@@ -41,7 +45,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
 
   //  Constructors
   constructor() {
-    // this.Devices = [];
+    this.Devices = [];
 
     this.IssuedSASToken = new EventEmitter();
 
@@ -53,6 +57,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   //  Life Cycle
 
   public ngOnChanges(changes: SimpleChanges): void {
+    // console.log('CHANGES: ', changes);
     if (changes.Devices) {
       this.updateDevicesDataSource();
     }
@@ -64,9 +69,9 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   /**
    * Copies the connection string to the clipboard while temporarily setting the copy icon to
    * a checkmark to display to the user that the content was succesfully copied
-   * @param deviceInfo
+   * @ param deviceInfo
    */
-  public CopyClick(deviceInfo: IoTEnsembleDeviceInfo) {
+  public CopyClick(deviceInfo: IoTEnsembleDeviceInfo): void {
     ClipboardCopyFunction.ClipboardCopy(deviceInfo.ConnectionString);
 
     deviceInfo.$IsCopySuccessIcon = true;
@@ -76,7 +81,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     }, 2000);
   }
 
-  public IssueSASToken(device: IoTEnsembleDeviceInfo) {
+  public IssueSASToken(device: IoTEnsembleDeviceInfo): void {
     this.IssuedSASToken.emit(device.DeviceName);
   }
 
@@ -85,7 +90,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     this.PageSizeChanged.emit(event.pageSize);
   }
 
-  public RevokeClick(device: IoTEnsembleDeviceInfo) {
+  public RevokeClick(device: IoTEnsembleDeviceInfo): void {
     if (
       confirm(`Are you sure you want to remove device '${device.DeviceName}'?`)
     ) {
@@ -98,13 +103,13 @@ export class DevicesTableComponent implements OnInit, OnChanges {
    * Setup all features of the grid
    */
   protected setupGrid(): void {
-    const columnDefs = this.setupGridColumns();
+    const columndefs = this.setupGridColumns();
 
     const features = this.setupGridFeatures();
 
     this.GridParameters = new DataGridConfigModel(
-      of(this.Devices.Devices),
-      columnDefs,
+      of(this.Devices),
+      columndefs,
       features
     );
   }
@@ -112,7 +117,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   /**
    * Create grid columns
    */
-  protected setupGridColumns() {
+  protected setupGridColumns(): Array<ColumnDefinitionModel> {
     return [
       new ColumnDefinitionModel({
         ColType: 'DeviceName',
@@ -179,10 +184,10 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   /**
    * Setup grid features, such as pagination, row colors, etc.
    */
-  protected setupGridFeatures() {
+  protected setupGridFeatures(): DataGridFeaturesModel {
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
-        PageSize: this.Devices.PageSize,
+        PageSize: 10,
         PageSizeOptions: [5, 10, 25],
       }
     );
@@ -201,9 +206,9 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     return features;
   }
 
-  protected updateDevicesDataSource() {
-    if (this.Devices.Devices) {
-      console.log('DEVICES: ', this.Devices.Devices);
+  protected updateDevicesDataSource(): void {
+    if (this.Devices) {
+      // console.log('DEVICES: ', this.Devices);
 
       this.setupGrid();
     }

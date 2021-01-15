@@ -135,10 +135,9 @@
 
               <mat-card-content class="margin-left-5">
                 <p>
-                  To see the dashboard in action without connecting a device, enable the emulated data.
-                  When enabled, emulated data will be provided in your data queries. The emulated device
-                  is for smart room detection and provides data on the temperature, humidity and occupancy
-                  of a room.
+                  To see the dashboard in action without connecting a device, enable the emulated device data. When
+                  enabled, emulated data will be provided in your data queries. The emulated device we are showing here
+                  is for smart room detection and provides data on the temperature, humidity and occupancy of a room.
                 </p>
               </mat-card-content>
 
@@ -183,7 +182,8 @@
                 <div *ngIf="AddingDevice">
                   <ng-container *ngIf="!MaxDevicesReached">
                     <p class="paragraph-text">
-                      To get your devices connected we will start off with some simple security practices.
+                      To connect a device and see its real-time data flowing through the system, simply enter a device
+                      name and enroll it. You will be provided with a connection string for your device.
                     </p>
                   </ng-container>
 
@@ -202,7 +202,7 @@
 
                 <div class="device-list" *ngIf="!AddingDevice">
                   <lcu-devices-table
-                    [devices]="Devices"
+                    [devices]="Devices?.Devices"
                     (issued-sas-token)="IssueDeviceSASToken($event)"
                     (page-size-changed)="DeviceTablePageEvent($event)"
                     (revoked)="RevokeDeviceEnrollmentClick($event)"
@@ -212,16 +212,6 @@
 
               <mat-card-actions>
                 <div fxFlex></div>
-
-                <a
-                  mat-raised-button
-                  color="primary"
-                  href="https://www.iot-ensemble.com/docs/getting-started/connecting-your-first-device"
-                  target="_blank"
-                  *ngIf="AddingDevice && !MaxDevicesReached"
-                >
-                  Read Documentation
-                </a>
 
                 <a
                   mat-raised-button
@@ -291,7 +281,7 @@
                       mat-raised-button
                       type="submit"
                       color="primary"
-                      *ngIf="Devices?.Loading"
+                      *ngIf="!Devices?.Loading"
                       [disabled]="!AddDeviceFormGroup.valid"
                     >
                       Enroll Device
@@ -348,12 +338,11 @@
                   fxLayoutGap="20px"
                   fxLayoutAlign="end center"
                 >
-
-                  <lcu-refresh-select
+                  <!-- <lcu-refresh-select
                     [telemetry]="Telemetry"
                     (refresh-rate-changed)="RefreshRateChanged($event)"
                   >
-                  </lcu-refresh-select>
+                  </lcu-refresh-select> -->
 
                   <button 
                     mat-button 
@@ -421,6 +410,10 @@
               </mat-card-header>
 
               <mat-card-content>
+                <div class="margin-left-5 padding-bottom-2 margin-top-2">
+                  Here we have provided an example open-source dashboard Freeboard to show how your data can be
+                  visualized. Freeboard provides simple and easy to use dashboards for your devices.
+                </div>
                 <div class="freeboard-display padding-top-2">
                   <iframe
                     [src]="DashboardIFrameURL"
@@ -463,6 +456,10 @@
               </mat-card-header>
 
               <mat-card-content>
+                <div class="margin-left-5 margin-top-2">
+                  Use the API keys to get your data downstream to the dashboards and services of your choice for
+                  visualization, application development, ML/AI, and more.
+                </div>
                 <lcu-api-access
                   [api-keys]="Storage?.APIKeys"
                   [api-options]="Storage?.APIOptions"
@@ -480,5 +477,4 @@
     </div>
   </div>
 </div>
-
 <lcu-loader [loading]="Loading"></lcu-loader>

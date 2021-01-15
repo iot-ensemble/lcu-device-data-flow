@@ -43,7 +43,7 @@
 		"@aspnet/signalr": "^1.1.4",
 		"@lcu/common": "1.63.553-8980-remove-subscribe",
 		"@lowcodeunit-devkit/ng-lcu": "^1.24.148",
-		"@lowcodeunit/data-grid": "^1.8.104",
+		"@lowcodeunit/data-grid": "^1.9.108",
 		"@lowcodeunit/lcu-documentation-common": "^1.5.34",
 		"@webcomponents/custom-elements": "^1.4.3",
 		"@webcomponents/webcomponentsjs": "^2.5.0",
