@@ -59,7 +59,7 @@
     .error-dot {
       height: 10px;
       width: 10px;
-      background-color: red; // TODO:  Where frm theme to get this
+      background-color: rgba(mat-color($warn), 1);;
       border-radius: 50%;
       display: inline-block;
       margin-right: 10px;

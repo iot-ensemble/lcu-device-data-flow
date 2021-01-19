@@ -59,9 +59,9 @@ export class AppComponent {
   protected handleMobileObserver(result?: BreakpointState) {
     this.IsMobile = result.matches;
 
-    if (!this.IsMobile && this.NavDrawer) {
-      this.NavDrawer.open();
-    }
+    // if (!this.IsMobile && this.NavDrawer) {
+    //   this.NavDrawer.open();
+    // }
   }
 
   protected handleStateChanged() {

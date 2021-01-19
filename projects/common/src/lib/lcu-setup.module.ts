@@ -1,5 +1,4 @@
 import { GenericModalService } from './services/generic-modal.service';
-import { SideNavService } from './services/sidenav.service';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -28,6 +27,7 @@ import { SendMessageDialogComponent } from './elements/manage/controls/send-mess
 import { ApiAccessComponent } from './controls/api-access/api-access.component';
 import { SasTokenDialogComponent } from './elements/manage/controls/sas-token-dialog/sas-token-dialog.component';
 import { TelemetryDownloadDialogComponent } from './elements/manage/controls/telemetry-download-dialog/telemetry-download-dialog.component';
+import { AnimationService } from './services/animation.service';
 
 @NgModule({
   declarations: [
@@ -96,7 +96,7 @@ export class LcuSetupModule {
       ngModule: LcuSetupModule,
       providers: [
         IoTEnsembleStateContext,
-        SideNavService,
+        AnimationService,
         GenericModalService
       ],
     };
