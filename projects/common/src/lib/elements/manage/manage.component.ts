@@ -256,9 +256,8 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceTablePageEvent(event: any) {
-    console.log("PAGE EVENT", event)
+    console.log('PAGE EVENT', event);
     this.UpdateDeviceTablePageSize.emit(event);
-
   }
 
   public DownloadTelemetryModal(): void {
@@ -295,7 +294,7 @@ export class LcuSetupManageElementComponent
     this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: ColdQueryModel) => {
         console.log('TELEMETRY MODAL CLOSED', res);
-        this.TelemetryDownload.emit(res)
+        this.TelemetryDownload.emit(res);
       }
     );
 
@@ -317,7 +316,6 @@ export class LcuSetupManageElementComponent
   }
 
   public HandleTelemetryPageEvent(event: any) {
-
     this.TelemetryPageEvent.emit(event);
   }
 
@@ -405,7 +403,6 @@ export class LcuSetupManageElementComponent
   //       link.href = url;
   //       link.click();
 
-
   // }
 
   public ToggleAddingDevice() {
@@ -458,11 +455,11 @@ export class LcuSetupManageElementComponent
       ? JSON.stringify(this.Dashboard?.FreeboardConfig)
       : '';
 
+    this.FreeboardURL = this.lcuSvcSettings.State.FreeboardURL || '/freeboard';
+
     this.DashboardIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(
       `${this.FreeboardURL}#data=${source}`
     );
-
-    this.FreeboardURL = this.lcuSvcSettings.State.FreeboardURL || '/freeboard';
   }
 
   protected setupAddDeviceForm() {
