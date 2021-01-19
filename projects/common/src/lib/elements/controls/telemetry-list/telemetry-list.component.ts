@@ -211,11 +211,13 @@ export class TelemetryListComponent implements OnChanges, OnInit {
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
         Length: this.Telemetry.TotalPayloads,
-        PageIndex: this.Telemetry.Page,
+        PageIndex: this.Telemetry.Page - 1,
         PageSize: this.Telemetry.PageSize,
         PageSizeOptions: [1, 5, 10, 20, 30],
       }
     );
+
+    console.log("Pagination Details: ", paginationDetails);
 
     const features: DataGridFeaturesModel = new DataGridFeaturesModel({
       NoData: {
