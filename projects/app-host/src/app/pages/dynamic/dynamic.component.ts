@@ -6,12 +6,16 @@ import {
   BreakpointUtils,
   IoTEnsembleDeviceEnrollment,
   IoTEnsembleTelemetryPayload,
+  animateText,
+  onSideNavOpenClose,
+  SideNavService,
 } from '@iot-ensemble/lcu-setup-common';
 
 @Component({
   selector: 'lcu-dynamic',
   templateUrl: './dynamic.component.html',
   styleUrls: ['./dynamic.component.scss'],
+  animations: [onSideNavOpenClose, animateText],
 })
 export class DynamicComponent implements OnInit {
   //  Fields
@@ -19,12 +23,17 @@ export class DynamicComponent implements OnInit {
   //  Properties
   public IsMobile: boolean;
 
+  public OnSideNavOpenClose: boolean;
+
+  public SideNavOpenCloseEvent: boolean;
+
   public State: IoTEnsembleState;
 
   //  Constructors
   constructor(
     protected iotEnsCtxt: IoTEnsembleStateContext,
-    protected breakpointUtils: BreakpointUtils
+    protected breakpointUtils: BreakpointUtils,
+    public SideNavSrvc: SideNavService
   ) {
     this.State = {};
   }
@@ -58,6 +67,14 @@ export class DynamicComponent implements OnInit {
     this.iotEnsCtxt.IssueDeviceSASToken(deviceName, 0);
   }
 
+  /**
+   *
+   * @param evt Animation event for open and closing side nav
+   */
+  public OnSideNavOpenCloseDoneEvent(evt: any): void {
+    this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
+  }
+
   public Refresh(ctxt: string) {
     const loadingCtxt = this.State[ctxt] || this.State;
 
@@ -83,6 +100,10 @@ export class DynamicComponent implements OnInit {
     this.State.Telemetry.Loading = true;
 
     this.iotEnsCtxt.SendDeviceMessage(payload.DeviceID, payload);
+  }
+
+  public ToggleSideNav(): void {
+    this.SideNavSrvc.SideNavToggle();
   }
 
   public ToggleTelemetryEnabled() {
@@ -115,10 +136,7 @@ export class DynamicComponent implements OnInit {
   public UpdateRefreshRate(refreshRate: number) {
     this.State.Telemetry.Loading = true;
 
-    this.iotEnsCtxt.UpdateTelemetrySync(
-      30,
-      this.State.Telemetry.PageSize
-    );
+    this.iotEnsCtxt.UpdateTelemetrySync(30, this.State.Telemetry.PageSize);
   }
 
   public WarmQuery() {

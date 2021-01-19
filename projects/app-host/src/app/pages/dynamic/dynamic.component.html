@@ -1,25 +1,135 @@
-<lcu-setup-manage-element
-  *ngIf="State"
-  [dashboard]="State.Dashboard"
-  [devices]="State.Devices"
-  [emulated]="State.Emulated"
-  [loading]="State.Loading"
-  [storage]="State.Storage"
-  [telemetry]="State.Telemetry"
-  (enroll-device)="EnrollDevice($event)"
-  (issued-device-sas-token)="IssueDeviceSASToken($event)"
-  (refreshed)="Refresh($event)"
-  (revoke-device-enrollment)="RevokeDeviceEnrollment($event)"
-  (regenerated-api-key)="RegenerateAPIKey($event)"
-  (sent-device-message)="SendDeviceMessage($event)"
-  (toggle-device-telemetry-enabled)="ToggleTelemetryEnabled()"
-  (toggle-emulated-enabled)="ToggleEmulatedEnabled()"
-  (update-device-table-page-size)="UpdateDeviceTablePageSize($event)"
-  (update-page-size)="UpdatePageSize($event)"
-  (update-refresh-rate)="UpdateRefreshRate($event)"
-></lcu-setup-manage-element>
-<!--
-<div>
-  <a mat-raised-button color="accent" (click)="WarmQuery()">Warm Query</a>
-  <a mat-raised-button color="accent" (click)="ColdQuery()">Cold Query</a>
-</div> -->
+<div fxFlexFill class="manage" *ngIf="!Loading">
+  <div fxFlexFill fxLayout="column" fxLayoutGap="5px">
+    <div fxLayout="row" fxLayoutGap="5px">
+      <div
+        fxFlex="75"
+        fxLayoutAlign="start end"
+        class="welcome-bg background-fill"
+      >
+        <div class="welcome-index" fxLayout="row" fxLayoutGap="30px">
+          <div fxFlex="30">
+            <h1 fxLayout="column">
+              <span class="plain-text theme-accent-text margin-bottom-2">
+                Welcome to
+              </span>
+              <span class="mat-display-1 plain-text">IoT Ensemble</span>
+            </h1>
+          </div>
+
+          <div class="divider-fill-vert"></div>
+
+          <div fxLayout="column">
+            <h2 class="plain-text theme-accent-text">Device Dashboard</h2>
+
+            <p>
+              Emulate, simulate, and connect your devices to unlock the power of
+              your IoT applications.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex class="background-fill blank-header"></div>
+    </div>
+
+    <!-- <div style="height: 200px; width: 100px; background-color: rgb(192, 24, 24);"
+      [@onSideNavOpenClose]="SideNavSrvc.SideNavToggleVal ? 'open' : 'close'">test
+      </div> -->
+
+    <div fxFlexFill fxLayout="row">
+      <div fxFlex fxLayout="row" fxLayoutGap="5px">
+        <!-- left side -->
+        <div
+          [@onSideNavOpenClose]="
+            SideNavSrvc.SideNavToggleVal ? 'open' : 'close'
+          "
+          (@onSideNavOpenClose.done)="OnSideNavOpenCloseDoneEvent($event)"
+          fxFlex="25"
+          fxLayout="row"
+          fxFill
+          fxLayoutAlign="start start"
+          class="background-fill box-side-triangle"
+        >
+          <div fxLayout="column" class="side-column">
+            <div
+              class="side-toggle-container"
+              [@onSideNavOpenClose]="
+                SideNavSrvc.SideNavToggleVal ? 'open' : 'close'
+              "
+              fxLayoutAlign="end"
+            >
+              <button mat-icon-button (click)="ToggleSideNav()">
+                <mat-icon *ngIf="SideNavSrvc.SideNavToggleVal">
+                  arrow_left
+                </mat-icon>
+                <mat-icon *ngIf="!SideNavSrvc.SideNavToggleVal">
+                  arrow_right
+                </mat-icon>
+              </button>
+            </div>
+
+            <div
+              [ngStyle]="{
+                display: SideNavOpenCloseEvent === true ? 'none' : 'block'
+              }"
+              fxLayout="column"
+              fxFlex="90"
+              class="padding-left-5 padding-right-5 padding-top-5"
+            >
+              <div class="divider-fill-hor"></div>
+
+              <h3 class="mat-display-5 plain-text whats-next-text">
+                Getting Started?
+              </h3>
+
+              <p>
+                Check out our getting started
+                <a
+                  mat-link-button
+                  href="https://www.iot-ensemble.com/docs/getting-started/setup"
+                  target="_blank"
+                >
+                  documentation
+                </a>
+              </p>
+
+              <div class="divider-fill-hor"></div>
+            </div>
+          </div>
+        </div>
+        <!--^^^ Left Side ^^^-->
+
+        <!-- Content -->
+        <div
+          fxFlex
+          fxLayout="column"
+          fxLayoutGap="1em"
+          class="background-fill padding-left-2 padding-right-2 padding-top-2"
+        >
+          <lcu-setup-manage-element
+            *ngIf="State"
+            [dashboard]="State.Dashboard"
+            [devices]="State.Devices"
+            [emulated]="State.Emulated"
+            [storage]="State.Storage"
+            [telemetry]="State.Telemetry"
+            (enroll-device)="EnrollDevice($event)"
+            (issued-device-sas-token)="IssueDeviceSASToken($event)"
+            (refreshed)="Refresh($event)"
+            (revoke-device-enrollment)="RevokeDeviceEnrollment($event)"
+            (regenerated-api-key)="RegenerateAPIKey($event)"
+            (sent-device-message)="SendDeviceMessage($event)"
+            (toggle-device-telemetry-enabled)="ToggleTelemetryEnabled()"
+            (toggle-emulated-enabled)="ToggleEmulatedEnabled()"
+            (update-device-table-page-size)="UpdateDeviceTablePageSize($event)"
+            (update-page-size)="UpdatePageSize($event)"
+            (update-refresh-rate)="UpdateRefreshRate($event)"
+          ></lcu-setup-manage-element>
+        </div>
+        <!--^^^ Content ^^^-->
+      </div>
+    </div>
+  </div>
+
+  <lcu-loader [loading]="State.Loading"></lcu-loader>
+</div>
