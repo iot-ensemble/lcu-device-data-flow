@@ -426,6 +426,9 @@ export class LcuSetupManageElementComponent
     if (syncDate) {
       this.LastSyncedAt = new Date(Date.parse(syncDate));
     }
+    else{
+      this.LastSyncedAt = null;
+    }
   }
 
   protected handleStateChanged(changes: SimpleChanges) {
