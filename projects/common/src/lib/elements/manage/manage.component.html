@@ -1,6 +1,6 @@
-<div>
+<div fxFlexFill class="manage">
   <!-- Emulated Devices -->
-  <div>
+  <div class="emulated section">
     <mat-card>
       <mat-card-header>
         <div
@@ -49,7 +49,7 @@
     fxLayout="row"
     fxLayout.lt-md="column"
     fxLayoutGap="1em"
-    class="connected"
+    class="connected section"
   >
     <mat-card [fxFlex]="ConnectedDevicesInfoCardFlex" fxFlex.lt-md="100%">
       <mat-card-header>
@@ -203,7 +203,7 @@
   <!--^^^ Connected Devices ^^^-->
 
   <!-- Telemetry -->
-  <div class="telemetry">
+  <div class="telemetry section">
     <mat-card>
       <mat-card-header class="border-bottom">
         <div
@@ -304,7 +304,7 @@
   <!--^^^ Telemetry ^^^-->
 
   <!-- Dashboard -->
-  <div class="dashboard">
+  <div class="dashboard section">
     <mat-card>
       <mat-card-header>
         <div
@@ -345,7 +345,7 @@
   <!--^^^ Dashboard ^^^-->
 
   <!-- Device Reports -->
-  <!-- <div>
+  <!-- <div class="device-reports widget">
             <mat-card>
               <mat-card-header>
                 <mat-card-title>Device Reports</mat-card-title>
@@ -354,7 +354,7 @@
           </div> -->
 
   <!-- Storage Access -->
-  <div>
+  <div class="storage-access section">
     <mat-card>
       <mat-card-header>
         <div

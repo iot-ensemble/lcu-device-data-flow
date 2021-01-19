@@ -1,4 +1,4 @@
-<div fxFlexFill class="manage" *ngIf="!Loading">
+<div fxFlexFill>
   <div fxFlexFill fxLayout="column" fxLayoutGap="5px">
     <div fxLayout="row" fxLayoutGap="5px">
       <div
@@ -107,7 +107,7 @@
           class="background-fill padding-left-2 padding-right-2 padding-top-2"
         >
           <lcu-setup-manage-element
-            *ngIf="State"
+            *ngIf="State && !State.Loading"
             [dashboard]="State.Dashboard"
             [devices]="State.Devices"
             [emulated]="State.Emulated"
@@ -126,11 +126,11 @@
             (telemetry-page-event)="HandleTelemetryPageEvent($event)"
             (update-refresh-rate)="UpdateRefreshRate($event)"
           ></lcu-setup-manage-element>
+
+          <lcu-loader [loading]="State.Loading"></lcu-loader>
         </div>
         <!--^^^ Content ^^^-->
       </div>
     </div>
   </div>
-
-  <lcu-loader [loading]="State.Loading"></lcu-loader>
 </div>

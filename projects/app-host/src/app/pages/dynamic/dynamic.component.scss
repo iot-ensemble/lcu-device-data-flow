@@ -1,6 +1,6 @@
 @import "../../../../../common/src/assets/common";
 
-:host {
+:host ::ng-deep {
   .welcome-bg {
     position: relative;
     padding: 30px 50px 20px 50px;
@@ -16,6 +16,15 @@
 
   .whats-next-text {
     color: mat-color($accent);
+  }
+
+  .side-column {
+    height: 100%;
+  }
+
+  .side-toggle-container {
+    position: sticky;
+    top: 0;
   }
 
   // .box-side-triangle {
