@@ -50,6 +50,7 @@ export class GenericModalService<T> {
   public Close(val: any): void {
     this.ModalComponent.close(val);
   }
+  
 
   /**
    * Event after the modal closes
