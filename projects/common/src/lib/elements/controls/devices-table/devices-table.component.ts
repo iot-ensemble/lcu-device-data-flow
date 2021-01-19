@@ -187,6 +187,8 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   protected setupGridFeatures(): DataGridFeaturesModel {
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
+        // Length: this.Telemetry.TotalPayloads,
+        // PageIndex: this.Telemetry.Page - 1,
         PageSize: 10,
         PageSizeOptions: [5, 10, 25],
       }
