@@ -129,10 +129,11 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     });
   }
 
-  public UpdateConnectedDevicesSync(pageSize: number) {
+  public UpdateConnectedDevicesSync(page: number, pageSize: number) {
     this.Execute({
       Arguments: {
-        PageSize: pageSize,
+        Page: page,
+        PageSize: pageSize
       },
       Type: 'UpdateConnectedDevicesSync',
     });
