@@ -207,7 +207,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
    * Setup grid features, such as pagination, row colors, etc.
    */
   protected setupGridFeatures() {
-    console.log("TELEMETRY DATA: ", this.Telemetry)
+    // console.log("TELEMETRY DATA: ", this.Telemetry)
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
         Length: this.Telemetry.TotalPayloads,
@@ -217,7 +217,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
       }
     );
 
-    console.log("Pagination Details: ", paginationDetails);
+    // console.log("Pagination Details: ", paginationDetails);
 
     const features: DataGridFeaturesModel = new DataGridFeaturesModel({
       NoData: {
