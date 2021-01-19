@@ -38,7 +38,6 @@ import {
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SideNavService } from '../../services/sidenav.service';
-import { animateText, onSideNavOpenClose } from '../../animations/animations';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -64,20 +63,19 @@ export const SELECTOR_LCU_SETUP_MANAGE_ELEMENT = 'lcu-setup-manage-element';
   selector: SELECTOR_LCU_SETUP_MANAGE_ELEMENT,
   templateUrl: './manage.component.html',
   styleUrls: ['./manage.component.scss'],
-  animations: [onSideNavOpenClose, animateText],
 })
 export class LcuSetupManageElementComponent
   extends LcuElementComponent<LcuSetupManageContext>
   implements OnChanges, OnInit, AfterViewInit, AfterContentInit, OnDestroy {
   //  Fields
+  protected componentRef: ComponentRef<any>;
+
   protected devicesSasTokensOpened: boolean;
 
   //  Properties
   public AddDeviceFormGroup: FormGroup;
 
   public AddingDevice: boolean;
-
-  protected componentRef: ComponentRef<any>;
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
@@ -108,9 +106,6 @@ export class LcuSetupManageElementComponent
 
   public LastSyncedAt: Date;
 
-  @Input('loading')
-  public Loading: boolean;
-
   public get MaxDevicesReached(): boolean {
     return this.Devices?.Devices?.length >= this.Devices?.MaxDevicesCount;
   }
@@ -120,8 +115,6 @@ export class LcuSetupManageElementComponent
    */
   @ViewChild('ModalContainer', { read: ViewContainerRef })
   public ModalContainer: ViewContainerRef;
-
-  public onSideNavOpenClose: boolean;
 
   public PipeDate: DataPipeConstants;
 
@@ -136,8 +129,6 @@ export class LcuSetupManageElementComponent
 
   @Output('sent-device-message')
   public SentDeviceMessage: EventEmitter<IoTEnsembleTelemetryPayload>;
-
-  public SideNavOpenCloseEvent: boolean;
 
   @Input('storage')
   public Storage: IoTEnsembleStorageConfiguration;
@@ -166,8 +157,6 @@ export class LcuSetupManageElementComponent
   // @Output('update-telemetry-page')
   // public UpdateTelemetryPage: EventEmitter<number>;
 
-  protected sideSlideSubscription: Subscription;
-
   //  Constructors
   constructor(
     protected dialog: MatDialog,
@@ -177,7 +166,6 @@ export class LcuSetupManageElementComponent
     protected formBldr: FormBuilder,
     protected lcuSvcSettings: LCUServiceSettings,
     protected snackBar: MatSnackBar,
-    public SideNavSrvc: SideNavService,
     protected resolver: ComponentFactoryResolver
   ) {
     super(injector);
@@ -207,13 +195,6 @@ export class LcuSetupManageElementComponent
     this.TelemetryPageEvent = new EventEmitter();
 
     this.UpdateRefreshRate = new EventEmitter();
-
-
-    this.sideSlideSubscription = this.SideNavSrvc.SideNavToggleChanged.subscribe(
-      (res: boolean) => {
-        this.onSideNavOpenClose = res;
-      }
-    );
   }
 
   //  Life Cycle
@@ -278,7 +259,7 @@ export class LcuSetupManageElementComponent
   public DeviceTablePageEvent(event: any) {
     console.log("PAGE EVENT", event)
     this.UpdateDeviceTablePageSize.emit(event);
-    
+
   }
 
   public DownloadTelemetryModal(): void {
@@ -287,7 +268,7 @@ export class LcuSetupManageElementComponent
      *
      * TODO: get this working
      */
-    
+
     const modalConfig: GenericModalModel = new GenericModalModel({
       ModalType: 'data', // type of modal we want (data, confirm, info)
       CallbackAction: (val: any) => {}, // function exposed to the modal
@@ -337,20 +318,12 @@ export class LcuSetupManageElementComponent
   }
 
   public HandleTelemetryPageEvent(event: any) {
-    
+
     this.TelemetryPageEvent.emit(event);
   }
 
   public IssueDeviceSASToken(deviceName: string) {
     this.IssuedDeviceSASToken.emit(deviceName);
-  }
-
-  /**
-   *
-   * @param evt Animation event for open and closing side nav
-   */
-  public OnSideNavOpenCloseDoneEvent(evt: any): void {
-    this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
   }
 
   public PayloadFormModal(): void {
@@ -432,7 +405,7 @@ export class LcuSetupManageElementComponent
   //       link.download = "telemetry.json";
   //       link.href = url;
   //       link.click();
-    
+
 
   // }
 
@@ -446,10 +419,6 @@ export class LcuSetupManageElementComponent
 
   public ToggleEmulatedEnabledChanged(enabled: boolean) {
     this.ToggleEmulatedEnabled.emit(enabled);
-  }
-
-  public ToggleSideNav(): void {
-    this.SideNavSrvc.SideNavToggle();
   }
 
   //  Helpers

@@ -1,0 +1,35 @@
+@import "../../../../../common/src/assets/common";
+
+:host ::ng-deep {
+  .welcome-bg {
+    position: relative;
+    padding: 30px 50px 20px 50px;
+
+    .theme-accent-text {
+      color: mat-color($accent);
+    }
+
+    .welcome-index {
+      z-index: 1;
+    }
+  }
+
+  .whats-next-text {
+    color: mat-color($accent);
+  }
+
+  .side-column {
+    height: 100%;
+  }
+
+  .side-toggle-container {
+    position: sticky;
+    top: 0;
+  }
+
+  // .box-side-triangle {
+  //   $path: polygon(90% 0%, 100% 7%, 90% 12%, 90% 100%, 0% 100%, 0% 0%, 90% 0);
+  //   -webkit-clip-path: $path;
+  //   clip-path: $path;
+  // }
+}

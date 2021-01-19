@@ -6,28 +6,45 @@ import {
   BreakpointUtils,
   IoTEnsembleDeviceEnrollment,
   IoTEnsembleTelemetryPayload,
+  animateText,
+  onSideNavOpenClose,
+  SideNavService,
 } from '@iot-ensemble/lcu-setup-common';
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'lcu-dynamic',
   templateUrl: './dynamic.component.html',
   styleUrls: ['./dynamic.component.scss'],
+  animations: [onSideNavOpenClose, animateText],
 })
 export class DynamicComponent implements OnInit {
   //  Fields
+  protected sideSlideSubscription: Subscription;
 
   //  Properties
   public IsMobile: boolean;
+
+  public OnSideNavOpenClose: boolean;
+
+  public SideNavOpenCloseEvent: boolean;
 
   public State: IoTEnsembleState;
 
   //  Constructors
   constructor(
     protected iotEnsCtxt: IoTEnsembleStateContext,
-    protected breakpointUtils: BreakpointUtils
+    protected breakpointUtils: BreakpointUtils,
+    public SideNavSrvc: SideNavService
   ) {
     this.State = {};
+
+    this.sideSlideSubscription = this.SideNavSrvc.SideNavToggleChanged.subscribe(
+      (res: boolean) => {
+        this.OnSideNavOpenClose = res;
+      }
+    );
   }
 
   //  Life Cycle
@@ -52,12 +69,11 @@ export class DynamicComponent implements OnInit {
     this.iotEnsCtxt.EnrollDevice(device);
   }
 
-  public HandleTelemetryPageEvent(event: any){
+  public HandleTelemetryPageEvent(event: any) {
     // console.log("Telemetry Page event recieved: ", event);
-    if(event.pageIndex+1 !== this.State.Telemetry.Page){
-      this.UpdateTelemetryPage(event.pageIndex+1);
-    }
-    else if(event.pageSize !== this.State.Telemetry.PageSize){
+    if (event.pageIndex + 1 !== this.State.Telemetry.Page) {
+      this.UpdateTelemetryPage(event.pageIndex + 1);
+    } else if (event.pageSize !== this.State.Telemetry.PageSize) {
       this.UpdateTelemetryPageSize(event.pageSize);
     }
   }
@@ -67,6 +83,14 @@ export class DynamicComponent implements OnInit {
 
     //  TODO:  Pass through expiry time in some way?
     this.iotEnsCtxt.IssueDeviceSASToken(deviceName, 0);
+  }
+
+  /**
+   *
+   * @param evt Animation event for open and closing side nav
+   */
+  public OnSideNavOpenCloseDoneEvent(evt: any): void {
+    this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
   }
 
   public Refresh(ctxt: string) {
@@ -96,35 +120,40 @@ export class DynamicComponent implements OnInit {
     this.iotEnsCtxt.SendDeviceMessage(payload.DeviceID, payload);
   }
 
-  public TelemetryDownload(query: ColdQueryModel){
+  public ToggleSideNav(): void {
+    this.SideNavSrvc.SideNavToggle();
+  }
 
-    console.log("ColdQueryModelCall: ", query);
+  public TelemetryDownload(query: ColdQueryModel) {
+    console.log('ColdQueryModelCall: ', query);
 
-    if(!query.Zip){
+    if (!query.Zip) {
+      this.iotEnsCtxt
+        .ColdQuery(
+          query.StartDate,
+          query.EndDate,
+          query.PageSize,
+          query.PageSize,
+          query.SelectedDeviceIds,
+          query.IncludeEmulated,
+          query.DataType,
+          query.ResultType,
+          query.Flatten,
+          query.Zip
+        )
+        .then((obs: any) => {
+          console.log('OBS: ', obs);
+          const blob = new Blob([JSON.stringify(obs.body)], {
+            type: 'text/json',
+          });
+          const url = window.URL.createObjectURL(blob);
 
-      this.iotEnsCtxt.ColdQuery(query.StartDate, 
-                                query.EndDate, 
-                                query.PageSize, 
-                                query.PageSize, 
-                                query.SelectedDeviceIds,
-                                query.IncludeEmulated,
-                                query.DataType,
-                                query.ResultType,
-                                query.Flatten,
-                                query.Zip)
-      .then((obs: any) =>{
-          console.log("OBS: ", obs)
-          const blob = new Blob([JSON.stringify(obs.body)], { type: 'text/json' });
-          const url= window.URL.createObjectURL(blob);
-
-          let link = document.createElement("a");
-          link.download = "telemetry.json";
+          const link = document.createElement('a');
+          link.download = 'telemetry.json';
           link.href = url;
           link.click();
-    });
-}
-    
-
+        });
+    }
   }
 
   public ToggleTelemetryEnabled() {
