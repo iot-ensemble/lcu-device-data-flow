@@ -1,6 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
 import { StateContext } from '@lcu/common';
-import { Observable } from 'rxjs';
 import {
   ColdQueryResultTypes,
   IoTEnsembleDeviceEnrollment,
@@ -54,6 +53,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   public EnrollDevice(device: IoTEnsembleDeviceEnrollment): void {
+    console.log("calling enrollDevice")
     this.Execute({
       Arguments: {
         Device: device,
@@ -66,6 +66,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     deviceName: string,
     expiryInSeconds: number = 0
   ): void {
+    console.log("calling issueDeviceSasToken")
+
     this.Execute({
       Arguments: {
         DeviceName: deviceName,
@@ -76,6 +78,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   public RevokeDeviceEnrollment(deviceId: string): void {
+    console.log("calling RevokeDeviceEnrollment")
+
     this.Execute({
       Arguments: {
         DeviceID: deviceId,
@@ -88,6 +92,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     deviceName: string,
     payload: IoTEnsembleTelemetryPayload
   ): void {
+    console.log("calling sendDeviceMessage")
+
     this.Execute({
       Arguments: {
         DeviceName: deviceName,
@@ -98,6 +104,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   public ToggleDetailsPane(): void {
+    console.log("calling toggleDetailsPane")
+
     this.Execute({
       Arguments: {},
       Type: 'ToggleDetailsPane',
@@ -105,6 +113,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   public ToggleEmulatedEnabled(): void {
+    console.log("calling ToggleEmulated")
+
     this.Execute({
       Arguments: {},
       Type: 'ToggleEmulatedEnabled',
@@ -112,6 +122,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   public ToggleTelemetrySync() {
+    console.log("calling toggleTelemetry")
+
     this.Execute({
       Arguments: {},
       Type: 'ToggleTelemetrySync',
@@ -119,6 +131,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   public UpdateTelemetrySync(refreshRate: number, page: number, pageSize: number) {
+    console.log("updating telemetry sync page number: ", page);
     this.Execute({
       Arguments: {
         RefreshRate: refreshRate,
@@ -129,10 +142,11 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     });
   }
 
-  public UpdateConnectedDevicesSync(pageSize: number) {
+  public UpdateConnectedDevicesSync(page: number, pageSize: number) {
     this.Execute({
       Arguments: {
-        PageSize: pageSize,
+        Page: page,
+        PageSize: pageSize
       },
       Type: 'UpdateConnectedDevicesSync',
     });
@@ -146,6 +160,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     selectedDeviceIds: string[] = [],
     includeEmulated: boolean = false
   ) {
+    console.log("calling warmQuery")
+
     this.Execute({
       Arguments: {
         EndDate: endDate,
