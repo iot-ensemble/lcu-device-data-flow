@@ -15,7 +15,7 @@ import {
   DataGridPaginationModel,
 } from '@lowcodeunit/data-grid';
 import { of } from 'rxjs';
-import { IoTEnsembleDeviceInfo } from '../../../state/iot-ensemble.state';
+import { IoTEnsembleConnectedDevicesConfig, IoTEnsembleDeviceInfo } from '../../../state/iot-ensemble.state';
 
 @Component({
   selector: 'lcu-devices-table',
@@ -26,8 +26,8 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   //  Fields
 
   //  Properties
-  @Input('devices')
-  public Devices?: IoTEnsembleDeviceInfo[];
+  @Input('devices-config')
+  public DevicesConfig?: IoTEnsembleConnectedDevicesConfig;
 
   @Input('displayed-columns')
   public DisplayedColumns: string[];
@@ -42,6 +42,8 @@ export class DevicesTableComponent implements OnInit, OnChanges {
 
   @Output('revoked')
   public Revoked: EventEmitter<string>;
+
+  public Devices: IoTEnsembleDeviceInfo[];
 
   //  Constructors
   constructor() {
@@ -187,9 +189,9 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   protected setupGridFeatures(): DataGridFeaturesModel {
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
-        // Length: this.Telemetry.TotalPayloads,
-        // PageIndex: this.Telemetry.Page - 1,
-        PageSize: 10,
+        Length: this.DevicesConfig.TotalDevices,
+        PageIndex: this.DevicesConfig.Page,
+        PageSize: this.DevicesConfig.PageSize,
         PageSizeOptions: [5, 10, 25],
       }
     );
@@ -209,7 +211,8 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   }
 
   protected updateDevicesDataSource(): void {
-    if (this.Devices) {
+    if (this.DevicesConfig) {
+      this.Devices = this.DevicesConfig.Devices;
       // console.log('DEVICES: ', this.Devices);
 
       this.setupGrid();
