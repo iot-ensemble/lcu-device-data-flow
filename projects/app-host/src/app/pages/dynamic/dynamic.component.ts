@@ -120,6 +120,15 @@ export class DynamicComponent implements OnInit {
     }
   }
 
+  public HandleDevicePageEvent(event: any) {
+    // console.log("Telemetry Page event recieved: ", event);
+    if (event.pageIndex + 1 !== this.State.Devices.Page) {
+      this.UpdateDeviceTablePageIndex(event.pageIndex + 1);
+    } else if (event.pageSize !== this.State.Devices.PageSize) {
+      this.UpdateDeviceTablePageSize(event.pageSize);
+    }
+  }
+
   public IssueDeviceSASToken(deviceName: string) {
     this.State.Devices.Loading = true;
 
@@ -247,7 +256,13 @@ export class DynamicComponent implements OnInit {
   public UpdateDeviceTablePageSize(pageSize: number) {
     this.State.Devices.Loading = true;
 
-    this.iotEnsCtxt.UpdateConnectedDevicesSync(pageSize);
+    this.iotEnsCtxt.UpdateConnectedDevicesSync(this.State.Devices.Page, pageSize);
+  }
+
+  public UpdateDeviceTablePageIndex(page: number) {
+    this.State.Devices.Loading = true;
+
+    this.iotEnsCtxt.UpdateConnectedDevicesSync(page, this.State.Devices.PageSize);
   }
 
   public UpdateTelemetryPage(page: number) {
