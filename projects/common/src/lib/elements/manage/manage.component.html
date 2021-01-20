@@ -119,9 +119,9 @@
 
         <div class="device-list" *ngIf="!AddingDevice">
           <lcu-devices-table
-            [devices]="Devices?.Devices"
+            [devices-config]="Devices"
             (issued-sas-token)="IssueDeviceSASToken($event)"
-            (page-size-changed)="DeviceTablePageEvent($event)"
+            (page-event)="DeviceTablePageEvent($event)"
             (revoked)="RevokeDeviceEnrollmentClick($event)"
           ></lcu-devices-table>
         </div>

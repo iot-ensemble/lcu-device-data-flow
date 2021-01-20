@@ -144,8 +144,8 @@ export class LcuSetupManageElementComponent
   @Output('toggle-emulated-enabled')
   public ToggleEmulatedEnabled: EventEmitter<boolean>;
 
-  @Output('update-device-table-page-size')
-  public UpdateDeviceTablePageSize: EventEmitter<any>;
+  @Output('devices-page-event')
+  public DevicesPageEvent: EventEmitter<any>;
 
   @Output('telemetry-page-event')
   public TelemetryPageEvent: EventEmitter<any>;
@@ -169,6 +169,8 @@ export class LcuSetupManageElementComponent
   ) {
     super(injector);
 
+    this.DevicesPageEvent = new EventEmitter();
+
     this.EnrollDevice = new EventEmitter();
 
     this.IssuedDeviceSASToken = new EventEmitter();
@@ -188,8 +190,6 @@ export class LcuSetupManageElementComponent
     this.ToggleTelemetryEnabled = new EventEmitter();
 
     this.ToggleEmulatedEnabled = new EventEmitter();
-
-    this.UpdateDeviceTablePageSize = new EventEmitter();
 
     this.TelemetryPageEvent = new EventEmitter();
 
@@ -256,8 +256,9 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceTablePageEvent(event: any) {
-    console.log('PAGE EVENT', event);
-    this.UpdateDeviceTablePageSize.emit(event);
+    console.log("PAGE EVENT", event)
+    this.DevicesPageEvent.emit(event);
+
   }
 
   public DownloadTelemetryModal(): void {
@@ -421,6 +422,9 @@ export class LcuSetupManageElementComponent
   protected convertToDate(syncDate: string) {
     if (syncDate) {
       this.LastSyncedAt = new Date(Date.parse(syncDate));
+    }
+    else{
+      this.LastSyncedAt = null;
     }
   }
 
