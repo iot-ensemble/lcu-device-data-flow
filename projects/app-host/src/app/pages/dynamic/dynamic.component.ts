@@ -1,23 +1,26 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
+import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import {
   IoTEnsembleState,
   IoTEnsembleStateContext,
   BreakpointUtils,
   IoTEnsembleDeviceEnrollment,
   IoTEnsembleTelemetryPayload,
-  animateText,
-  onSideNavOpenClose,
-  SideNavService,
+  AnimationService,
+  OnExpandHorizontal,
+  OnExpandVertical,
+  AnimateText
 } from '@iot-ensemble/lcu-setup-common';
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
 
 @Component({
   selector: 'lcu-dynamic',
   templateUrl: './dynamic.component.html',
   styleUrls: ['./dynamic.component.scss'],
-  animations: [onSideNavOpenClose, animateText],
+  animations: [OnExpandHorizontal, OnExpandVertical, AnimateText],
 })
 export class DynamicComponent implements OnInit {
   //  Fields
@@ -25,6 +28,16 @@ export class DynamicComponent implements OnInit {
 
   //  Properties
   public IsMobile: boolean;
+
+  /**
+   * Current screen size from mediaSubscription
+   */
+  public MediaSize: string;
+
+  /**
+   * Subscription for media changes (screen width)
+   */
+  protected mediaSubscription: Subscription;
 
   public OnSideNavOpenClose: boolean;
 
@@ -36,15 +49,10 @@ export class DynamicComponent implements OnInit {
   constructor(
     protected iotEnsCtxt: IoTEnsembleStateContext,
     protected breakpointUtils: BreakpointUtils,
-    public SideNavSrvc: SideNavService
+    public AnimationSrvc: AnimationService,
+    protected mediaObserver: MediaObserver
   ) {
     this.State = {};
-
-    this.sideSlideSubscription = this.SideNavSrvc.SideNavToggleChanged.subscribe(
-      (res: boolean) => {
-        this.OnSideNavOpenClose = res;
-      }
-    );
   }
 
   //  Life Cycle
@@ -54,6 +62,40 @@ export class DynamicComponent implements OnInit {
     );
 
     this.setupStateHandler();
+
+    this.mediaSubscription = this.mediaObserver.asObservable()
+    .pipe(
+      map((changes: MediaChange[]) =>  {
+        return changes[0]
+      })
+    ).subscribe((change: MediaChange) => {
+      this.MediaSize = change.mqAlias;
+
+      console.log('MEDIA SIZE: ', this.MediaSize);
+
+      const direction: string = (this.MediaSize.toUpperCase() === 'XS' ||
+                                this.MediaSize.toUpperCase() === 'SM') ? 'VERTICAL' : 'HORIZONTAL';
+
+      this.AnimationSrvc.Direction = direction;
+
+      // if (!this.AnimationSrvc.Direction) {
+      //   this.ToggleSideNav();
+      // }
+    });
+
+    // this.sideSlideSubscription = this.AnimationSrvc.ExpandToggleChanged.subscribe(
+
+    //   (res: ExpandToggleModel) => {
+
+    //     if (res.Direction === 'HORIZONTAL') {
+
+    //       this.OnExpandHorizontal = res.Toggle;
+    //     } else {
+
+    //       this.OnExpandVertical = res.Toggle;
+    //     }
+    //   }
+    // );
   }
 
   //  API Methods
@@ -102,6 +144,19 @@ export class DynamicComponent implements OnInit {
     this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
   }
 
+  public SidePanelAction(): string {
+
+    if (!this.MediaSize) { return; }
+
+    const mediaSize: string = this.MediaSize.toUpperCase();
+
+    if (mediaSize === 'XS' || mediaSize === 'SM') {
+      return this.AnimationSrvc.ExpandVerticalToggleVal ? 'up' : 'down';
+    }
+
+    return this.AnimationSrvc.ExpandHoizontalToggleVal ? 'open' : 'close';
+  }
+
   public Refresh(ctxt: string) {
     const loadingCtxt = this.State[ctxt] || this.State;
 
@@ -130,7 +185,28 @@ export class DynamicComponent implements OnInit {
   }
 
   public ToggleSideNav(): void {
-    this.SideNavSrvc.SideNavToggle();
+    const mediaSize: string = this.MediaSize.toUpperCase();
+    // const direction: string = mediaSize === 'SM' || mediaSize === 'MD' ? 'VERTICAL' : 'HORIZONTAL';
+
+    this.AnimationSrvc.ExpandToggle();
+  }
+
+  /**
+   *
+   * @param evt Animation event for open and closing side nav
+   */
+  public OnExpandHorizontalDoneEvent(evt: any): void {
+
+    // this.ExpandHorizontalEvent = evt.fromState === 'open' ? true : false;
+  }
+
+  /**
+   *
+   * @param evt Animation event for open and closing side nav
+   */
+  public OnExpandVerticalDoneEvent(evt: any): void {
+
+    // this.ExpandVerticalEvent = evt.fromState === 'down' ? true : false;
   }
 
   public TelemetryDownload(query: ColdQueryModel) {
@@ -228,6 +304,8 @@ export class DynamicComponent implements OnInit {
   }
 
   //  Helpers
+
+  //TODO: move this to Ref Arch - shannon
   protected handleMobileObserver(result?: BreakpointState) {
     this.IsMobile = result.matches;
 

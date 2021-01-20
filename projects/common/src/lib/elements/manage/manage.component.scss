@@ -1,5 +1,10 @@
 @import "../../../assets/common";
 
+@mixin info-dot($color) {
+  color: $color;
+  font-size: 1em;
+}
+
 :host {
   .manage-header {
   }
@@ -48,21 +53,11 @@
     color: set-opacity(white, 0.25);
 
     .success-dot {
-      height: 10px;
-      width: 10px;
-      background-color: $success;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 10px;
+      @include info-dot($success);
     }
 
     .error-dot {
-      height: 10px;
-      width: 10px;
-      background-color: red; // TODO:  Where frm theme to get this
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 10px;
+      @include info-dot(mat-color($warn))
     }
   }
 }

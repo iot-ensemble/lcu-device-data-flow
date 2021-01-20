@@ -37,7 +37,6 @@ import {
 } from './../../state/iot-ensemble.state';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SideNavService } from '../../services/sidenav.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
