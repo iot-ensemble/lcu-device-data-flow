@@ -69,6 +69,8 @@ export class IoTEnsembleConnectedDevicesConfig {
   public PageSize?: number;
 
   public SASTokens?: { [deviceName: string]: string };
+
+  public TotalDevices?: number;
 }
 
 export class IoTEnsembleDeviceInfo {
