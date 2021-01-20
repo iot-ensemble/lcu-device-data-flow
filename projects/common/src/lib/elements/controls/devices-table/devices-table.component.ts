@@ -37,8 +37,8 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   @Output('issued-sas-token')
   public IssuedSASToken: EventEmitter<string>;
 
-  @Output('page-size-changed')
-  public PageSizeChanged: EventEmitter<any>;
+  @Output('page-event')
+  public PageEvent: EventEmitter<any>;
 
   @Output('revoked')
   public Revoked: EventEmitter<string>;
@@ -49,7 +49,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
 
     this.IssuedSASToken = new EventEmitter();
 
-    this.PageSizeChanged = new EventEmitter();
+    this.PageEvent = new EventEmitter();
 
     this.Revoked = new EventEmitter();
   }
@@ -87,7 +87,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
 
   public HandlePageEvent(event: any): void {
     console.log("PaGe EvEnT: ", event);
-    this.PageSizeChanged.emit(event.pageSize);
+    this.PageEvent.emit(event);
   }
 
   public RevokeClick(device: IoTEnsembleDeviceInfo): void {
