@@ -65,11 +65,7 @@ export class AppComponent {
   }
 
   protected handleStateChanged() {
-<<<<<<< Updated upstream
     console.log("State From App",this.State);
-=======
-    // console.log(this.State);
->>>>>>> Stashed changes
   }
 
   protected setupStateHandler() {
