@@ -156,6 +156,9 @@
           ></lcu-setup-manage-element>
 
           <lcu-loader [loading]="State.Loading"></lcu-loader>
+          <div  *ngIf="State.Loading" fxLayoutAlign="space-around center">
+            <p>Setting up your Dashboard</p>
+          </div>
         </div>
         <!--^^^ Content ^^^-->
       </div>
