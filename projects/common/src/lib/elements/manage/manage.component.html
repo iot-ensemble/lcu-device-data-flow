@@ -88,12 +88,12 @@
       </mat-card-header>
 
       <mat-card-content
-        [class.margin-left-5]="AddingDevice || Devices?.Devices?.length <= 0"
+        [class.margin-left-5]="AddingDevice || DevicesConfig?.Devices?.length <= 0"
       >
         <mat-progress-bar
           class="margin-top-2"
           mode="indeterminate"
-          *ngIf="Devices?.Loading"
+          *ngIf="DevicesConfig?.Loading"
         ></mat-progress-bar>
 
         <div *ngIf="AddingDevice">
@@ -109,8 +109,8 @@
             <p class="paragraph-text">
               Click "Upgrade Now" to see other plans where you can connect more
               than
-              {{ Devices.MaxDevicesCount }}
-              {{ Devices.MaxDevicesCount > 1 ? "devices" : "device" }}, increase
+              {{ DevicesConfig.MaxDevicesCount }}
+              {{ DevicesConfig.MaxDevicesCount > 1 ? "devices" : "device" }}, increase
               your data velocity, increase your data retention and other great
               benefits.
             </p>
@@ -119,7 +119,7 @@
 
         <div class="device-list" *ngIf="!AddingDevice">
           <lcu-devices-table
-            [devices-config]="Devices"
+            [devices-config]="DevicesConfig"
             (issued-sas-token)="IssueDeviceSASToken($event)"
             (page-event)="DeviceTablePageEvent($event)"
             (revoked)="RevokeDeviceEnrollmentClick($event)"
@@ -185,8 +185,30 @@
                   placeholder="The Name of your Device"
                   required
                 />
+                
               </mat-form-field>
+              
             </div>
+            <div *ngIf="AddDeviceFormGroup.get('deviceName').invalid && (AddDeviceFormGroup.get('deviceName').dirty || AddDeviceFormGroup.get('deviceName').touched)"
+                      class="alert alert-danger">
+
+                  <mat-error *ngIf="AddDeviceFormGroup.get('deviceName').hasError('required')">
+                    Device name is required
+                  </mat-error>
+
+                  <mat-error *ngIf="AddDeviceFormGroup.get('deviceName').hasError('maxlength')">
+                    Device name cannot be longer than 128 characters
+                  </mat-error>
+
+                  <mat-error *ngIf="AddDeviceFormGroup.get('deviceName').hasError('pattern')">
+                    A case-sensitive string of ASCII 7-bit alphanumeric characters plus certain special characters: - . % _ * ? ! ( ) , : = @ $ '
+                  </mat-error>
+
+                  <mat-error *ngIf="AddDeviceFormGroup.get('deviceName').hasError('duplicateName')">
+                    Device name already exists
+                  </mat-error>
+
+                </div>
           </div>
         </mat-card-content>
 
@@ -198,7 +220,7 @@
               mat-raised-button
               type="submit"
               color="primary"
-              *ngIf="!Devices?.Loading"
+              *ngIf="!DevicesConfig?.Loading"
               [disabled]="!AddDeviceFormGroup.valid"
             >
               Enroll Device
@@ -318,7 +340,7 @@
           mat-raised-button
           color="primary"
           (click)="PayloadFormModal()"
-          *ngIf="Devices?.Devices?.length >= 1"
+          *ngIf="DevicesConfig?.Devices?.length >= 1"
         >
           Send Device Message
         </button>
