@@ -20,11 +20,13 @@ export class AnimationService {
     /**
      * Boolean to open/close sidenav
      */
-    public ExpandToggleVal: boolean;
+    // public ExpandToggleVal: boolean;
 
     public ExpandHoizontalToggleVal: boolean;
 
     public ExpandVerticalToggleVal: boolean;
+
+    public IsOpen: boolean;
 
     constructor() {
 
@@ -33,9 +35,9 @@ export class AnimationService {
         this.ExpandVerticalChanged = new Subject();
 
         // toggle close on load
-        this.ExpandToggleVal = false;
-        this.ExpandHoizontalToggleVal = false;
-        this.ExpandVerticalToggleVal = false;
+        // this.ExpandToggleVal = false;
+        // this.ExpandHoizontalToggleVal = false;
+        // this.ExpandVerticalToggleVal = false;
     }
 
     /**
@@ -43,20 +45,23 @@ export class AnimationService {
      */
     public ExpandToggle(): void {
 
+        this.IsOpen = !this.IsOpen;
+        console.log('ISOPEN: ', this.IsOpen);
+
         if (this.Direction.toUpperCase() === 'VERTICAL') {
-            const toggle: boolean = this.ExpandVerticalToggleVal = !this.ExpandVerticalToggleVal;
+            // const toggle: boolean = this.ExpandVerticalToggleVal = !this.ExpandVerticalToggleVal;
             const expand: ExpandToggleModel = new ExpandToggleModel();
 
             expand.Direction = this.Direction;
-            expand.Toggle = toggle;
+            // expand.Toggle = toggle;
 
             this.ExpandToggleChanged.next(expand);
         } else {
-            const toggle: boolean = this.ExpandHoizontalToggleVal = !this.ExpandHoizontalToggleVal;
+            // const toggle: boolean = this.ExpandHoizontalToggleVal = !this.ExpandHoizontalToggleVal;
             const expand: ExpandToggleModel = new ExpandToggleModel();
 
             expand.Direction = this.Direction;
-            expand.Toggle = toggle;
+            // expand.Toggle = toggle;
 
            this.ExpandToggleChanged.next(expand);
         }

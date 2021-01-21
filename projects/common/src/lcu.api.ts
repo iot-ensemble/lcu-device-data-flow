@@ -11,4 +11,4 @@ export * from './lib/models/generice-modal.model';
 export * from './lib/elements/generic/generic-modal/generic-modal.component';
 export * from './lib/elements/controls/payload-form/payload-form.component';
 export * from './lib/services/animation.service';
-export * from './lib/animations/animations';
+export * from './lib/models/expand-toggle.model';

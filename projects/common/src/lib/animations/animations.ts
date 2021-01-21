@@ -49,7 +49,7 @@ state('down',
 //   transition('open => close', animate('250ms ease-in-out')),
 // ]);
 
-export const AnimateText = trigger('animateText', [
+export const AnimateText = trigger('AnimateText', [
   state('hide',
     style({
       display: 'none',

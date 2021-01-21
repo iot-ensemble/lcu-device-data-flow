@@ -57,9 +57,9 @@ export class DynamicComponent implements OnInit {
 
   //  Life Cycle
   public ngOnInit(): void {
-    this.breakpointUtils.SetupIsMobileObserver((result) =>
-      this.handleMobileObserver(result)
-    );
+    // this.breakpointUtils.SetupIsMobileObserver((result) =>
+    //   this.handleMobileObserver(result)
+    // );
 
     this.setupStateHandler();
 
@@ -71,8 +71,6 @@ export class DynamicComponent implements OnInit {
     ).subscribe((change: MediaChange) => {
       this.MediaSize = change.mqAlias;
 
-      console.log('MEDIA SIZE: ', this.MediaSize);
-
       const direction: string = (this.MediaSize.toUpperCase() === 'XS' ||
                                 this.MediaSize.toUpperCase() === 'SM') ? 'VERTICAL' : 'HORIZONTAL';
 
@@ -83,19 +81,19 @@ export class DynamicComponent implements OnInit {
       // }
     });
 
-    // this.sideSlideSubscription = this.AnimationSrvc.ExpandToggleChanged.subscribe(
+    this.sideSlideSubscription = this.AnimationSrvc.ExpandToggleChanged.subscribe(
+      // ExpandToggleModel
+      (res: any) => {
+        console.log('RES', this.AnimationSrvc.IsOpen);
+        if (res.Direction === 'HORIZONTAL') {
 
-    //   (res: ExpandToggleModel) => {
-
-    //     if (res.Direction === 'HORIZONTAL') {
-
-    //       this.OnExpandHorizontal = res.Toggle;
-    //     } else {
-
-    //       this.OnExpandVertical = res.Toggle;
-    //     }
-    //   }
-    // );
+          // this.OnExpandHorizontal = res.Toggle;
+        } else {
+          // console.log(this.AnimationSrvc.ExpandVerticalToggleVal);
+          // this.OnExpandVertical = res.Toggle;
+        }
+      }
+    );
   }
 
   //  API Methods
@@ -141,7 +139,7 @@ export class DynamicComponent implements OnInit {
    * @param evt Animation event for open and closing side nav
    */
   public OnSideNavOpenCloseDoneEvent(evt: any): void {
-    this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
+    // this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
   }
 
   public SidePanelAction(): string {
@@ -149,12 +147,14 @@ export class DynamicComponent implements OnInit {
     if (!this.MediaSize) { return; }
 
     const mediaSize: string = this.MediaSize.toUpperCase();
-
+    console.log('BLAH ', this.AnimationSrvc.IsOpen);
     if (mediaSize === 'XS' || mediaSize === 'SM') {
-      return this.AnimationSrvc.ExpandVerticalToggleVal ? 'up' : 'down';
+      return this.AnimationSrvc.IsOpen ? 'down' : 'up';
+      // return this.AnimationSrvc.ExpandVerticalToggleVal ? 'up' : 'down';
     }
 
-    return this.AnimationSrvc.ExpandHoizontalToggleVal ? 'open' : 'close';
+    return this.AnimationSrvc.IsOpen ? 'open' : 'close';
+    // return this.AnimationSrvc.ExpandHoizontalToggleVal ? 'open' : 'close';
   }
 
   public Refresh(ctxt: string) {
@@ -315,7 +315,7 @@ export class DynamicComponent implements OnInit {
   }
 
   protected handleStateChanged() {
-    console.log(this.State);
+    // console.log(this.State);
   }
 
   protected setupStateHandler() {
