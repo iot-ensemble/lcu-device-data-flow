@@ -1,12 +1,23 @@
 <div fxFlexFill>
-  <div fxFlexFill fxLayout="column" fxLayoutGap="5px">
-    <div fxLayout="row" fxLayoutGap="5px">
+  <div 
+    fxFlexFill 
+    fxLayout="column" 
+    fxLayoutGap="5px">
+    <div 
+      fxLayout="row" 
+      fxLayout.lt-sm="column"
+      fxLayoutGap="5px">
       <div
-        fxFlex="75"
+        fxFlex
+        fxLayout.lt-md="column"
         fxLayoutAlign="start end"
         class="welcome-bg background-fill"
       >
-        <div class="welcome-index" fxLayout="row" fxLayoutGap="30px">
+        <div 
+          class="welcome-index" 
+          fxLayout="row" 
+          fxLayout.lt-md="column" 
+          fxLayoutGap="30px">
           <div fxFlex="30">
             <h1 fxLayout="column">
               <span class="plain-text theme-accent-text margin-bottom-2">
@@ -16,7 +27,7 @@
             </h1>
           </div>
 
-          <div class="divider-fill-vert"></div>
+          <div ngClass.lt-md="divider-fill-hor" ngClass.gt-sm="divider-fill-vert"></div>
 
           <div fxLayout="column">
             <h2 class="plain-text theme-accent-text">Device Dashboard</h2>
@@ -29,53 +40,70 @@
         </div>
       </div>
 
-      <div fxFlex class="background-fill blank-header"></div>
+      <div fxLayout.sm="column" fxFlex="30" fxFlex class="background-fill blank-header"></div>
     </div>
 
     <!-- <div style="height: 200px; width: 100px; background-color: rgb(192, 24, 24);"
       [@onSideNavOpenClose]="SideNavSrvc.SideNavToggleVal ? 'open' : 'close'">test
       </div> -->
 
-    <div fxFlexFill fxLayout="row">
-      <div fxFlex fxLayout="row" fxLayoutGap="5px">
+    <div 
+    fxFlexFill 
+    fxLayout="row"
+    fxLayout.lt-md="column">
+      <div 
+      fxFlex 
+      fxLayout="row" 
+      fxLayout.lt-md="column"
+      fxLayoutGap="5px">
         <!-- left side -->
-        <div
-          [@onSideNavOpenClose]="
-            SideNavSrvc.SideNavToggleVal ? 'open' : 'close'
-          "
-          (@onSideNavOpenClose.done)="OnSideNavOpenCloseDoneEvent($event)"
-          fxFlex="25"
-          fxLayout="row"
-          fxFill
+        <div 
+          [@OnExpandHorizontal]="SidePanelAction()"
+          (@OnExpandHorizontal.done)="OnExpandHorizontalDoneEvent($event)"
+          [@OnExpandVertical]="SidePanelAction()"
+          (@OnExpandVertical.done)="OnExpandVerticalDoneEvent($event)"
+          fxLayout="column"
+          fxLayout.lt-md="row"
           fxLayoutAlign="start start"
           class="background-fill box-side-triangle"
         >
           <div fxLayout="column" class="side-column">
             <div
               class="side-toggle-container"
-              [@onSideNavOpenClose]="
-                SideNavSrvc.SideNavToggleVal ? 'open' : 'close'
-              "
-              fxLayoutAlign="end"
-            >
+              [@OnExpandHorizontal]="AnimationSrvc.ExpandHoizontalToggleVal ? 'open' : 'close'"
+              [@OnExpandVertical]="AnimationSrvc.ExpandVerticalToggleVal ? 'up' : 'down'"
+              >
+              
               <button mat-icon-button (click)="ToggleSideNav()">
-                <mat-icon *ngIf="SideNavSrvc.SideNavToggleVal">
-                  arrow_left
-                </mat-icon>
-                <mat-icon *ngIf="!SideNavSrvc.SideNavToggleVal">
-                  arrow_right
-                </mat-icon>
+
+                <div *ngIf="AnimationSrvc.Direction === 'HORIZONTAL'">
+                  <mat-icon *ngIf="AnimationSrvc.ExpandHoizontalToggleVal">
+                    arrow_left
+                  </mat-icon>
+                  <mat-icon *ngIf="!AnimationSrvc.ExpandHoizontalToggleVal">
+                    arrow_right
+                  </mat-icon>
+                </div>
+               
+                <div *ngIf="AnimationSrvc.Direction === 'VERTICAL'">
+                  <mat-icon *ngIf="AnimationSrvc.ExpandVerticalToggleVal">
+                    arrow_drop_down
+                  </mat-icon>
+                  <mat-icon *ngIf="!AnimationSrvc.ExpandVerticalToggleVal">
+                    arrow_drop_up
+                  </mat-icon>
+                </div>
               </button>
             </div>
 
+            <!-- [ngStyle]="{
+                display: OnExpandVertical || OnExpandHoizontal === false ? 'none' : 'block'
+              }" -->
             <div
-              [ngStyle]="{
-                display: SideNavOpenCloseEvent === true ? 'none' : 'block'
-              }"
               fxLayout="column"
               fxFlex="90"
-              class="padding-left-5 padding-right-5 padding-top-5"
-            >
+              
+              class="padding-left-5 padding-right-5 padding-top-5">
               <div class="divider-fill-hor"></div>
 
               <h3 class="mat-display-5 plain-text whats-next-text">
@@ -122,7 +150,7 @@
             (telemetry-download)="TelemetryDownload($event)"
             (toggle-device-telemetry-enabled)="ToggleTelemetryEnabled()"
             (toggle-emulated-enabled)="ToggleEmulatedEnabled()"
-            (update-device-table-page-size)="UpdateDeviceTablePageSize($event)"
+            (devices-page-event)="HandleDevicePageEvent($event)"
             (telemetry-page-event)="HandleTelemetryPageEvent($event)"
             (update-refresh-rate)="UpdateRefreshRate($event)"
           ></lcu-setup-manage-element>

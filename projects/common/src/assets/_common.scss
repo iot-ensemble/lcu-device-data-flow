@@ -13,8 +13,9 @@ $orange-accent: map-get($mat-orange, 500);
 $green-accent: map-get($mat-green, 400);
 $yellow-accent: map-get($mat-yellow, 600);
 
-$success:  map-get($mat-green, A700);
+$success: map-get($mat-green, A700);
 
+// $primary-logo: $fathym-default-logo;
 $logo-color: map-get(map-get($global-theme, 'foreground'), 'icon');
 $divider-size: 5px;
 $divider: mat-color($primary);
@@ -34,6 +35,25 @@ html, body {
     margin: 0 !important;
     background-color: $background;
     color: white;
+}
+
+.logo-config {
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+ .fathym-logo {
+    background-image: fathym-logo(thinky-logo, mat-color($accent), 1);
+    width: 50px; 
+    height: 60px;
+    @extend .logo-config;
+}
+
+.fathym-full-logo {
+    background-image: fathym-logo(thinky-full-logo, mat-color($accent), 1);
+    width: 160px; 
+    height: 60px;
+    @extend .logo-config;
 }
 
 .no-access {

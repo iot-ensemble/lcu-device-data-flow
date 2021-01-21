@@ -37,7 +37,6 @@ import {
 } from './../../state/iot-ensemble.state';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SideNavService } from '../../services/sidenav.service';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -146,8 +145,8 @@ export class LcuSetupManageElementComponent
   @Output('toggle-emulated-enabled')
   public ToggleEmulatedEnabled: EventEmitter<boolean>;
 
-  @Output('update-device-table-page-size')
-  public UpdateDeviceTablePageSize: EventEmitter<any>;
+  @Output('devices-page-event')
+  public DevicesPageEvent: EventEmitter<any>;
 
   @Output('telemetry-page-event')
   public TelemetryPageEvent: EventEmitter<any>;
@@ -171,6 +170,8 @@ export class LcuSetupManageElementComponent
   ) {
     super(injector);
 
+    this.DevicesPageEvent = new EventEmitter();
+
     this.EnrollDevice = new EventEmitter();
 
     this.IssuedDeviceSASToken = new EventEmitter();
@@ -190,8 +191,6 @@ export class LcuSetupManageElementComponent
     this.ToggleTelemetryEnabled = new EventEmitter();
 
     this.ToggleEmulatedEnabled = new EventEmitter();
-
-    this.UpdateDeviceTablePageSize = new EventEmitter();
 
     this.TelemetryPageEvent = new EventEmitter();
 
@@ -259,7 +258,7 @@ export class LcuSetupManageElementComponent
 
   public DeviceTablePageEvent(event: any) {
     console.log("PAGE EVENT", event)
-    this.UpdateDeviceTablePageSize.emit(event);
+    this.DevicesPageEvent.emit(event);
 
   }
 
@@ -297,7 +296,7 @@ export class LcuSetupManageElementComponent
     this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: ColdQueryModel) => {
         console.log('TELEMETRY MODAL CLOSED', res);
-        this.TelemetryDownload.emit(res)
+        this.TelemetryDownload.emit(res);
       }
     );
 
@@ -320,7 +319,6 @@ export class LcuSetupManageElementComponent
   }
 
   public HandleTelemetryPageEvent(event: any) {
-
     this.TelemetryPageEvent.emit(event);
   }
 
@@ -408,7 +406,6 @@ export class LcuSetupManageElementComponent
   //       link.href = url;
   //       link.click();
 
-
   // }
 
   public ToggleAddingDevice() {
@@ -427,6 +424,9 @@ export class LcuSetupManageElementComponent
   protected convertToDate(syncDate: string) {
     if (syncDate) {
       this.LastSyncedAt = new Date(Date.parse(syncDate));
+    }
+    else{
+      this.LastSyncedAt = null;
     }
   }
 
@@ -461,11 +461,11 @@ export class LcuSetupManageElementComponent
       ? JSON.stringify(this.Dashboard?.FreeboardConfig)
       : '';
 
+    this.FreeboardURL = this.lcuSvcSettings.State.FreeboardURL || '/freeboard';
+
     this.DashboardIFrameURL = this.sanitizer.bypassSecurityTrustResourceUrl(
       `${this.FreeboardURL}#data=${source}`
     );
-
-    this.FreeboardURL = this.lcuSvcSettings.State.FreeboardURL || '/freeboard';
   }
 
   protected setupAddDeviceForm() {
