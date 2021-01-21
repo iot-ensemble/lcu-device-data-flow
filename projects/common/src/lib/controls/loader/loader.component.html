@@ -1,7 +1,6 @@
 <div *ngIf="Loading">
   <div fxLayout="row" fxLayoutAlign="center center" class="spinner-container">
     <mat-spinner [diameter]="Diameter"></mat-spinner>
-
     <div
       [class.spinner-logo]="true"
       logo-alt="Fathym Logo"
@@ -9,5 +8,8 @@
       [style.width]="LogoDiameter"
       *ngIf="!HideInner"
       ></div>
+  </div>
+  <div fxLayoutAlign="space-around center" >
+    <p>Setting up your Dashboard</p>
   </div>
 </div>
