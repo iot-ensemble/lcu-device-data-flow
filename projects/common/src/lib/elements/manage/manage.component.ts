@@ -48,6 +48,7 @@ import { SendMessageDialogComponent } from './controls/send-message-dialog/send-
 import { SasTokenDialogComponent } from './controls/sas-token-dialog/sas-token-dialog.component';
 import { TelemetryDownloadDialogComponent } from './controls/telemetry-download-dialog/telemetry-download-dialog.component';
 import { ColdQueryModel } from '../../models/cold-query.model';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare var freeboard: any;
 
@@ -314,7 +315,8 @@ export class LcuSetupManageElementComponent
   public EnrollDeviceSubmit() {
     this.EnrollDevice.emit({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
-    });
+    })
+    //this.AddDeviceFormGroup.reset();
   }
 
   public HandleTelemetryPageEvent(event: any) {
