@@ -43,10 +43,6 @@
       <div fxLayout.sm="column" fxFlex="30" fxFlex class="background-fill blank-header"></div>
     </div>
 
-    <!-- <div style="height: 200px; width: 100px; background-color: rgb(192, 24, 24);"
-      [@onSideNavOpenClose]="SideNavSrvc.SideNavToggleVal ? 'open' : 'close'">test
-      </div> -->
-
     <div 
     fxFlexFill 
     fxLayout="row"
@@ -66,8 +62,6 @@
           class="background-fill box-side-triangle"
         >
           <div fxLayout="column" class="side-column">
-            <!-- [@OnExpandHorizontal]="AnimationSrvc.ExpandHoizontalToggleVal ? 'open' : 'close'"
-              [@OnExpandVertical]="AnimationSrvc.ExpandVerticalToggleVal ? 'up' : 'down'" -->
             <div
               class="side-toggle-container"
               
@@ -101,8 +95,7 @@
                 [ngStyle]="{
               visibilty: !AnimationSrvc.IsOpen ? 'none' : 'block'}"
               }" -->
-            <div [@AnimateText]="AnimationSrvc.IsOpen ? 'show' : 'hide'"
-            >
+            <div [@AnimateOpacity]="AnimationSrvc.IsOpen ? 'show' : 'hide'">
               <div
                 fxLayout="column"
                 ngClass.gt-sm="padding-top-5"

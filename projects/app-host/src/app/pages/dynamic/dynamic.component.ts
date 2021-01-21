@@ -10,7 +10,7 @@ import {
   AnimationService,
   OnExpandHorizontal,
   OnExpandVertical,
-  AnimateText
+  AnimateOpacity
 } from '@iot-ensemble/lcu-setup-common';
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { Subscription } from 'rxjs';
@@ -20,7 +20,7 @@ import { map } from 'rxjs/internal/operators/map';
   selector: 'lcu-dynamic',
   templateUrl: './dynamic.component.html',
   styleUrls: ['./dynamic.component.scss'],
-  animations: [OnExpandHorizontal, OnExpandVertical, AnimateText],
+  animations: [OnExpandHorizontal, OnExpandVertical, AnimateOpacity],
 })
 export class DynamicComponent implements OnInit {
   //  Fields
@@ -147,14 +147,12 @@ export class DynamicComponent implements OnInit {
     if (!this.MediaSize) { return; }
 
     const mediaSize: string = this.MediaSize.toUpperCase();
-    console.log('BLAH ', this.AnimationSrvc.IsOpen);
+    
     if (mediaSize === 'XS' || mediaSize === 'SM') {
       return this.AnimationSrvc.IsOpen ? 'down' : 'up';
-      // return this.AnimationSrvc.ExpandVerticalToggleVal ? 'up' : 'down';
     }
 
     return this.AnimationSrvc.IsOpen ? 'open' : 'close';
-    // return this.AnimationSrvc.ExpandHoizontalToggleVal ? 'open' : 'close';
   }
 
   public Refresh(ctxt: string) {
