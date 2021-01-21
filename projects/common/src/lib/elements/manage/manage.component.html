@@ -106,13 +106,18 @@
           </ng-container>
 
           <ng-container *ngIf="MaxDevicesReached">
-            <p class="paragraph-text">
+            <p *ngIf="DevicesConfig.MaxDevicesCount < 50" class="paragraph-text">
               Click "Upgrade Now" to see other plans where you can connect more
               than
               {{ DevicesConfig.MaxDevicesCount }}
               {{ DevicesConfig.MaxDevicesCount > 1 ? "devices" : "device" }}, increase
               your data velocity, increase your data retention and other great
               benefits.
+            </p>
+            <p *ngIf="DevicesConfig.MaxDevicesCount === 50" class="paragraph-text">
+              Please contact Fathym at 
+                <a href = "mailto: sales@fathym.com" color="primary">
+              sales@fathym.com</a> for enterprise packages.
             </p>
           </ng-container>
         </div>
@@ -145,11 +150,13 @@
             href="https://www.iot-ensemble.com/docs/getting-started/buy-and-scale"
             target="_blank"
             *ngIf="AddingDevice"
+            color="accent"
           >
             Read Documentation
           </a>
 
           <a
+          *ngIf="DevicesConfig.MaxDevicesCount < 50"
             mat-raised-button
             href="/billing/iot"
             color="accent"

@@ -78,7 +78,6 @@ export class LcuSetupManageElementComponent
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
-
     return this.AddingDevice ? maxDeviceFlex : '100%';
   }
 
@@ -106,7 +105,8 @@ export class LcuSetupManageElementComponent
   public LastSyncedAt: Date;
 
   public get MaxDevicesReached(): boolean {
-    return this.DevicesConfig?.Devices?.length >= this.DevicesConfig?.MaxDevicesCount;
+    
+    return this.DevicesConfig?.TotalDevices >= this.DevicesConfig?.MaxDevicesCount;
   }
 
   /**
