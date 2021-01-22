@@ -13,7 +13,7 @@ $orange-accent: map-get($mat-orange, 500);
 $green-accent: map-get($mat-green, 400);
 $yellow-accent: map-get($mat-yellow, 600);
 
-$success: map-get($mat-green, A700);
+$success:  map-get($mat-green, A700);
 
 // $primary-logo: $fathym-default-logo;
 $logo-color: map-get(map-get($global-theme, 'foreground'), 'icon');
@@ -29,10 +29,14 @@ $secondary-text: map-get(map-get($global-theme, 'foreground'), 'secondary-text')
     @return rgba($color, $opacity);
 }
 
-html, body {
+* {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
     height: 100%;
-    margin: 0 !important;
     background-color: $background;
     color: white;
 }
