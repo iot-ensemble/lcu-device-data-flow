@@ -26,5 +26,4 @@ export class PayloadComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }
