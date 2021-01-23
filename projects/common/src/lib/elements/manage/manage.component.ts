@@ -85,7 +85,7 @@ export class LcuSetupManageElementComponent
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
-
+// debugger;
     return this.AddingDevice ? maxDeviceFlex : '100%';
   }
 

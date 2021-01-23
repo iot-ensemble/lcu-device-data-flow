@@ -51,207 +51,130 @@
   <!--^^^ Emulated Devices ^^^-->
 
   <!-- Connected Devices -->
-  <div fxLayout="column" fxLayoutGap="1em">
-    <!--  [fxFlex]="ConnectedDevicesInfoCardFlex"
-      fxFlex.lt-md="100%"
-      fxLayout="column"> -->
-    <mat-card fxLayout="column">
-      <div fxFlex fxLayout="row" fxLayoutAlign="end" class="margin-bottom-3">
-        <a
-          href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
-          target="_blank"
-        >
-          <mat-icon matTooltip="More info">help_outline</mat-icon>
-        </a>
-      </div>
-      <mat-card-header>
-        <div
-          mat-card-avatar
-          fxLayoutAlign="center center"
-          [class.orange-accent]="!AddingDevice"
-          [class.green-accent]="AddingDevice"
-        >
-          <mat-icon>loop</mat-icon>
-        </div>
-        <mat-card-title> Connected Devices </mat-card-title>
-        <div fxFlex></div>
-        <mat-card-subtitle *ngIf="MaxDevicesReached && AddingDevice">
-          Max number of devices reached
-        </mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content
-        [class.margin-left-5]="
-          AddingDevice || DevicesConfig?.Devices?.length <= 0
-        "
+  <div class="connected section">
+    <div fxLayout="row" fxLayoutGap="1em">
+      <!--
+    fxLayout="column"> -->
+      <mat-card
+        fxLayout="column"
+        [fxFlex]="ConnectedDevicesInfoCardFlex"
+        fxFlex.lt-md="100%"
       >
-        <mat-progress-bar
-          class="margin-top-2"
-          mode="indeterminate"
-          *ngIf="DevicesConfig?.Loading"
-        ></mat-progress-bar>
-
-        <div *ngIf="AddingDevice">
-          <ng-container *ngIf="!MaxDevicesReached">
-            <p class="paragraph-text">
-              To connect a device and see its real-time data flowing through the
-              system, simply enter a device name and enroll it. You will be
-              provided with a connection string for your device.
-            </p>
-          </ng-container>
-
-          <ng-container *ngIf="MaxDevicesReached">
-            <p
-              *ngIf="DevicesConfig.MaxDevicesCount < 50"
-              class="paragraph-text"
-            >
-              Click "Upgrade Now" to see other plans where you can connect more
-              than
-              {{ DevicesConfig.MaxDevicesCount }}
-              {{ DevicesConfig.MaxDevicesCount > 1 ? "devices" : "device" }},
-              increase your data velocity, increase your data retention and
-              other great benefits.
-            </p>
-            <p
-              *ngIf="DevicesConfig.MaxDevicesCount === 50"
-              class="paragraph-text"
-            >
-              Please contact Fathym at
-              <a href="mailto: sales@fathym.com" color="primary">
-                sales@fathym.com</a
-              >
-              for enterprise packages.
-            </p>
-          </ng-container>
+        <div fxFlex fxLayout="row" fxLayoutAlign="end" class="margin-bottom-3">
+          <a
+            href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
+            target="_blank"
+          >
+            <mat-icon matTooltip="More info">help_outline</mat-icon>
+          </a>
         </div>
 
-        <div class="device-list" *ngIf="!AddingDevice">
-          <lcu-devices-table
-            [devices-config]="DevicesConfig"
-            (issued-sas-token)="IssueDeviceSASToken($event)"
-            (page-event)="DeviceTablePageEvent($event)"
-            (revoked)="RevokeDeviceEnrollmentClick($event)"
-          ></lcu-devices-table>
-        </div>
-      </mat-card-content>
+        <mat-card-header>
+          <div
+            mat-card-avatar
+            fxLayoutAlign="center center"
+            [class.orange-accent]="!AddingDevice"
+            [class.green-accent]="AddingDevice"
+          >
+            <mat-icon>loop</mat-icon>
+          </div>
 
-      <mat-card-actions>
-        <div fxFlex></div>
+          <mat-card-title> Connected Devices </mat-card-title>
 
-        <a
-          mat-raised-button
-          color="accent"
-          (click)="ToggleAddingDevice()"
-          *ngIf="!AddingDevice"
+          <div fxFlex></div>
+
+          <mat-card-subtitle *ngIf="MaxDevicesReached && AddingDevice">
+            Max number of devices reached
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content
+          [class.margin-left-5]="
+            AddingDevice || DevicesConfig?.Devices?.length <= 0
+          "
         >
-          Enroll New Device
-        </a>
+          <mat-progress-bar
+            class="margin-top-2"
+            mode="indeterminate"
+            *ngIf="DevicesConfig?.Loading"
+          ></mat-progress-bar>
 
-        <ng-container *ngIf="AddingDevice && MaxDevicesReached">
-          <a
-            mat-button
-            href="https://www.iot-ensemble.com/docs/getting-started/buy-and-scale"
-            target="_blank"
-            *ngIf="AddingDevice"
-            color="accent"
-          >
-            Read Documentation
-          </a>
+          <div *ngIf="AddingDevice">
+            <ng-container *ngIf="!MaxDevicesReached">
+              <p class="paragraph-text">
+                To connect a device and see its real-time data flowing through
+                the system, simply enter a device name and enroll it. You will
+                be provided with a connection string for your device.
+              </p>
+            </ng-container>
 
-          <a
-            *ngIf="DevicesConfig.MaxDevicesCount < 50"
-            mat-raised-button
-            href="/billing/iot"
-            color="accent"
-            target="_blank"
-          >
-            Upgrade now
-          </a>
-
-          <a mat-button color="warn" (click)="ToggleAddingDevice()">
-            <mat-icon>cancel</mat-icon>
-            Cancel
-          </a>
-        </ng-container>
-      </mat-card-actions>
-    </mat-card>
-
-    <form
-      fxFlex="50%"
-      [formGroup]="AddDeviceFormGroup"
-      (ngSubmit)="EnrollDeviceSubmit()"
-      *ngIf="AddingDevice && !MaxDevicesReached"
-    >
-      <mat-card>
-        <mat-card-content>
-          <div>
-            <div class="device-adding">
-              <h2>Enroll a New Device</h2>
-
-              <mat-form-field>
-                <input
-                  matInput
-                  formControlName="deviceName"
-                  placeholder="The Name of your Device"
-                  required
-                />
-              </mat-form-field>
-            </div>
-            <div
-              *ngIf="
-                AddDeviceFormGroup.get('deviceName').invalid &&
-                (AddDeviceFormGroup.get('deviceName').dirty ||
-                  AddDeviceFormGroup.get('deviceName').touched)
-              "
-              class="alert alert-danger"
-            >
-              <mat-error
-                *ngIf="
-                  AddDeviceFormGroup.get('deviceName').hasError('required')
-                "
+            <ng-container *ngIf="MaxDevicesReached">
+              <p
+                *ngIf="DevicesConfig.MaxDevicesCount < 50"
+                class="paragraph-text"
               >
-                Device name is required
-              </mat-error>
-
-              <mat-error
-                *ngIf="
-                  AddDeviceFormGroup.get('deviceName').hasError('maxlength')
-                "
+                Click "Upgrade Now" to see other plans where you can connect
+                more than
+                {{ DevicesConfig.MaxDevicesCount }}
+                {{ DevicesConfig.MaxDevicesCount > 1 ? "devices" : "device" }},
+                increase your data velocity, increase your data retention and
+                other great benefits.
+              </p>
+              <p
+                *ngIf="DevicesConfig.MaxDevicesCount === 50"
+                class="paragraph-text"
               >
-                Device name cannot be longer than 128 characters
-              </mat-error>
+                Please contact Fathym at
+                <a href="mailto: sales@fathym.com" color="primary">
+                  sales@fathym.com</a
+                >
+                for enterprise packages.
+              </p>
+            </ng-container>
+          </div>
 
-              <mat-error
-                *ngIf="AddDeviceFormGroup.get('deviceName').hasError('pattern')"
-              >
-                A case-sensitive string of ASCII 7-bit alphanumeric characters
-                plus certain special characters: - . % _ * ? ! ( ) , : = @ $ '
-              </mat-error>
-
-              <mat-error
-                *ngIf="
-                  AddDeviceFormGroup.get('deviceName').hasError('duplicateName')
-                "
-              >
-                Device name already exists
-              </mat-error>
-            </div>
+          <div class="device-list" *ngIf="!AddingDevice">
+            <lcu-devices-table
+              [devices-config]="DevicesConfig"
+              (issued-sas-token)="IssueDeviceSASToken($event)"
+              (page-event)="DeviceTablePageEvent($event)"
+              (revoked)="RevokeDeviceEnrollmentClick($event)"
+            ></lcu-devices-table>
           </div>
         </mat-card-content>
 
         <mat-card-actions>
           <div fxFlex></div>
 
-          <ng-container>
-            <button
-              mat-raised-button
-              type="submit"
-              color="primary"
-              *ngIf="!DevicesConfig?.Loading"
-              [disabled]="!AddDeviceFormGroup.valid"
+          <a
+            mat-raised-button
+            color="accent"
+            (click)="ToggleAddingDevice()"
+            *ngIf="!AddingDevice"
+          >
+            Enroll New Device
+          </a>
+
+          <ng-container *ngIf="AddingDevice && MaxDevicesReached">
+            <a
+              mat-button
+              href="https://www.iot-ensemble.com/docs/getting-started/buy-and-scale"
+              target="_blank"
+              *ngIf="AddingDevice"
+              color="accent"
             >
-              Enroll Device
-            </button>
+              Read Documentation
+            </a>
+
+            <a
+              *ngIf="DevicesConfig.MaxDevicesCount < 50"
+              mat-raised-button
+              href="/billing/iot"
+              color="accent"
+              target="_blank"
+            >
+              Upgrade now
+            </a>
 
             <a mat-button color="warn" (click)="ToggleAddingDevice()">
               <mat-icon>cancel</mat-icon>
@@ -260,7 +183,97 @@
           </ng-container>
         </mat-card-actions>
       </mat-card>
-    </form>
+
+      <form
+        fxFlex="50%"
+        [formGroup]="AddDeviceFormGroup"
+        (ngSubmit)="EnrollDeviceSubmit()"
+        *ngIf="AddingDevice && !MaxDevicesReached"
+      >
+        <mat-card>
+          <mat-card-content>
+            <div>
+              <div class="device-adding">
+                <h2>Enroll a New Device</h2>
+
+                <mat-form-field>
+                  <input
+                    matInput
+                    formControlName="deviceName"
+                    placeholder="The Name of your Device"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+              <div
+                *ngIf="
+                  AddDeviceFormGroup.get('deviceName').invalid &&
+                  (AddDeviceFormGroup.get('deviceName').dirty ||
+                    AddDeviceFormGroup.get('deviceName').touched)
+                "
+                class="alert alert-danger"
+              >
+                <mat-error
+                  *ngIf="
+                    AddDeviceFormGroup.get('deviceName').hasError('required')
+                  "
+                >
+                  Device name is required
+                </mat-error>
+
+                <mat-error
+                  *ngIf="
+                    AddDeviceFormGroup.get('deviceName').hasError('maxlength')
+                  "
+                >
+                  Device name cannot be longer than 128 characters
+                </mat-error>
+
+                <mat-error
+                  *ngIf="
+                    AddDeviceFormGroup.get('deviceName').hasError('pattern')
+                  "
+                >
+                  A case-sensitive string of ASCII 7-bit alphanumeric characters
+                  plus certain special characters: - . % _ * ? ! ( ) , : = @ $ '
+                </mat-error>
+
+                <mat-error
+                  *ngIf="
+                    AddDeviceFormGroup.get('deviceName').hasError(
+                      'duplicateName'
+                    )
+                  "
+                >
+                  Device name already exists
+                </mat-error>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <div fxFlex></div>
+
+            <ng-container>
+              <button
+                mat-raised-button
+                type="submit"
+                color="primary"
+                *ngIf="!DevicesConfig?.Loading"
+                [disabled]="!AddDeviceFormGroup.valid"
+              >
+                Enroll Device
+              </button>
+
+              <a mat-button color="warn" (click)="ToggleAddingDevice()">
+                <mat-icon>cancel</mat-icon>
+                Cancel
+              </a>
+            </ng-container>
+          </mat-card-actions>
+        </mat-card>
+      </form>
+    </div>
   </div>
   <!--^^^ Connected Devices ^^^-->
 
