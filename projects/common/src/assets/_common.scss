@@ -120,3 +120,6 @@ html, body {
     background-color: rgba(map-get($accent, 500), .07);
 }
 
+.mat-button-base {
+  padding: 0 16px !important;
+}
