@@ -1,10 +1,17 @@
+@import "../../../assets/common";
+
+@mixin info-dot($color) {
+  color: $color;
+  font-size: 1em;
+}
+
 :host {
   .manage-header {
   }
 
   .manage {
-    .widget {
-      margin: 1em;
+    .section {
+      margin: .5rem 0;
     }
 
     .devices {
@@ -12,20 +19,21 @@
       }
 
       .connected {
-        .deviceId, .connStr {
-          width: 300px;
-          margin: 0.5em;
+        .deviceId,
+        .connStr {
+          // width: 300px;
+          // margin: 0.5em;
         }
       }
 
-      .dashboard {
-        iframe {
-          width: 100%;
-        }
-      }
+      // .dashboard {
+        // iframe {
+          // width: 100%;
+        // }
+      // }
 
-      .telemetry {
-      }
+      // .telemetry {
+      // }
     }
 
     .connected {
@@ -34,6 +42,22 @@
     }
 
     .storage-access {
+    }
+  }
+
+  .border-bottom {
+    // border-bottom: 1px solid set-opacity(grey, .25);
+  }
+
+  .telemetry-update {
+    color: set-opacity(white, 0.25);
+
+    .success-dot {
+      @include info-dot($success);
+    }
+
+    .error-dot {
+      @include info-dot(mat-color($warn))
     }
   }
 }

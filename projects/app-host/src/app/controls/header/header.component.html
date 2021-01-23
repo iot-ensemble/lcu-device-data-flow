@@ -1,18 +1,30 @@
-<mat-toolbar color="primary">
-  <button
+<mat-toolbar 
+  color="primary">
+  <!-- <button
     mat-icon-button
     class="menu-button"
     (click)="MenuClick($event)"
-    *ngIf="ShowMenu"
-  >
+    *ngIf="ShowMenu">
     <mat-icon>menu</mat-icon>
-  </button>
+  </button> -->
 
-  <img src="assets/img/logo.svg" class="logo" />
-
+  <div 
+    style="height: 60px;" 
+    ngClass.gt-xs="fathym-full-logo" 
+    ngClass.xs="fathym-logo">
+  </div>
+  
+  <div 
+    fxFlex
+    fxLayoutGap.lt-sm="5px"
+    fxLayoutGap.gt-sm="10px"
+    >
   <a mat-button href="/">{{ Text }}</a>
 
-  <div class="filler"></div>
-
-  <a mat-button href="/.oauth/logout">Sign Out</a>
+  <div 
+    fxFlex 
+    fxLayoutAlign="end">
+    <a mat-button href="/.oauth/logout">Sign Out</a>
+  </div>
+</div>
 </mat-toolbar>

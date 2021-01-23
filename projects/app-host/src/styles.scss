@@ -1,26 +1,11 @@
-@import '../../../node_modules/@lcu/common/assets/theming/common-theme';
-@import '../../../node_modules/@lcu/common/assets/styles/fathym-global.styles';
-
-$global-theme: fathym-ivy-theme(true);
-
-// :root {
-//     --global-theme: $global-theme;
-
-// }
-
-/**
-* Or, can call create-theme and pass in your own palatte colors
-*/
-// $global-theme: create-theme($fathym-primary, $fathym-accent, $fathym-warn, true);
-$global-background: map-get(map-get($global-theme, background), 'background');
-
-/**
-* Set the theme and generate dynamic variant theme classes,
-* theme-setup is inside of Ref Arch (common-theme)
-*
-* If we skip this @include, the default theme is 'fathym-ivy-theme'
-*/
+@import "../../common/src/assets/common";
 @include theme-setup($global-theme);
+
+//counters freeboards effect on style when modal is open
+#index-page{
+  top: 0px !important;
+  overflow: hidden;
+}
 
 /**
 * Common styles for Napkin-IDE projects
@@ -28,13 +13,33 @@ $global-background: map-get(map-get($global-theme, background), 'background');
 * If this starts to get big, think about moving these to another stylesheet
 */
 .spinner-logo {
-    position: absolute;
-    background-image: fathym-logo(thinky-logo,black, 1 );
-    height: 50px !important;
-    width: 50px !important;
-    background-repeat:no-repeat;
+  position: absolute;
+  background-image: fathym-logo(thinky-logo, black, 1);
+  // height: 50px !important;
+  // width: 50px !important;
+  // height: 50px !important;
+  // width: 50px !important;
+  background-repeat: no-repeat;
 }
 
 .wrapperloading {
   display: none !important;
 }
+
+//TODO:  Move to common and out  of all default styles
+.mat-spinner {
+  ::ng-deep circle {
+      stroke: $success;
+  }
+
+  margin: auto;
+}
+
+.mat-full-width {
+  width: 100%;
+}
+
+.spread {
+  margin: 2em;
+}
+

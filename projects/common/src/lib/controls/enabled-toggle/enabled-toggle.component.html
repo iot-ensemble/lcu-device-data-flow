@@ -1,9 +1,9 @@
 <div>
-  <lcu-loader [loading]="DisplayText == EnablingText"></lcu-loader>
+  <lcu-loader [loading]="Loading"></lcu-loader>
 
   <mat-slide-toggle
     #enabledToggle
-    *ngIf="DisplayText != EnablingText"
+    *ngIf="!Loading"
     [checked]="Enabled"
     (change)="ToggleEnabledChanged($event)"
   >

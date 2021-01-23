@@ -1,12 +1,12 @@
-<div class="page">
+<div fxFlexFill fxLayout="column">
   <lcu-header
     class="header"
     [show-menu]="IsMobile"
-    (menu-click)="HeaderMenuClicked($event)"
-  ></lcu-header>
+    (menu-click)="HeaderMenuClicked($event)">
+  </lcu-header>
 
-  <mat-drawer-container class="drawers" [hasBackdrop]="IsMobile">
-    <mat-drawer class="nav-drawer" [mode]="NavDrawerMode" #navDrawer>
+  <!-- <mat-drawer-container class="drawers" [hasBackdrop]="IsMobile"> -->
+    <!-- <mat-drawer class="nav-drawer" [mode]="NavDrawerMode" #navDrawer>
       nav drawer
     </mat-drawer>
 
@@ -26,12 +26,12 @@
 
         <p>You can use this dashboard to get your data flowing.</p>
       </div>
-    </mat-drawer>
+    </mat-drawer> -->
 
-    <div class="page-content">
+    <div class="margin-2">
       <router-outlet></router-outlet>
     </div>
-  </mat-drawer-container>
+  <!-- </mat-drawer-container> -->
 
   <lcu-footer class="footer"></lcu-footer>
 </div>

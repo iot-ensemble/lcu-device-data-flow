@@ -1,4 +1,4 @@
-:host {
+:host ::ng-deep {
   .table-container {
     .mat-table {
       width: 100%;
@@ -19,9 +19,21 @@
         //   background: #f5f5f5;
         // }
 
+        .gray {
+          background-color: gray;
+        }
+
+        .light-gray {
+          background-color: rgb(212, 212, 212);
+        }
+
         &.expanded {
           border-bottom-color: transparent;
         }
+      }
+
+      lcu-dynamic-container {
+        width: 100%;
       }
     }
   }

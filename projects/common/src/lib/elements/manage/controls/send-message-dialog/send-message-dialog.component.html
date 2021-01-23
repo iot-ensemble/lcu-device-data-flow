@@ -1,0 +1,7 @@
+<h2>Send a Device Message</h2>
+
+<lcu-payload-form
+  [device-options]="DeviceNames"
+  (canceled)="Cancel()"
+  (sent)="SendDeviceMesaage($event)"
+></lcu-payload-form>

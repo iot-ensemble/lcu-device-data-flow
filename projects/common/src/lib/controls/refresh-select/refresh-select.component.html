@@ -1,13 +1,13 @@
-<mat-form-field id="refresh-rate-selection" appearance="fill">
+<mat-form-field id="refresh-rate-selection">
 
   <mat-label>Refresh Rate</mat-label>
 
-  <mat-select 
-    [value]="SelectedRefreshRate" 
+  <mat-select
+    [value]="Telemetry?.RefreshRate"
     (selectionChange)="SelectRefreshRate($event)">
 
-    <mat-option 
-      *ngFor="let rate of RefreshRateList" 
+    <mat-option
+      *ngFor="let rate of RefreshRateList"
       [value]="rate">{{rate}} Seconds</mat-option>
 
   </mat-select>

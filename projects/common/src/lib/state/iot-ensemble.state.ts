@@ -1,19 +1,28 @@
 import { Status } from '@lcu/common';
+import { logging } from 'protractor';
 
 export class IoTEnsembleState {
-  public Dashboard?: IoTEnsembleDashboardConfiguration;
+  public AccessLicenseType?: string;
 
-  public Devices?: IoTEnsembleDeviceInfo[];
+  public AccessPlanGroup?: string;
+
+  public Devices?: IoTEnsembleConnectedDevicesConfig;
+
+  public Dashboard?: IoTEnsembleDashboardConfiguration;
 
   public Drawers?: IoTEnsembleDrawersConfig;
 
   public Emulated?: EmulatedDeviceInfo;
 
+  public Error?: ErrorContext;
+
+  public HasAccess?: boolean;
+
   public Loading?: boolean;
 
   public SelectedDeviceID?: string;
 
-  public Storage?: IoTEnsembleStorageConfiguration[];
+  public Storage?: IoTEnsembleStorageConfiguration;
 
   public Telemetry?: IoTEnsembleTelemetry;
 
@@ -22,6 +31,8 @@ export class IoTEnsembleState {
 
 export class EmulatedDeviceInfo {
   public Enabled?: boolean;
+
+  public Loading?: boolean;
 }
 
 export class IoTEnsembleDashboardConfiguration {
@@ -30,11 +41,41 @@ export class IoTEnsembleDashboardConfiguration {
   public PowerBIConfig?: any;
 }
 
+export class ErrorContext {
+  public ActionPath?: string;
+
+  public ActionTarget?: string;
+
+  public ActionText?: string;
+
+  public Message?: string;
+
+  public Title?: string;
+}
+
 export class IoTEnsembleDeviceEnrollment {
   public DeviceName?: string;
 }
 
+export class IoTEnsembleConnectedDevicesConfig {
+  public Devices?: IoTEnsembleDeviceInfo[];
+
+  public Loading?: boolean;
+
+  public MaxDevicesCount?: number;
+
+  public Page?: number;
+
+  public PageSize?: number;
+
+  public SASTokens?: { [deviceName: string]: string };
+
+  public TotalDevices?: number;
+}
+
 export class IoTEnsembleDeviceInfo {
+  [prop: string]: any;
+
   public AuthenticationType?: string;
 
   public CloudToDeviceMessageCount?: number;
@@ -62,6 +103,8 @@ export class IoTEnsembleTelemetry {
   public RefreshRate?: number;
 
   public LastSyncedAt?: string;
+
+  public TotalPayloads?: number;
 }
 
 export class IoTEnsembleTelemetryPayload {
@@ -81,6 +124,8 @@ export class IoTEnsembleTelemetryPayload {
 
   public Timestamp?: Date;
 
+  public TotalPayloads?: number;
+
   public Version?: string;
 }
 
@@ -93,5 +138,35 @@ export class IoTEnsembleDrawersConfig {
 }
 
 export class IoTEnsembleStorageConfiguration {
-  public APIKeys: { [keyName: string]: string };
+  public APIKeys: IoTEnsembleAPIKeyData[];
+
+  public APIOptions: IoTEnsembleAPIOption[];
+}
+
+export class IoTEnsembleAPIKeyData {
+  public Key: string;
+
+  public KeyName: string;
+}
+
+export class IoTEnsembleAPIOption {
+  public Description: string;
+
+  public Method: string;
+
+  public Name: string;
+
+  public Path: string;
+}
+
+export enum ColdQueryDataTypes {
+  Telemetry = 'Telemetry',
+  Observations = 'Observations',
+  SensorMetadata = 'SensorMetadata',
+}
+
+export enum ColdQueryResultTypes {
+  CSV = 'CSV',
+  JSON = 'JSON',
+  JSONLines = 'JSONLines',
 }

@@ -1,11 +1,8 @@
 {
 	"name": "@iot-ensemble/lcu-setup-common",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"peerDependencies": {
 		"@angular/common": "^10.2.0",
 		"@angular/core": "^10.2.0"
-	},
-	"dependencies": {
-		"tslib": "^2.0.0"
 	}
 }

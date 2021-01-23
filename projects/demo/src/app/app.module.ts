@@ -12,7 +12,7 @@ import { LcuSetupModule } from '@iot-ensemble/lcu-setup-common';
 import { environment } from '../environments/environment';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, DocumentationComponent],
+  declarations: [AppComponent, HomeComponent, DocumentationComponent,],
   imports: [
     AppRoutingModule,
     BrowserModule,

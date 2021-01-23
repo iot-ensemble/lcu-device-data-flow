@@ -9,6 +9,7 @@ import {
   FathymSharedModule,
   LCUServiceSettings,
   MaterialModule,
+  PipeModule
 } from '@lcu/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -29,6 +30,8 @@ import { environment } from '../environments/environment';
     FlexLayoutModule,
     FathymSharedModule.forRoot(),
     LcuSetupModule.forRoot(),
+    PipeModule
+    
   ],
   providers: [
     {

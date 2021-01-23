@@ -1,0 +1,76 @@
+<form [formGroup]="PayloadFormGroup" (ngSubmit)="Send()">
+  <mat-form-field class="mat-full-width">
+    <mat-select
+      formControlName="deviceName"
+      placeholder="The Name of your Device"
+      required
+    >
+      <mat-option
+        [value]="deviceOption"
+        *ngFor="let deviceOption of DeviceOptions"
+      >
+        {{ deviceOption }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="mat-full-width">
+    <input
+      matInput
+      formControlName="version"
+      placeholder="The Device Version"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field class="mat-full-width">
+    <input
+      matInput
+      formControlName="deviceType"
+      placeholder="The Device Type"
+      required
+    />
+  </mat-form-field>
+
+  <mat-form-field class="mat-full-width">
+    <textarea
+      matInput
+      formControlName="deviceData"
+      placeholder="The Device Data (JSON Object '{...}')"
+      required></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="mat-full-width">
+    <textarea
+      matInput
+      formControlName="sensorReadings"
+      placeholder="The Sensor Readings (JSON Object '{...}')"
+      required></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="mat-full-width">
+    <textarea
+      matInput
+      formControlName="sensorMetadata"
+      placeholder="The Sensor Metadata (JSON Object '{...}')"
+      required></textarea>
+  </mat-form-field>
+
+  <div>
+    <div fxFlex></div>
+
+    <button
+      mat-raised-button
+      type="submit"
+      color="primary"
+      [disabled]="!PayloadFormGroup.valid"
+    >
+      Send Message
+    </button>
+
+    <a mat-button color="warn" (click)="Cancel()">
+      <mat-icon>cancel</mat-icon>
+      Cancel
+    </a>
+  </div>
+</form>

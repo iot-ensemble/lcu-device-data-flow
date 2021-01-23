@@ -1,7 +1,13 @@
 <div *ngIf="Loading">
   <div fxLayout="row" fxLayoutAlign="center center" class="spinner-container">
-    <mat-spinner diameter="75"></mat-spinner>
+    <mat-spinner [diameter]="Diameter"></mat-spinner>
 
-    <div class="spinner-logo" logo-alt="Fathym Logo"></div>
+    <div
+      [class.spinner-logo]="true"
+      logo-alt="Fathym Logo"
+      [style.height]="LogoDiameter"
+      [style.width]="LogoDiameter"
+      *ngIf="!HideInner"
+      ></div>
   </div>
 </div>
