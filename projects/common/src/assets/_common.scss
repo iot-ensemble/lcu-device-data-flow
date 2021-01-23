@@ -48,14 +48,14 @@ html, body {
 
  .fathym-logo {
     background-image: fathym-logo(thinky-logo, mat-color($accent), 1);
-    width: 50px; 
+    width: 50px;
     height: 60px;
     @extend .logo-config;
 }
 
 .fathym-full-logo {
     background-image: fathym-logo(thinky-full-logo, mat-color($accent), 1);
-    width: 160px; 
+    width: 160px;
     height: 60px;
     @extend .logo-config;
 }
