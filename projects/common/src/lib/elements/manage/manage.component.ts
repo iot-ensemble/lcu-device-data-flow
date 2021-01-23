@@ -438,11 +438,11 @@ export class LcuSetupManageElementComponent
     if (changes.Devices) {
       this.DeviceSASTokensModal();
 
-      this.setAddingDevice();
-
       this.DeviceNames =
         this.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
     }
+
+    this.setAddingDevice();
 
     if (changes.Dashboard) {
       this.setupFreeboard();
