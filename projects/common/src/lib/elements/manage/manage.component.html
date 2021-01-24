@@ -52,7 +52,7 @@
 
   <!-- Connected Devices -->
   <div class="connected section">
-    <div fxLayout="row" fxLayoutGap="1em">
+    <div fxLayout="row wrap" fxLayoutGap="1em">
       <!--
     fxLayout="column"> -->
       <mat-card
@@ -186,6 +186,7 @@
 
       <form
         fxFlex="50%"
+        fxFlex.lt-md="100%"
         [formGroup]="AddDeviceFormGroup"
         (ngSubmit)="EnrollDeviceSubmit()"
         *ngIf="AddingDevice && !MaxDevicesReached"
