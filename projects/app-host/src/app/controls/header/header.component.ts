@@ -36,5 +36,6 @@ export class HeaderComponent implements OnInit {
   public MenuClick(event: MouseEvent): void {
     this.MenuClicked.emit(event)
   }
+  
   //  Helpers
 }
