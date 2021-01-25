@@ -224,7 +224,9 @@
         fxLayout="row" 
         fxLayoutAlign="end start"
         class="margin-bottom-3">
-     
+        <button mat-button (click)="HandleTelemetryPageEvent()">
+          <mat-icon matTooltip="Refresh date" >refresh</mat-icon>
+        </button>
         <lcu-enabled-toggle
           class="margin-right-3"
           [enabled]="Telemetry?.Enabled"

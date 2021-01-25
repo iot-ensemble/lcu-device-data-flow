@@ -376,6 +376,10 @@ export class LcuSetupManageElementComponent
     // }, 1000);
   }
 
+  public RefreshTelemetry(event: any) {
+    this.Refreshed.emit(event);
+  }
+
   public RefreshRateChanged(event: any) {
     this.UpdateRefreshRate.emit(event);
   }
