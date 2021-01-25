@@ -321,10 +321,10 @@
           fxLayoutAlign="start"
           class="telemetry-update margin-top-2"
         >
-          <lcu-loader [loading]="Telemetry?.Loading" [diameter]="20">
-          </lcu-loader>
+          <!-- <lcu-loader [loading]="Telemetry?.Loading" [diameter]="20">
+          </lcu-loader> -->
 
-          <div matTooltip="Updates successful" *ngIf="!Telemetry?.Loading">
+          <div matTooltip="Telemetry Sync Status">
             <mat-icon
               [class.success-dot]="Telemetry?.Enabled"
               [class.error-dot]="!Telemetry?.Enabled"
