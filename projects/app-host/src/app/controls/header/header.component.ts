@@ -33,8 +33,5 @@ export class HeaderComponent implements OnInit {
   public MenuClick(event: MouseEvent): void {
     this.MenuClicked.emit(event)
   }
-  public OpenBillingPage() : void {
-    window.open('https://www.iot-ensemble.com/billing/iot/', '_blank');
-  }
   //  Helpers
 }
