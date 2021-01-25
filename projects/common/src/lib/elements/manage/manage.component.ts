@@ -227,6 +227,28 @@ export class LcuSetupManageElementComponent
   }
 
   //  API Methods
+  public get DeviceNameErrorText(): string {
+    var errorText: string = null;
+    
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('required')) {
+    errorText = 'Device name is required\r\n';
+    }
+    
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('maxlength')) {
+    errorText = 'Device name cannot be longer than 128 characters\r\n';
+    }
+
+    if(this.AddDeviceFormGroup.get('deviceName').hasError('pattern')) {
+      errorText = 'A case-sensitive string of ASCII 7-bit alphanumeric characters plus certain special characters: - . % _ * ? ! ( ) , : = @ $ \' \r\n' 
+    }
+
+    if(this.AddDeviceFormGroup.get('deviceName').hasError('duplicateName')){
+      errorText = ' Device name already exists \r\n';
+    }
+                  
+    return errorText;
+    }
+    
   public DeviceSASTokensModal(): void {
     if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
       /**
