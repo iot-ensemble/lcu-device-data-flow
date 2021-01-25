@@ -6,7 +6,7 @@ export class IoTEnsembleState {
 
   public AccessPlanGroup?: string;
 
-  public Devices?: IoTEnsembleConnectedDevicesConfig;
+  public DevicesConfig?: IoTEnsembleConnectedDevicesConfig;
 
   public Dashboard?: IoTEnsembleDashboardConfiguration;
 
@@ -58,6 +58,8 @@ export class IoTEnsembleDeviceEnrollment {
 }
 
 export class IoTEnsembleConnectedDevicesConfig {
+  public EnterprisesDeviceCount: number;
+
   public Devices?: IoTEnsembleDeviceInfo[];
 
   public Loading?: boolean;
