@@ -58,7 +58,7 @@ export class IoTEnsembleDeviceEnrollment {
 }
 
 export class IoTEnsembleConnectedDevicesConfig {
-  public EnterprisesDeviceCount: number;
+  public EnterpriseDevicesCount: number;
 
   public Devices?: IoTEnsembleDeviceInfo[];
 

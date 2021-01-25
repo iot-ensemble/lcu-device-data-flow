@@ -110,7 +110,7 @@
 
             <ng-container *ngIf="MaxDevicesReached">
               <p
-                *ngIf="DevicesConfig.MaxDevicesCount < DevicesConfig.EnterprisesDeviceCount"
+                *ngIf="DevicesConfig.MaxDevicesCount < DevicesConfig.EnterpriseDevicesCount"
                 class="paragraph-text"
               >
                 Click "Upgrade Now" to see other plans where you can connect
@@ -121,7 +121,7 @@
                 other great benefits.
               </p>
               <p
-                *ngIf="DevicesConfig.MaxDevicesCount === DevicesConfig.EnterprisesDeviceCount"
+                *ngIf="DevicesConfig.MaxDevicesCount === DevicesConfig.EnterpriseDevicesCount"
                 class="paragraph-text"
               >
                 Please contact Fathym at
@@ -167,7 +167,7 @@
             </a>
 
             <a
-              *ngIf="DevicesConfig.MaxDevicesCount < DevicesConfig.EnterprisesDeviceCount"
+              *ngIf="DevicesConfig.MaxDevicesCount < DevicesConfig.EnterpriseDevicesCount"
               mat-raised-button
               href="/billing/iot"
               color="accent"
@@ -210,7 +210,7 @@
               <div *ngIf="DeviceNameErrorText">
                 <mat-error>{{ DeviceNameErrorText }}</mat-error>
               </div>
-              
+
             </div>
           </mat-card-content>
 
