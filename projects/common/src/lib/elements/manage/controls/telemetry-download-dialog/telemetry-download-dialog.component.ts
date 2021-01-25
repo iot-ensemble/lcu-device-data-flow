@@ -88,7 +88,7 @@ export class TelemetryDownloadDialogComponent implements OnInit {
     //Helpers
 
     protected getDeviceIDs(){
-      this.State.Devices.Devices.forEach(device => {
+      this.State.DevicesConfig.Devices.forEach(device => {
         this.deviceIDs.push(device.DeviceID);
       });
       console.log("Device IDs: ", this.deviceIDs);
@@ -96,7 +96,7 @@ export class TelemetryDownloadDialogComponent implements OnInit {
 
     protected stateChanged(){
       console.log("State From telemetry MODAL: ", this.State);
-      if(this.State.Devices){
+      if(this.State.DevicesConfig){
         this.getDeviceIDs();
       }
       

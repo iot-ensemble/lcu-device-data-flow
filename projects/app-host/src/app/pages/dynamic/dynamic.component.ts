@@ -104,7 +104,7 @@ export class DynamicComponent implements OnInit {
   }
 
   public EnrollDevice(device: IoTEnsembleDeviceEnrollment) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
     this.iotEnsCtxt.EnrollDevice(device);
   }
@@ -120,15 +120,15 @@ export class DynamicComponent implements OnInit {
 
   public HandleDevicePageEvent(event: any) {
     // console.log("Telemetry Page event recieved: ", event);
-    if (event.pageIndex + 1 !== this.State.Devices.Page) {
+    if (event.pageIndex + 1 !== this.State.DevicesConfig.Page) {
       this.UpdateDeviceTablePageIndex(event.pageIndex + 1);
-    } else if (event.pageSize !== this.State.Devices.PageSize) {
+    } else if (event.pageSize !== this.State.DevicesConfig.PageSize) {
       this.UpdateDeviceTablePageSize(event.pageSize);
     }
   }
 
   public IssueDeviceSASToken(deviceName: string) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
     //  TODO:  Pass through expiry time in some way?
     this.iotEnsCtxt.IssueDeviceSASToken(deviceName, 0);
@@ -171,7 +171,7 @@ export class DynamicComponent implements OnInit {
   }
 
   public RevokeDeviceEnrollment(deviceId: string) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
     this.iotEnsCtxt.RevokeDeviceEnrollment(deviceId);
   }
@@ -252,15 +252,15 @@ export class DynamicComponent implements OnInit {
   }
 
   public UpdateDeviceTablePageSize(pageSize: number) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
-    this.iotEnsCtxt.UpdateConnectedDevicesSync(this.State.Devices.Page, pageSize);
+    this.iotEnsCtxt.UpdateConnectedDevicesSync(this.State.DevicesConfig.Page, pageSize);
   }
 
   public UpdateDeviceTablePageIndex(page: number) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
-    this.iotEnsCtxt.UpdateConnectedDevicesSync(page, this.State.Devices.PageSize);
+    this.iotEnsCtxt.UpdateConnectedDevicesSync(page, this.State.DevicesConfig.PageSize);
   }
 
   public UpdateTelemetryPage(page: number) {

@@ -110,7 +110,7 @@
 
             <ng-container *ngIf="MaxDevicesReached">
               <p
-                *ngIf="DevicesConfig.MaxDevicesCount < 50"
+                *ngIf="DevicesConfig.MaxDevicesCount < DevicesConfig.EnterpriseDevicesCount"
                 class="paragraph-text"
               >
                 Click "Upgrade Now" to see other plans where you can connect
@@ -121,7 +121,7 @@
                 other great benefits.
               </p>
               <p
-                *ngIf="DevicesConfig.MaxDevicesCount === 50"
+                *ngIf="DevicesConfig.MaxDevicesCount === DevicesConfig.EnterpriseDevicesCount"
                 class="paragraph-text"
               >
                 Please contact Fathym at
@@ -167,7 +167,7 @@
             </a>
 
             <a
-              *ngIf="DevicesConfig.MaxDevicesCount < 50"
+              *ngIf="DevicesConfig.MaxDevicesCount < DevicesConfig.EnterpriseDevicesCount"
               mat-raised-button
               href="/billing/iot"
               color="accent"
@@ -206,49 +206,11 @@
                   />
                 </mat-form-field>
               </div>
-              <div
-                *ngIf="
-                  AddDeviceFormGroup.get('deviceName').invalid &&
-                  (AddDeviceFormGroup.get('deviceName').dirty ||
-                    AddDeviceFormGroup.get('deviceName').touched)
-                "
-                class="alert alert-danger"
-              >
-                <mat-error
-                  *ngIf="
-                    AddDeviceFormGroup.get('deviceName').hasError('required')
-                  "
-                >
-                  Device name is required
-                </mat-error>
 
-                <mat-error
-                  *ngIf="
-                    AddDeviceFormGroup.get('deviceName').hasError('maxlength')
-                  "
-                >
-                  Device name cannot be longer than 128 characters
-                </mat-error>
-
-                <mat-error
-                  *ngIf="
-                    AddDeviceFormGroup.get('deviceName').hasError('pattern')
-                  "
-                >
-                  A case-sensitive string of ASCII 7-bit alphanumeric characters
-                  plus certain special characters: - . % _ * ? ! ( ) , : = @ $ '
-                </mat-error>
-
-                <mat-error
-                  *ngIf="
-                    AddDeviceFormGroup.get('deviceName').hasError(
-                      'duplicateName'
-                    )
-                  "
-                >
-                  Device name already exists
-                </mat-error>
+              <div *ngIf="DeviceNameErrorText">
+                <mat-error>{{ DeviceNameErrorText }}</mat-error>
               </div>
+
             </div>
           </mat-card-content>
 
