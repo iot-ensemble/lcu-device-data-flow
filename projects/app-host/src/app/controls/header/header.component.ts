@@ -10,7 +10,7 @@ export class HeaderComponent implements OnInit {
   //  Fields
 
   //  Properties
-  @Input('billing-input')
+  @Input('billing-link')
   public BillingLink: string;
   
   @Output('menu-click')
