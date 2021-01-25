@@ -19,9 +19,12 @@ export class HeaderComponent implements OnInit {
   @Input('text')
   public Text: string;
 
+  public BillingLink: string;
+
   //  Constructors
   constructor() {
     this.MenuClicked = new EventEmitter();
+    this.BillingLink = "/billing/iot";
   }
 
   //  Life Cycle
