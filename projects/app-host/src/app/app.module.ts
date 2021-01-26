@@ -21,7 +21,7 @@ import { environment } from '../environments/environment';
     AppComponent,
     DynamicComponent,
     HeaderComponent,
-    FooterComponent,
+    FooterComponent
   ],
   imports: [
     AppRoutingModule,
@@ -31,7 +31,6 @@ import { environment } from '../environments/environment';
     FathymSharedModule.forRoot(),
     LcuSetupModule.forRoot(),
     PipeModule
-    
   ],
   providers: [
     {
