@@ -2,39 +2,47 @@
   <!-- Emulated Devices -->
   <div class="emulated section">
     <mat-card fxLayout="column">
-      <div
-        fxFlex
-        fxLayout="row"
-        fxLayoutAlign="end start"
-        class="margin-bottom-3"
-      >
-        <lcu-enabled-toggle
-          class="margin-right-3"
-          [enabled]="Emulated?.Enabled"
-          [loading]="Emulated?.Loading"
-          (enabled-toggled)="ToggleEmulatedEnabledChanged($event)"
+      <div fxLayout="row" fxLayout.lt-sm="column">
+        <mat-card-header
+          fxFlex
+          fxFlexOrder="1"
+          fxFlexOrder.lt-sm="2"
+          fxLayout="row"
         >
-        </lcu-enabled-toggle>
+          <div
+            mat-card-avatar
+            fxLayoutAlign="center center"
+            class="orange-accent margin-bottom-3"
+          >
+            <mat-icon>contactless</mat-icon>
+          </div>
+          <mat-card-title> Emulated Devices </mat-card-title>
+        </mat-card-header>
 
-        <a
-          href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
-          target="_blank"
-        >
-          <mat-icon matTooltip="More info">help_outline</mat-icon>
-        </a>
-      </div>
-      <mat-card-header>
+        <!-- header buttons -->
         <div
-          mat-card-avatar
-          fxLayoutAlign="center center"
-          class="orange-accent margin-bottom-3"
+          fxLayout="row"
+          fxFlexOrder="2"
+          fxFlexOrder.lt-sm="1"
+          fxLayoutAlign="end start"
+          class="margin-bottom-3"
         >
-          <mat-icon>contactless</mat-icon>
+          <lcu-enabled-toggle
+            class="margin-right-3"
+            [enabled]="Emulated?.Enabled"
+            [loading]="Emulated?.Loading"
+            (enabled-toggled)="ToggleEmulatedEnabledChanged($event)"
+          >
+          </lcu-enabled-toggle>
+
+          <a
+            href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
+            target="_blank"
+          >
+            <mat-icon matTooltip="More info">help_outline</mat-icon>
+          </a>
         </div>
-
-        <mat-card-title>Emulated Devices</mat-card-title>
-      </mat-card-header>
-
+      </div>
       <mat-card-content class="margin-left-5">
         <p>
           To see the dashboard in action without connecting a device, enable the
@@ -53,41 +61,50 @@
   <!-- Connected Devices -->
   <div class="connected section">
     <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
-      <!--
-    fxLayout="column"> -->
       <mat-card
         fxLayout="column"
         [fxFlex]="ConnectedDevicesInfoCardFlex"
         fxFlex.lt-md="100%"
       >
-        <div fxFlex fxLayout="row" fxLayoutAlign="end" class="margin-bottom-3">
-          <a
-            href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
-            target="_blank"
+        <div fxLayout="row" fxLayout.lt-sm="column">
+          <mat-card-header
+            fxFlex
+            fxFlexOrder="1"
+            fxFlexOrder.lt-sm="2"
+            fxLayout="row"
           >
-            <mat-icon matTooltip="More info">help_outline</mat-icon>
-          </a>
-        </div>
+            <div
+              mat-card-avatar
+              fxLayoutAlign="center center"
+              [class.orange-accent]="!AddingDevice"
+              [class.green-accent]="AddingDevice"
+            >
+              <mat-icon>loop</mat-icon>
+            </div>
 
-        <mat-card-header>
+            <mat-card-title> Connected Devices </mat-card-title>
+
+            <div fxFlex></div>
+
+            <mat-card-subtitle *ngIf="MaxDevicesReached && AddingDevice">
+              Max number of devices reached
+            </mat-card-subtitle>
+          </mat-card-header>
           <div
-            mat-card-avatar
-            fxLayoutAlign="center center"
-            [class.orange-accent]="!AddingDevice"
-            [class.green-accent]="AddingDevice"
+            fxLayout="row"
+            fxFlexOrder="2"
+            fxFlexOrder.lt-sm="1"
+            fxLayoutAlign="end start"
+            class="margin-bottom-3"
           >
-            <mat-icon>loop</mat-icon>
+            <a
+              href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
+              target="_blank"
+            >
+              <mat-icon matTooltip="More info">help_outline</mat-icon>
+            </a>
           </div>
-
-          <mat-card-title> Connected Devices </mat-card-title>
-
-          <div fxFlex></div>
-
-          <mat-card-subtitle *ngIf="MaxDevicesReached && AddingDevice">
-            Max number of devices reached
-          </mat-card-subtitle>
-        </mat-card-header>
-
+        </div>
         <mat-card-content
           [class.margin-left-5]="
             AddingDevice || DevicesConfig?.Devices?.length <= 0
@@ -110,10 +127,7 @@
 
             <ng-container *ngIf="MaxDevicesReached">
               <p
-                *ngIf="
-                  DevicesConfig.MaxDevicesCount <
-                  DevicesConfig.EnterpriseDevicesCount
-                "
+                *ngIf="DevicesConfig.MaxDevicesCount < 50"
                 class="paragraph-text"
               >
                 Click "Upgrade Now" to see other plans where you can connect
@@ -124,10 +138,7 @@
                 other great benefits.
               </p>
               <p
-                *ngIf="
-                  DevicesConfig.MaxDevicesCount ===
-                  DevicesConfig.EnterpriseDevicesCount
-                "
+                *ngIf="DevicesConfig.MaxDevicesCount === 50"
                 class="paragraph-text"
               >
                 Please contact Fathym at
@@ -145,7 +156,8 @@
               (issued-sas-token)="IssueDeviceSASToken($event)"
               (page-event)="DeviceTablePageEvent($event)"
               (revoked)="RevokeDeviceEnrollmentClick($event)"
-            ></lcu-devices-table>
+            >
+            </lcu-devices-table>
           </div>
         </mat-card-content>
 
@@ -173,10 +185,7 @@
             </a>
 
             <a
-              *ngIf="
-                DevicesConfig.MaxDevicesCount <
-                DevicesConfig.EnterpriseDevicesCount
-              "
+              *ngIf="DevicesConfig.MaxDevicesCount < 50"
               mat-raised-button
               href="/billing/iot"
               color="accent"
@@ -215,9 +224,48 @@
                   />
                 </mat-form-field>
               </div>
+              <div
+                *ngIf="
+                  AddDeviceFormGroup.get('deviceName').invalid &&
+                  (AddDeviceFormGroup.get('deviceName').dirty ||
+                    AddDeviceFormGroup.get('deviceName').touched)
+                "
+                class="alert alert-danger"
+              >
+                <mat-error
+                  *ngIf="
+                    AddDeviceFormGroup.get('deviceName').hasError('required')
+                  "
+                >
+                  Device name is required
+                </mat-error>
 
-              <div *ngIf="DeviceNameErrorText">
-                <mat-error>{{ DeviceNameErrorText }}</mat-error>
+                <mat-error
+                  *ngIf="
+                    AddDeviceFormGroup.get('deviceName').hasError('maxlength')
+                  "
+                >
+                  Device name cannot be longer than 128 characters
+                </mat-error>
+
+                <mat-error
+                  *ngIf="
+                    AddDeviceFormGroup.get('deviceName').hasError('pattern')
+                  "
+                >
+                  A case-sensitive string of ASCII 7-bit alphanumeric characters
+                  plus certain special characters: - . % _ * ? ! ( ) , : = @ $ '
+                </mat-error>
+
+                <mat-error
+                  *ngIf="
+                    AddDeviceFormGroup.get('deviceName').hasError(
+                      'duplicateName'
+                    )
+                  "
+                >
+                  Device name already exists
+                </mat-error>
               </div>
             </div>
           </mat-card-content>
@@ -251,83 +299,93 @@
   <!-- Telemetry -->
   <div class="telemetry section">
     <mat-card fxLayout="column">
-      <div
-        fxFlex
-        fxLayout="row"
-        fxLayoutAlign="end start"
-        class="margin-bottom-3"
-      >
-        <button
-          mat-button
-          color="primary"
-          matTooltip="Download Telemetry Data"
-          (click)="DownloadTelemetryModal()"
-        >
-          <mat-icon id="telemetry-download-element">download</mat-icon>
-        </button>
-
-        <lcu-enabled-toggle
-          class="margin-right-3"
-          [enabled]="Telemetry?.Enabled"
-          enabled-text="Live"
-          [loading]="Telemetry?.Loading"
-          (enabled-toggled)="ToggleTelemetryEnabledChanged($event)"
-        >
-        </lcu-enabled-toggle>
-
-        <a
-          href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#devices-telemetry"
-          target="_blank"
-        >
-          <mat-icon matTooltip="More info">help_outline</mat-icon>
-        </a>
-      </div>
-
-      <div fxLayout="row" fxLayoutAlign="space-between center"></div>
-      <mat-card-header class="border-bottom" fxLayout="row">
-        <div
-          mat-card-avatar
-          fxLayoutAlign="center center"
-          class="orange-accent"
-        >
-          <mat-icon>compare_arrows</mat-icon>
-        </div>
-
-        <mat-card-title>Devices Telemetry</mat-card-title>
-
-        <mat-card-subtitle
+      <div fxLayout="row" fxLayout.lt-sm="column" class="margin-bottom-3">
+        <mat-card-header
+          class="border-bottom"
+          fxFlex
+          fxFlexOrder="1"
+          fxFlexOrder.lt-sm="2"
           fxLayout="row"
-          fxLayoutAlign="start"
-          class="telemetry-update margin-top-2"
         >
-          <!-- <lcu-loader [loading]="Telemetry?.Loading" [diameter]="20">
-          </lcu-loader> -->
-
-          <div matTooltip="Telemetry Sync Status">
-            <mat-icon
-              [class.success-dot]="Telemetry?.Enabled"
-              [class.error-dot]="!Telemetry?.Enabled"
-            >
-              stop_circle
-            </mat-icon>
+          <div
+            mat-card-avatar
+            fxLayoutAlign="center center"
+            class="orange-accent"
+          >
+            <mat-icon>compare_arrows</mat-icon>
           </div>
 
-          Last Updated: {{ LastSyncedAt }}
-        </mat-card-subtitle>
-        <!-- <div
+          <mat-card-title>Devices Telemetry</mat-card-title>
+
+          <mat-card-subtitle
+            fxLayout="row"
+            fxLayoutAlign="start"
+            class="telemetry-update margin-top-2"
+          >
+            <lcu-loader [loading]="Telemetry?.Loading" [diameter]="20">
+            </lcu-loader>
+
+            <div matTooltip="Updates successful" *ngIf="!Telemetry?.Loading">
+              <mat-icon
+                [class.success-dot]="Telemetry?.Enabled"
+                [class.error-dot]="!Telemetry?.Enabled"
+              >
+                stop_circle
+              </mat-icon>
+            </div>
+
+            Last Updated: {{ LastSyncedAt }}
+          </mat-card-subtitle>
+
+          <!-- <div
           fxFlex
           fxLayout="row"
           fxLayoutGap="20px"
           fxLayoutAlign="end center"
         > -->
-        <!-- <lcu-refresh-select
+          <!-- <lcu-refresh-select
                     [telemetry]="Telemetry"
                     (refresh-rate-changed)="RefreshRateChanged($event)"
                   >
                   </lcu-refresh-select> -->
 
-        <!-- </div> -->
-      </mat-card-header>
+          <!-- </div> -->
+        </mat-card-header>
+        <!-- header buttons -->
+        <div
+          fxLayout="row"
+          fxFlexOrder="2"
+          fxFlexOrder.lt-sm="1"
+          fxLayoutAlign="end start"
+          class="margin-bottom-3"
+        >
+          <div fxFlex fxLayoutAlign="end start">
+            <button
+              mat-button
+              color="primary"
+              matTooltip="Download Telemetry Data"
+              (click)="DownloadTelemetryModal()"
+            >
+              <mat-icon id="telemetry-download-element">download</mat-icon>
+            </button>
+          </div>
+          <lcu-enabled-toggle
+            class="margin-right-3"
+            [enabled]="Telemetry?.Enabled"
+            enabled-text="Live"
+            [loading]="Telemetry?.Loading"
+            (enabled-toggled)="ToggleTelemetryEnabledChanged($event)"
+          >
+          </lcu-enabled-toggle>
+
+          <a
+            href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#devices-telemetry"
+            target="_blank"
+          >
+            <mat-icon matTooltip="More info">help_outline</mat-icon>
+          </a>
+        </div>
+      </div>
 
       <mat-card-content
         [class.margin-left-5]="Telemetry?.Payloads?.length <= 0"
@@ -350,10 +408,6 @@
         >
           Send Device Message
         </button>
-
-        <!-- <button mat-raised-button (click)="DownloadData()">
-                  Download Data
-                </button> -->
       </mat-card-actions>
     </mat-card>
   </div>
@@ -362,31 +416,46 @@
   <!-- Dashboard -->
   <div class="dashboard section">
     <mat-card fxLayout="column">
-      <div
-        fxFlex
-        fxLayout="row"
-        fxLayoutAlign="end start"
-        class="margin-bottom-3"
-      >
-        <a
-          href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
-          target="_blank"
+      <div fxLayout="row" fxLayout.lt-sm="column">
+        <mat-card-header
+          fxFlex
+          fxFlexOrder="1"
+          fxFlexOrder.lt-sm="2"
+          fxLayout="row"
         >
-          <mat-icon matTooltip="More info">help_outline</mat-icon>
-        </a>
-      </div>
-      <mat-card-header>
+          <div
+            mat-card-avatar
+            fxLayoutAlign="center center"
+            class="orange-accent"
+          >
+            <mat-icon>dashboard</mat-icon>
+          </div>
+
+          <mat-card-title>Devices Dashboard</mat-card-title>
+        </mat-card-header>
+        <!-- header buttons -->
         <div
-          mat-card-avatar
-          fxLayoutAlign="center center"
-          class="orange-accent"
+          fxLayout="row"
+          fxFlexOrder="2"
+          fxFlexOrder.lt-sm="1"
+          fxLayoutAlign="end start"
+          class="margin-bottom-3"
         >
-          <mat-icon>dashboard</mat-icon>
+          <div
+            fxFlex
+            fxLayout="row"
+            fxLayoutAlign="end start"
+            class="margin-bottom-3"
+          >
+            <a
+              href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
+              target="_blank"
+            >
+              <mat-icon matTooltip="More info">help_outline</mat-icon>
+            </a>
+          </div>
         </div>
-
-        <mat-card-title>Devices Dashboard</mat-card-title>
-      </mat-card-header>
-
+      </div>
       <mat-card-content>
         <div class="margin-left-5 padding-bottom-2 margin-top-2">
           Here we have provided an example open-source dashboard Freeboard to
@@ -418,37 +487,53 @@
   <!-- Storage Access -->
   <div class="storage-access section">
     <mat-card fxLayout="column">
-      <div
-        fxFlex
-        fxLayout="row"
-        fxLayoutAlign="end start"
-        class="margin-bottom-3"
-      >
-        <a
-          href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
-          target="_blank"
+      <div fxLayout="row" fxLayout.lt-sm="column">
+        <mat-card-header
+          fxFlex
+          fxFlexOrder="1"
+          fxFlexOrder.lt-sm="2"
+          fxLayout="row"
         >
-          <mat-icon matTooltip="More info">help_outline</mat-icon>
-        </a>
-      </div>
-      <mat-card-header>
+          <div
+            mat-card-avatar
+            fxLayoutAlign="center center"
+            class="orange-accent"
+          >
+            <mat-icon>storage</mat-icon>
+          </div>
+
+          <mat-card-title>Storage Access</mat-card-title>
+        </mat-card-header>
+        <!-- header buttons -->
         <div
-          mat-card-avatar
-          fxLayoutAlign="center center"
-          class="orange-accent"
+          fxLayout="row"
+          fxFlexOrder="2"
+          fxFlexOrder.lt-sm="1"
+          fxLayoutAlign="end start"
+          class="margin-bottom-3"
         >
-          <mat-icon>storage</mat-icon>
+          <div
+            fxFlex
+            fxLayout="row"
+            fxLayoutAlign="end start"
+            class="margin-bottom-3"
+          >
+            <a
+              href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
+              target="_blank"
+            >
+              <mat-icon matTooltip="More info">help_outline</mat-icon>
+            </a>
+          </div>
         </div>
-
-        <mat-card-title>Storage Access</mat-card-title>
-      </mat-card-header>
-
+      </div>
       <mat-card-content>
         <div class="margin-left-5 margin-top-2">
           Use the API keys to get your data downstream to the dashboards and
           services of your choice for visualization, application development,
           ML/AI, and more.
         </div>
+
         <lcu-api-access
           [api-keys]="Storage?.APIKeys"
           [open-api-source]="Storage?.OpenAPISource"
