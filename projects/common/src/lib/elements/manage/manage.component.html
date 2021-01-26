@@ -97,6 +97,8 @@
             fxLayoutAlign="end start"
             class="margin-bottom-3"
           >
+          <lcu-loader [loading]="DevicesConfig?.Loading" [diameter]="50">
+          </lcu-loader>
             <a
               href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
               target="_blank"
@@ -109,12 +111,7 @@
           [class.margin-left-5]="
             AddingDevice || DevicesConfig?.Devices?.length <= 0
           "
-        >
-          <mat-progress-bar
-            class="margin-top-2"
-            mode="indeterminate"
-            *ngIf="DevicesConfig?.Loading"
-          ></mat-progress-bar>
+        >   
 
           <div *ngIf="AddingDevice">
             <ng-container *ngIf="!MaxDevicesReached">
@@ -322,10 +319,7 @@
             fxLayoutAlign="start"
             class="telemetry-update margin-top-2"
           >
-            <lcu-loader [loading]="Telemetry?.Loading" [diameter]="20">
-            </lcu-loader>
-
-            <div matTooltip="Updates successful" *ngIf="!Telemetry?.Loading">
+            <div matTooltip="Updates successful">
               <mat-icon
                 [class.success-dot]="Telemetry?.Enabled"
                 [class.error-dot]="!Telemetry?.Enabled"
