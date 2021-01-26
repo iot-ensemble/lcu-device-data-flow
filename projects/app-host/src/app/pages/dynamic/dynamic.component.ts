@@ -10,7 +10,7 @@ import {
   AnimationService,
   OnExpandHorizontal,
   OnExpandVertical,
-  AnimateText
+  AnimateOpacity
 } from '@iot-ensemble/lcu-setup-common';
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { Subscription } from 'rxjs';
@@ -20,7 +20,7 @@ import { map } from 'rxjs/internal/operators/map';
   selector: 'lcu-dynamic',
   templateUrl: './dynamic.component.html',
   styleUrls: ['./dynamic.component.scss'],
-  animations: [OnExpandHorizontal, OnExpandVertical, AnimateText],
+  animations: [OnExpandHorizontal, OnExpandVertical, AnimateOpacity],
 })
 export class DynamicComponent implements OnInit {
   //  Fields
@@ -57,9 +57,9 @@ export class DynamicComponent implements OnInit {
 
   //  Life Cycle
   public ngOnInit(): void {
-    this.breakpointUtils.SetupIsMobileObserver((result) =>
-      this.handleMobileObserver(result)
-    );
+    // this.breakpointUtils.SetupIsMobileObserver((result) =>
+    //   this.handleMobileObserver(result)
+    // );
 
     this.setupStateHandler();
 
@@ -71,8 +71,6 @@ export class DynamicComponent implements OnInit {
     ).subscribe((change: MediaChange) => {
       this.MediaSize = change.mqAlias;
 
-      console.log('MEDIA SIZE: ', this.MediaSize);
-
       const direction: string = (this.MediaSize.toUpperCase() === 'XS' ||
                                 this.MediaSize.toUpperCase() === 'SM') ? 'VERTICAL' : 'HORIZONTAL';
 
@@ -83,19 +81,19 @@ export class DynamicComponent implements OnInit {
       // }
     });
 
-    // this.sideSlideSubscription = this.AnimationSrvc.ExpandToggleChanged.subscribe(
+    this.sideSlideSubscription = this.AnimationSrvc.ExpandToggleChanged.subscribe(
+      // ExpandToggleModel
+      (res: any) => {
+        console.log('RES', this.AnimationSrvc.IsOpen);
+        if (res.Direction === 'HORIZONTAL') {
 
-    //   (res: ExpandToggleModel) => {
-
-    //     if (res.Direction === 'HORIZONTAL') {
-
-    //       this.OnExpandHorizontal = res.Toggle;
-    //     } else {
-
-    //       this.OnExpandVertical = res.Toggle;
-    //     }
-    //   }
-    // );
+          // this.OnExpandHorizontal = res.Toggle;
+        } else {
+          // console.log(this.AnimationSrvc.ExpandVerticalToggleVal);
+          // this.OnExpandVertical = res.Toggle;
+        }
+      }
+    );
   }
 
   //  API Methods
@@ -106,7 +104,7 @@ export class DynamicComponent implements OnInit {
   }
 
   public EnrollDevice(device: IoTEnsembleDeviceEnrollment) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
     this.iotEnsCtxt.EnrollDevice(device);
   }
@@ -122,15 +120,15 @@ export class DynamicComponent implements OnInit {
 
   public HandleDevicePageEvent(event: any) {
     // console.log("Telemetry Page event recieved: ", event);
-    if (event.pageIndex + 1 !== this.State.Devices.Page) {
+    if (event.pageIndex + 1 !== this.State.DevicesConfig.Page) {
       this.UpdateDeviceTablePageIndex(event.pageIndex + 1);
-    } else if (event.pageSize !== this.State.Devices.PageSize) {
+    } else if (event.pageSize !== this.State.DevicesConfig.PageSize) {
       this.UpdateDeviceTablePageSize(event.pageSize);
     }
   }
 
   public IssueDeviceSASToken(deviceName: string) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
     //  TODO:  Pass through expiry time in some way?
     this.iotEnsCtxt.IssueDeviceSASToken(deviceName, 0);
@@ -141,7 +139,7 @@ export class DynamicComponent implements OnInit {
    * @param evt Animation event for open and closing side nav
    */
   public OnSideNavOpenCloseDoneEvent(evt: any): void {
-    this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
+    // this.SideNavOpenCloseEvent = evt.fromState === 'open' ? true : false;
   }
 
   public SidePanelAction(): string {
@@ -149,12 +147,12 @@ export class DynamicComponent implements OnInit {
     if (!this.MediaSize) { return; }
 
     const mediaSize: string = this.MediaSize.toUpperCase();
-
+    
     if (mediaSize === 'XS' || mediaSize === 'SM') {
-      return this.AnimationSrvc.ExpandVerticalToggleVal ? 'up' : 'down';
+      return this.AnimationSrvc.IsOpen ? 'down' : 'up';
     }
 
-    return this.AnimationSrvc.ExpandHoizontalToggleVal ? 'open' : 'close';
+    return this.AnimationSrvc.IsOpen ? 'open' : 'close';
   }
 
   public Refresh(ctxt: string) {
@@ -173,7 +171,7 @@ export class DynamicComponent implements OnInit {
   }
 
   public RevokeDeviceEnrollment(deviceId: string) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
     this.iotEnsCtxt.RevokeDeviceEnrollment(deviceId);
   }
@@ -254,15 +252,15 @@ export class DynamicComponent implements OnInit {
   }
 
   public UpdateDeviceTablePageSize(pageSize: number) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
-    this.iotEnsCtxt.UpdateConnectedDevicesSync(this.State.Devices.Page, pageSize);
+    this.iotEnsCtxt.UpdateConnectedDevicesSync(this.State.DevicesConfig.Page, pageSize);
   }
 
   public UpdateDeviceTablePageIndex(page: number) {
-    this.State.Devices.Loading = true;
+    this.State.DevicesConfig.Loading = true;
 
-    this.iotEnsCtxt.UpdateConnectedDevicesSync(page, this.State.Devices.PageSize);
+    this.iotEnsCtxt.UpdateConnectedDevicesSync(page, this.State.DevicesConfig.PageSize);
   }
 
   public UpdateTelemetryPage(page: number) {
@@ -315,7 +313,7 @@ export class DynamicComponent implements OnInit {
   }
 
   protected handleStateChanged() {
-    console.log(this.State);
+    // console.log(this.State);
   }
 
   protected setupStateHandler() {

@@ -1,10 +1,10 @@
 <div fxFlexFill>
-  <div 
-    fxFlexFill 
-    fxLayout="column" 
+  <div
+    fxFlexFill
+    fxLayout="column"
     fxLayoutGap="5px">
-    <div 
-      fxLayout="row" 
+    <div
+      fxLayout="row"
       fxLayout.lt-sm="column"
       fxLayoutGap="5px">
       <div
@@ -13,10 +13,10 @@
         fxLayoutAlign="start end"
         class="welcome-bg background-fill"
       >
-        <div 
-          class="welcome-index" 
-          fxLayout="row" 
-          fxLayout.lt-md="column" 
+        <div
+          class="welcome-index"
+          fxLayout="row"
+          fxLayout.lt-md="column"
           fxLayoutGap="30px">
           <div fxFlex="30">
             <h1 fxLayout="column">
@@ -43,25 +43,19 @@
       <div fxLayout.sm="column" fxFlex="30" fxFlex class="background-fill blank-header"></div>
     </div>
 
-    <!-- <div style="height: 200px; width: 100px; background-color: rgb(192, 24, 24);"
-      [@onSideNavOpenClose]="SideNavSrvc.SideNavToggleVal ? 'open' : 'close'">test
-      </div> -->
-
-    <div 
-    fxFlexFill 
+    <div
+    fxFlexFill
     fxLayout="row"
     fxLayout.lt-md="column">
-      <div 
-      fxFlex 
-      fxLayout="row" 
+      <div
+      fxFlex
+      fxLayout="row"
       fxLayout.lt-md="column"
       fxLayoutGap="5px">
         <!-- left side -->
-        <div 
+        <div
           [@OnExpandHorizontal]="SidePanelAction()"
-          (@OnExpandHorizontal.done)="OnExpandHorizontalDoneEvent($event)"
           [@OnExpandVertical]="SidePanelAction()"
-          (@OnExpandVertical.done)="OnExpandVerticalDoneEvent($event)"
           fxLayout="column"
           fxLayout.lt-md="row"
           fxLayoutAlign="start start"
@@ -70,26 +64,25 @@
           <div fxLayout="column" class="side-column">
             <div
               class="side-toggle-container"
-              [@OnExpandHorizontal]="AnimationSrvc.ExpandHoizontalToggleVal ? 'open' : 'close'"
-              [@OnExpandVertical]="AnimationSrvc.ExpandVerticalToggleVal ? 'up' : 'down'"
+
               >
-              
-              <button mat-icon-button (click)="ToggleSideNav()">
+
+              <button mat-icon-button (click)="ToggleSideNav()" *ngIf="!State.Loading">
 
                 <div *ngIf="AnimationSrvc.Direction === 'HORIZONTAL'">
-                  <mat-icon *ngIf="AnimationSrvc.ExpandHoizontalToggleVal">
+                  <mat-icon *ngIf="AnimationSrvc.IsOpen">
                     arrow_left
                   </mat-icon>
-                  <mat-icon *ngIf="!AnimationSrvc.ExpandHoizontalToggleVal">
+                  <mat-icon *ngIf="!AnimationSrvc.IsOpen">
                     arrow_right
                   </mat-icon>
                 </div>
-               
+
                 <div *ngIf="AnimationSrvc.Direction === 'VERTICAL'">
-                  <mat-icon *ngIf="AnimationSrvc.ExpandVerticalToggleVal">
+                  <mat-icon *ngIf="!AnimationSrvc.IsOpen">
                     arrow_drop_down
                   </mat-icon>
-                  <mat-icon *ngIf="!AnimationSrvc.ExpandVerticalToggleVal">
+                  <mat-icon *ngIf="AnimationSrvc.IsOpen">
                     arrow_drop_up
                   </mat-icon>
                 </div>
@@ -98,31 +91,36 @@
 
             <!-- [ngStyle]="{
                 display: OnExpandVertical || OnExpandHoizontal === false ? 'none' : 'block'
+
+                [ngStyle]="{
+              visibilty: !AnimationSrvc.IsOpen ? 'none' : 'block'}"
               }" -->
-            <div
-              fxLayout="column"
-              fxFlex="90"
-              
-              class="padding-left-5 padding-right-5 padding-top-5">
-              <div class="divider-fill-hor"></div>
+            <div [@AnimateOpacity]="AnimationSrvc.IsOpen ? 'show' : 'hide'">
+              <div
+                fxLayout="column"
+                ngClass.gt-sm="padding-top-5"
+                ngClass.lt-md="padding-bottom-5"
+                class="padding-left-5 padding-right-5">
+                <div class="divider-fill-hor"></div>
 
-              <h3 class="mat-display-5 plain-text whats-next-text">
-                Getting Started?
-              </h3>
+                <h3 class="mat-display-5 plain-text whats-next-text">
+                  Getting Started?
+                </h3>
 
-              <p>
-                Check out our getting started
-                <a
-                  mat-link-button
-                  href="https://www.iot-ensemble.com/docs/getting-started/setup"
-                  target="_blank"
-                >
-                  documentation
-                </a>
-              </p>
+                <p>
+                  Check out our getting started
+                  <a
+                    mat-link-button
+                    href="https://www.iot-ensemble.com/docs/getting-started/setup"
+                    target="_blank"
+                  >
+                    documentation
+                  </a>
+                </p>
 
-              <div class="divider-fill-hor"></div>
-            </div>
+                <div class="divider-fill-hor"></div>
+              </div>
+          </div>
           </div>
         </div>
         <!--^^^ Left Side ^^^-->
@@ -137,7 +135,7 @@
           <lcu-setup-manage-element
             *ngIf="State && !State.Loading"
             [dashboard]="State.Dashboard"
-            [devices]="State.Devices"
+            [devices-config]="State.DevicesConfig"
             [emulated]="State.Emulated"
             [storage]="State.Storage"
             [telemetry]="State.Telemetry"

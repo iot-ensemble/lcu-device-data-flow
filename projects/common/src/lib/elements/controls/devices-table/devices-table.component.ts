@@ -60,7 +60,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges): void {
     // console.log('CHANGES: ', changes);
-    if (changes.Devices) {
+    if (changes.DevicesConfig) {
       this.updateDevicesDataSource();
     }
   }
@@ -190,7 +190,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
         Length: this.DevicesConfig.TotalDevices,
-        PageIndex: this.DevicesConfig.Page,
+        PageIndex: this.DevicesConfig.Page-1,
         PageSize: this.DevicesConfig.PageSize,
         PageSizeOptions: [5, 10, 25],
       }
@@ -213,7 +213,6 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   protected updateDevicesDataSource(): void {
     if (this.DevicesConfig) {
       this.Devices = this.DevicesConfig.Devices;
-      // console.log('DEVICES: ', this.Devices);
 
       this.setupGrid();
     }
