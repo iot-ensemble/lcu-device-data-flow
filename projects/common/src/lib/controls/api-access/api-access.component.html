@@ -22,10 +22,9 @@
 
     <div class="margin-top-4">
       <lcu-swagger-ui
-        source="https://www.iot-ensemble.com/open-api/iot-ensemble.openapi.json"
+        [source]="OpenAPISource"
         [auth-key]="APIKeys[0]?.Key"
       ></lcu-swagger-ui>
-      <!-- <lcu-swagger-ui [source]="OpenAPISource"></lcu-swagger-ui> -->
     </div>
 
     <div class="divider-fill-hor margin-top-4"></div>
