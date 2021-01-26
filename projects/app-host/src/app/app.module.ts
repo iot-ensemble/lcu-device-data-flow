@@ -1,4 +1,3 @@
-import { ApiAccessComponent } from './../../../common/src/lib/controls/api-access/api-access.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
