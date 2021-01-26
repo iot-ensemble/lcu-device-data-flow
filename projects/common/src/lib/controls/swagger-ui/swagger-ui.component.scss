@@ -1,0 +1,21 @@
+@import "../../../assets/common";
+
+:host ::ng-deep {
+  //  TODO:  Change all this, just wanted a starting point...  We want the stuff i commented out,
+  //    and it all to look on brand... we are pulling a material theme from swagger-ui-themes in node_modules
+  //    should probably do something that extends that custom theme and creates are own, then use our own instead of theirs...
+
+  .swagger-ui {
+    &,
+    .info .title,
+    .opblock-tag {
+      color: white;
+    }
+
+    .information-container,
+    .scheme-container,
+    .authorization__btn.unlocked {
+      display: none;
+    }
+  }
+}
