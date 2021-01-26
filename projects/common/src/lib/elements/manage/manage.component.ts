@@ -253,7 +253,7 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceSASTokensModal(): void {
-    debugger;
+    // debugger;
     if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
       /**
        * Acces component properties not working - shannon
