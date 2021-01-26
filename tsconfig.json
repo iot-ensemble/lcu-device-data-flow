@@ -21,7 +21,7 @@
 				"dist/common"
 			]
 		},
-		"noImplicitAny": true,
+		"noImplicitAny": false,
 		"suppressImplicitAnyIndexErrors": true
 	},
 	"angularCompilerOptions": {

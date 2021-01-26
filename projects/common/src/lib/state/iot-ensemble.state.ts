@@ -142,23 +142,13 @@ export class IoTEnsembleDrawersConfig {
 export class IoTEnsembleStorageConfiguration {
   public APIKeys: IoTEnsembleAPIKeyData[];
 
-  public APIOptions: IoTEnsembleAPIOption[];
+  public OpenAPISource: string;
 }
 
 export class IoTEnsembleAPIKeyData {
   public Key: string;
 
   public KeyName: string;
-}
-
-export class IoTEnsembleAPIOption {
-  public Description: string;
-
-  public Method: string;
-
-  public Name: string;
-
-  public Path: string;
 }
 
 export enum ColdQueryDataTypes {
