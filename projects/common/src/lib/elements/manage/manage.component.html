@@ -110,7 +110,10 @@
 
             <ng-container *ngIf="MaxDevicesReached">
               <p
-                *ngIf="DevicesConfig.MaxDevicesCount < 50"
+                *ngIf="
+                  DevicesConfig.MaxDevicesCount <
+                  DevicesConfig.EnterpriseDevicesCount
+                "
                 class="paragraph-text"
               >
                 Click "Upgrade Now" to see other plans where you can connect
@@ -121,7 +124,10 @@
                 other great benefits.
               </p>
               <p
-                *ngIf="DevicesConfig.MaxDevicesCount === 50"
+                *ngIf="
+                  DevicesConfig.MaxDevicesCount ===
+                  DevicesConfig.EnterpriseDevicesCount
+                "
                 class="paragraph-text"
               >
                 Please contact Fathym at
@@ -167,7 +173,10 @@
             </a>
 
             <a
-              *ngIf="DevicesConfig.MaxDevicesCount < 50"
+              *ngIf="
+                DevicesConfig.MaxDevicesCount <
+                DevicesConfig.EnterpriseDevicesCount
+              "
               mat-raised-button
               href="/billing/iot"
               color="accent"
@@ -206,48 +215,9 @@
                   />
                 </mat-form-field>
               </div>
-              <div
-                *ngIf="
-                  AddDeviceFormGroup.get('deviceName').invalid &&
-                  (AddDeviceFormGroup.get('deviceName').dirty ||
-                    AddDeviceFormGroup.get('deviceName').touched)
-                "
-                class="alert alert-danger"
-              >
-                <mat-error
-                  *ngIf="
-                    AddDeviceFormGroup.get('deviceName').hasError('required')
-                  "
-                >
-                  Device name is required
-                </mat-error>
 
-                <mat-error
-                  *ngIf="
-                    AddDeviceFormGroup.get('deviceName').hasError('maxlength')
-                  "
-                >
-                  Device name cannot be longer than 128 characters
-                </mat-error>
-
-                <mat-error
-                  *ngIf="
-                    AddDeviceFormGroup.get('deviceName').hasError('pattern')
-                  "
-                >
-                  A case-sensitive string of ASCII 7-bit alphanumeric characters
-                  plus certain special characters: - . % _ * ? ! ( ) , : = @ $ '
-                </mat-error>
-
-                <mat-error
-                  *ngIf="
-                    AddDeviceFormGroup.get('deviceName').hasError(
-                      'duplicateName'
-                    )
-                  "
-                >
-                  Device name already exists
-                </mat-error>
+              <div *ngIf="DeviceNameErrorText">
+                <mat-error>{{ DeviceNameErrorText }}</mat-error>
               </div>
             </div>
           </mat-card-content>
@@ -287,6 +257,15 @@
         fxLayoutAlign="end start"
         class="margin-bottom-3"
       >
+        <button
+          mat-button
+          color="primary"
+          matTooltip="Download Telemetry Data"
+          (click)="DownloadTelemetryModal()"
+        >
+          <mat-icon id="telemetry-download-element">download</mat-icon>
+        </button>
+
         <lcu-enabled-toggle
           class="margin-right-3"
           [enabled]="Telemetry?.Enabled"
@@ -321,10 +300,10 @@
           fxLayoutAlign="start"
           class="telemetry-update margin-top-2"
         >
-          <lcu-loader [loading]="Telemetry?.Loading" [diameter]="20">
-          </lcu-loader>
+          <!-- <lcu-loader [loading]="Telemetry?.Loading" [diameter]="20">
+          </lcu-loader> -->
 
-          <div matTooltip="Updates successful" *ngIf="!Telemetry?.Loading">
+          <div matTooltip="Telemetry Sync Status">
             <mat-icon
               [class.success-dot]="Telemetry?.Enabled"
               [class.error-dot]="!Telemetry?.Enabled"
@@ -335,16 +314,6 @@
 
           Last Updated: {{ LastSyncedAt }}
         </mat-card-subtitle>
-        <div fxFlex fxLayoutAlign="end start">
-          <button
-            mat-button
-            color="primary"
-            matTooltip="Download Telemetry Data"
-            (click)="DownloadTelemetryModal()"
-          >
-            <mat-icon id="telemetry-download-element">download</mat-icon>
-          </button>
-        </div>
         <!-- <div
           fxFlex
           fxLayout="row"
@@ -482,7 +451,7 @@
         </div>
         <lcu-api-access
           [api-keys]="Storage?.APIKeys"
-          [api-options]="Storage?.APIOptions"
+          [open-api-source]="Storage?.OpenAPISource"
           (regenerated)="RegenerateAPIKey($event)"
         ></lcu-api-access>
       </mat-card-content>

@@ -16,7 +16,6 @@ import {
 } from '@lowcodeunit/data-grid';
 import {
   IoTEnsembleAPIKeyData,
-  IoTEnsembleAPIOption,
 } from '../../state/iot-ensemble.state';
 import { of } from 'rxjs';
 
@@ -32,10 +31,10 @@ export class ApiAccessComponent implements OnChanges, OnInit {
   @Input('api-keys')
   public APIKeys: IoTEnsembleAPIKeyData[];
 
-  @Input('api-options')
-  public APIOptions: IoTEnsembleAPIOption[];
-
   public GridParameters: DataGridConfigModel;
+
+  @Input('open-api-source')
+  public OpenAPISource: string;
 
   @Output('regenerated')
   public Regenerated: EventEmitter<string>;
