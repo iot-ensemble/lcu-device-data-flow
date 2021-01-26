@@ -147,7 +147,7 @@ export class DynamicComponent implements OnInit {
     if (!this.MediaSize) { return; }
 
     const mediaSize: string = this.MediaSize.toUpperCase();
-    
+
     if (mediaSize === 'XS' || mediaSize === 'SM') {
       return this.AnimationSrvc.IsOpen ? 'down' : 'up';
     }
@@ -313,7 +313,7 @@ export class DynamicComponent implements OnInit {
   }
 
   protected handleStateChanged() {
-    // console.log(this.State);
+    console.log(this.State);
   }
 
   protected setupStateHandler() {
