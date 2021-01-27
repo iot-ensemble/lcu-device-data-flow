@@ -15,6 +15,7 @@ import {
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
+import { GtagService } from '@iot-ensemble/lcu-setup-common';
 
 @Component({
   selector: 'lcu-dynamic',
@@ -110,7 +111,6 @@ export class DynamicComponent implements OnInit {
   }
 
   public HandleTelemetryPageEvent(event: any) {
-    // console.log("Telemetry Page event recieved: ", event);
     if (event.pageIndex + 1 !== this.State.Telemetry.Page) {
       this.UpdateTelemetryPage(event.pageIndex + 1);
     } else if (event.pageSize !== this.State.Telemetry.PageSize) {
@@ -119,7 +119,6 @@ export class DynamicComponent implements OnInit {
   }
 
   public HandleDevicePageEvent(event: any) {
-    // console.log("Telemetry Page event recieved: ", event);
     if (event.pageIndex + 1 !== this.State.DevicesConfig.Page) {
       this.UpdateDeviceTablePageIndex(event.pageIndex + 1);
     } else if (event.pageSize !== this.State.DevicesConfig.PageSize) {

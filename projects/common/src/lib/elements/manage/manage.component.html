@@ -38,6 +38,9 @@
           <a
             href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
             target="_blank"
+            lcuEvent="click"
+            label="Emulated Devices"
+            category="help"
           >
             <mat-icon matTooltip="More info">help_outline</mat-icon>
           </a>
@@ -102,6 +105,9 @@
             <a
               href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
               target="_blank"
+              lcuEvent="click"
+              label="Connected Devices"
+              category="help"
             >
               <mat-icon matTooltip="More info">help_outline</mat-icon>
             </a>
@@ -111,7 +117,7 @@
           [class.margin-left-5]="
             AddingDevice || DevicesConfig?.Devices?.length <= 0
           "
-        >   
+        >
 
           <div *ngIf="AddingDevice">
             <ng-container *ngIf="!MaxDevicesReached">
@@ -375,6 +381,9 @@
           <a
             href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#devices-telemetry"
             target="_blank"
+            lcuEvent="click"
+            label="Device Telemetry"
+            category="help"
           >
             <mat-icon matTooltip="More info">help_outline</mat-icon>
           </a>
@@ -444,6 +453,9 @@
             <a
               href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
               target="_blank"
+              lcuEvent="click"
+              label="Devices Dashboard"
+              category="help"
             >
               <mat-icon matTooltip="More info">help_outline</mat-icon>
             </a>
@@ -515,6 +527,9 @@
             <a
               href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
               target="_blank"
+              lcuEvent="click"
+              label="Storage Access"
+              category="help"
             >
               <mat-icon matTooltip="More info">help_outline</mat-icon>
             </a>

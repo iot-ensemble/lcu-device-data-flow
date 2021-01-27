@@ -6,6 +6,7 @@ import {
   DataGridConfigModel,
   DataGridFeaturesModel,
 } from '@lowcodeunit/data-grid';
+import { GtagService } from '../../../../services/gtag.service';
 import { of } from 'rxjs';
 import { GenericModalModel } from '../../../../models/generice-modal.model';
 
@@ -36,7 +37,8 @@ export class SasTokenDialogComponent implements OnInit {
   //  Constructors
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: GenericModalModel,
-    public dialogRef: MatDialogRef<SasTokenDialogComponent>
+    public dialogRef: MatDialogRef<SasTokenDialogComponent>,
+    protected gtag: GtagService
   ) {}
 
   //  Life Cycle
@@ -53,6 +55,11 @@ export class SasTokenDialogComponent implements OnInit {
 
   public CopyClick(keyData: any) {
     ClipboardCopyFunction.ClipboardCopy(keyData.SASToken);
+
+    this.gtag.Event('click', {
+      event_category: 'copy',
+      event_label: 'SAS Token'
+    });
 
     keyData.$IsCopySuccessIcon = true;
 
