@@ -346,7 +346,7 @@ export class LcuSetupManageElementComponent
   public EnrollDeviceSubmit() {
     this.EnrollDevice.emit({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
-    })
+    });
     this.AddDeviceFormGroup.reset();
   }
 
