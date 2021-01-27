@@ -21,6 +21,7 @@ import { of } from 'rxjs/internal/observable/of';
 import { IoTEnsembleTelemetry } from '../../../state/iot-ensemble.state';
 import { PayloadComponent } from '../../dynamic/payload/payload.component';
 import { IoTEnsembleTelemetryPayload } from './../../../state/iot-ensemble.state';
+import { GtagService } from '../../../services/gtag.service';
 
 @Component({
   selector: 'lcu-telemetry-list',
@@ -46,7 +47,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   public Telemetry: IoTEnsembleTelemetry;
 
   //  Constructors
-  constructor() {
+  constructor(protected gtag: GtagService) {
     this.Downloaded = new EventEmitter();
 
     this.PageEvent = new EventEmitter();
@@ -74,6 +75,11 @@ export class TelemetryListComponent implements OnChanges, OnInit {
    */
   public CopyClick(payload: IoTEnsembleTelemetryPayload) {
     ClipboardCopyFunction.ClipboardCopy(JSON.stringify(payload));
+
+    this.gtag.Event('click', {
+      event_category: 'copy',
+      event_label: 'Telemetry Payload'
+    });
 
     payload.$IsCopySuccessIcon = true;
 
