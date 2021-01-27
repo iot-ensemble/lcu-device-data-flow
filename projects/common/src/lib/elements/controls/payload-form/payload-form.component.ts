@@ -37,6 +37,12 @@ export class PayloadFormComponent implements OnInit {
     this.setupPayloadForm();
   }
 
+  public ngOnChanges(){
+    if(this.DeviceOptions){
+      this.DeviceOptions.sort();
+    }
+  }
+
   //  API Methods
   public Cancel() {
     this.Canceled.emit(true);
