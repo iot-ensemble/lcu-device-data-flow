@@ -462,7 +462,7 @@ export class LcuSetupManageElementComponent
   }
 
   protected handleStateChanged(changes: SimpleChanges, force: boolean = false) {
-    if (changes.Devices || force) {
+    if (changes.DevicesConfig || force) {
       this.DeviceSASTokensModal();
 
       this.DeviceNames =
@@ -471,7 +471,7 @@ export class LcuSetupManageElementComponent
       this.setAddingDevice();
     }
 
-    if (changes.Dashboardv) {
+    if (changes.Dashboard || force) {
       this.setupFreeboard();
     }
 
