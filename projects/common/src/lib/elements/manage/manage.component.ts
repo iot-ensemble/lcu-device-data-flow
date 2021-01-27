@@ -347,6 +347,7 @@ export class LcuSetupManageElementComponent
     this.EnrollDevice.emit({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
     });
+    this.AddDeviceFormGroup.reset();
   }
 
   public HandleTelemetryPageEvent(event: any) {
