@@ -6,7 +6,7 @@ import {
   FathymSharedModule,
   LCUServiceSettings,
   MaterialModule,
-  PipeModule
+  PipeModule,
 } from '@lcu/common';
 import { LcuSetupManageElementComponent } from './elements/manage/manage.component';
 import { LcuSetupAdminElementComponent } from './elements/admin/admin.component';
@@ -29,6 +29,9 @@ import { SasTokenDialogComponent } from './elements/manage/controls/sas-token-di
 import { TelemetryDownloadDialogComponent } from './elements/manage/controls/telemetry-download-dialog/telemetry-download-dialog.component';
 import { AnimationService } from './services/animation.service';
 import { SwaggerUIComponent } from './controls/swagger-ui/swagger-ui.component';
+import { GtagService } from './services/gtag.service';
+import { PageViewDirective } from './directives/analytics/page-view.directive';
+import { EventDirective } from './directives/analytics/event.directive';
 
 @NgModule({
   declarations: [
@@ -48,17 +51,19 @@ import { SwaggerUIComponent } from './controls/swagger-ui/swagger-ui.component';
     ApiAccessComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
-    SwaggerUIComponent
+    SwaggerUIComponent,
+    PageViewDirective,
+    EventDirective,
   ],
   imports: [
-    FathymSharedModule,
+  FathymSharedModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     FlexLayoutModule,
     MaterialModule,
     DataGridModule,
-    PipeModule
+    PipeModule,
   ],
   exports: [
     LcuSetupManageElementComponent,
@@ -77,7 +82,9 @@ import { SwaggerUIComponent } from './controls/swagger-ui/swagger-ui.component';
     ApiAccessComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
-    SwaggerUIComponent
+    SwaggerUIComponent,
+    PageViewDirective,
+    EventDirective,
   ],
   entryComponents: [
     LcuSetupManageElementComponent,
@@ -90,7 +97,7 @@ import { SwaggerUIComponent } from './controls/swagger-ui/swagger-ui.component';
     PayloadFormComponent,
     SendMessageDialogComponent,
     SasTokenDialogComponent,
-    TelemetryDownloadDialogComponent
+    TelemetryDownloadDialogComponent,
   ],
 })
 export class LcuSetupModule {
@@ -100,7 +107,8 @@ export class LcuSetupModule {
       providers: [
         IoTEnsembleStateContext,
         AnimationService,
-        GenericModalService
+        GenericModalService,
+        GtagService
       ],
     };
   }

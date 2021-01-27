@@ -154,6 +154,10 @@
           ></lcu-setup-manage-element>
 
           <lcu-loader [loading]="State.Loading"></lcu-loader>
+          <div  *ngIf="State.Loading" fxLayoutAlign="space-around center">
+            <p *ngIf="!State.UserEnterpriseLookup">Setting up your Dashboard, connecting you to the shared IoT flow, and preparing your APIs.</p>
+            <p *ngIf="State.UserEnterpriseLookup">Loading your Dashboard.</p>
+          </div>
         </div>
         <!--^^^ Content ^^^-->
       </div>

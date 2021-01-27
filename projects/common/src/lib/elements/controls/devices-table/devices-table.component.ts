@@ -16,6 +16,7 @@ import {
 } from '@lowcodeunit/data-grid';
 import { of } from 'rxjs';
 import { IoTEnsembleConnectedDevicesConfig, IoTEnsembleDeviceInfo } from '../../../state/iot-ensemble.state';
+import { GtagService } from './../../../services/gtag.service';
 
 @Component({
   selector: 'lcu-devices-table',
@@ -46,7 +47,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
   public Devices: IoTEnsembleDeviceInfo[];
 
   //  Constructors
-  constructor() {
+  constructor(protected gtag: GtagService) {
     this.Devices = [];
 
     this.IssuedSASToken = new EventEmitter();
@@ -75,6 +76,11 @@ export class DevicesTableComponent implements OnInit, OnChanges {
    */
   public CopyClick(deviceInfo: IoTEnsembleDeviceInfo): void {
     ClipboardCopyFunction.ClipboardCopy(deviceInfo.ConnectionString);
+
+    this.gtag.Event('click', {
+      event_category: 'copy',
+      event_label: 'Device Connection String'
+    });
 
     deviceInfo.$IsCopySuccessIcon = true;
 
@@ -190,7 +196,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
         Length: this.DevicesConfig.TotalDevices,
-        PageIndex: this.DevicesConfig.Page-1,
+        PageIndex: this.DevicesConfig.Page - 1,
         PageSize: this.DevicesConfig.PageSize,
         PageSizeOptions: [5, 10, 25],
       }
@@ -203,8 +209,9 @@ export class DevicesTableComponent implements OnInit, OnChanges {
       Paginator: paginationDetails,
       Filter: false,
       ShowLoader: true,
-      RowColorEven: 'gray',
-      RowColorOdd: 'light-gray',
+      Highlight: 'rowHighlight',
+      // RowColorEven: 'gray',
+      // RowColorOdd: 'light-gray',
     });
 
     return features;
@@ -212,6 +219,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
 
   protected updateDevicesDataSource(): void {
     if (this.DevicesConfig) {
+      console.log("updating devices config: ",this.DevicesConfig )
       this.Devices = this.DevicesConfig.Devices;
 
       this.setupGrid();
