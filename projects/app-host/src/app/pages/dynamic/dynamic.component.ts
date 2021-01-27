@@ -15,7 +15,6 @@ import {
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { GtagService } from '@iot-ensemble/lcu-setup-common';
 
 @Component({
   selector: 'lcu-dynamic',
