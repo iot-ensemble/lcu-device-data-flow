@@ -1,0 +1,27 @@
+@import "../../../assets/common";
+
+:host ::ng-deep {
+  //  TODO:  Change all this, just wanted a starting point...  We want the stuff i commented out,
+  //    and it all to look on brand... we are pulling a material theme from swagger-ui-themes in node_modules
+  //    should probably do something that extends that custom theme and creates are own, then use our own instead of theirs...
+  //    The display: none stuff should stay as we don't want to show those only for the purpose of this control
+
+  .swagger-ui {
+    &,
+    .info .title,
+    .opblock-tag {
+      color: white;
+    }
+
+    .information-container,
+    .scheme-container,
+    .authorization__btn.unlocked,
+    .models {
+      display: none;
+    }
+
+    .opblock.opblock-get {
+      background-color: #C6C6C6;
+    }
+  }
+}

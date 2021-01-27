@@ -10,24 +10,20 @@
     <script src="assets/freeboard/freeboard.thirdparty.min.js"></script>
     <script type="text/javascript">
       head.js(
-        'assets/freeboard/freeboard_plugins.min.js',
+        "assets/freeboard/freeboard_plugins.min.js",
         // *** Load more plugins here ***
         function () {
           $(function () {
             //DOM Ready
             // debugger;
             // freeboard.initialize(true);
-
             // var dataUrl = null;
-
             // if (window.LCU && window.LCU.State.FreeboardConfigURL) {
             //   dataUrl = window.LCU.State.FreeboardConfigURL;
             // } else {
             //   var hashpattern = window.location.hash.match(/(&|#)source=([^&]+)/);
-
             //   dataUrl = hashpattern !== null ? hashpattern[2] : null;
             // }
-
             // if (dataUrl) {
             //   $.getJSON(dataUrl, function (data) {
             //     freeboard.loadDashboard(data, function () {
@@ -52,12 +48,40 @@
         State: {
           ActionRoot: "/api/state",
           Root: "/api/state",
-          Environment: "int",
-          UsernameMock: "iot-ensemble-mcgear-0120a@mailinator.com",
-          FreeboardURL: "https://fathym.fathym-it.com/freeboard"
+          // Environment: "local",
+          UsernameMock: "michael.gearhardt@fathym.com",
+          FreeboardURL: "https://fathym.fathym-it.com/freeboard",
+          Google: {
+            Analytics: {
+              MeasurementiD: "G-NEWEXH7W8C",
+            },
+          },
         },
         Settings: {},
       };
+    </script>
+    <script type="application/javascript">
+      (function (b, o, n, g, s, r, c) {
+        if (b[s]) return;
+        b[s] = {};
+        b[s].scriptToken = "XzcwMzAwMzkyNA";
+        b[s].callsQueue = [];
+        b[s].api = function () {
+          b[s].callsQueue.push(arguments);
+        };
+        r = o.createElement(n);
+        c = o.getElementsByTagName(n)[0];
+        r.async = 1;
+        r.src = g;
+        r.id = s + n;
+        c.parentNode.insertBefore(r, c);
+      })(
+        window,
+        document,
+        "script",
+        "https://cdn.oribi.io/XzcwMzAwMzkyNA/oribi.js",
+        "ORIBI"
+      );
     </script>
   </head>
   <body>

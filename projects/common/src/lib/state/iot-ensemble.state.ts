@@ -6,7 +6,7 @@ export class IoTEnsembleState {
 
   public AccessPlanGroup?: string;
 
-  public Devices?: IoTEnsembleConnectedDevicesConfig;
+  public DevicesConfig?: IoTEnsembleConnectedDevicesConfig;
 
   public Dashboard?: IoTEnsembleDashboardConfiguration;
 
@@ -58,6 +58,8 @@ export class IoTEnsembleDeviceEnrollment {
 }
 
 export class IoTEnsembleConnectedDevicesConfig {
+  public EnterpriseDevicesCount: number;
+
   public Devices?: IoTEnsembleDeviceInfo[];
 
   public Loading?: boolean;
@@ -140,23 +142,13 @@ export class IoTEnsembleDrawersConfig {
 export class IoTEnsembleStorageConfiguration {
   public APIKeys: IoTEnsembleAPIKeyData[];
 
-  public APIOptions: IoTEnsembleAPIOption[];
+  public OpenAPISource: string;
 }
 
 export class IoTEnsembleAPIKeyData {
   public Key: string;
 
   public KeyName: string;
-}
-
-export class IoTEnsembleAPIOption {
-  public Description: string;
-
-  public Method: string;
-
-  public Name: string;
-
-  public Path: string;
 }
 
 export enum ColdQueryDataTypes {

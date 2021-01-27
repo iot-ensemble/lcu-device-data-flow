@@ -10,6 +10,9 @@ export class HeaderComponent implements OnInit {
   //  Fields
 
   //  Properties
+  @Input('billing-link')
+  public BillingLink: string;
+  
   @Output('menu-click')
   public MenuClicked: EventEmitter<MouseEvent>;
 
@@ -21,6 +24,7 @@ export class HeaderComponent implements OnInit {
 
   //  Constructors
   constructor() {
+    this.BillingLink = "/billing/iot";
     this.MenuClicked = new EventEmitter();
   }
 

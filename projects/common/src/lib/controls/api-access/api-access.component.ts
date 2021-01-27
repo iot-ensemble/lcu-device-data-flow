@@ -16,9 +16,9 @@ import {
 } from '@lowcodeunit/data-grid';
 import {
   IoTEnsembleAPIKeyData,
-  IoTEnsembleAPIOption,
 } from '../../state/iot-ensemble.state';
 import { of } from 'rxjs';
+import { GtagService } from '../../services/gtag.service';
 
 @Component({
   selector: 'lcu-api-access',
@@ -32,10 +32,10 @@ export class ApiAccessComponent implements OnChanges, OnInit {
   @Input('api-keys')
   public APIKeys: IoTEnsembleAPIKeyData[];
 
-  @Input('api-options')
-  public APIOptions: IoTEnsembleAPIOption[];
-
   public GridParameters: DataGridConfigModel;
+
+  @Input('open-api-source')
+  public OpenAPISource: string;
 
   @Output('regenerated')
   public Regenerated: EventEmitter<string>;
@@ -43,7 +43,7 @@ export class ApiAccessComponent implements OnChanges, OnInit {
   protected toggleKeyVisibility: boolean;
 
   //  Constructors
-  constructor() {
+  constructor(protected gtag: GtagService) {
     this.Regenerated = new EventEmitter();
   }
 
@@ -61,6 +61,11 @@ export class ApiAccessComponent implements OnChanges, OnInit {
   //  API Methods
   public CopyClick(keyData: any) {
     ClipboardCopyFunction.ClipboardCopy(keyData.Key);
+
+    this.gtag.Event('click', {
+      event_category: 'copy',
+      event_label: 'Storage Access Keys'
+    });
 
     keyData.$IsCopySuccessIcon = true;
 

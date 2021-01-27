@@ -36,7 +36,14 @@ import {
   IoTEnsembleTelemetryPayload,
 } from './../../state/iot-ensemble.state';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  PatternValidator,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -78,7 +85,7 @@ export class LcuSetupManageElementComponent
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
-
+// debugger;
     return this.AddingDevice ? maxDeviceFlex : '100%';
   }
 
@@ -89,8 +96,8 @@ export class LcuSetupManageElementComponent
 
   public DeviceNames: string[];
 
-  @Input('devices')
-  public Devices: IoTEnsembleConnectedDevicesConfig;
+  @Input('devices-config')
+  public DevicesConfig: IoTEnsembleConnectedDevicesConfig;
 
   @Input('emulated')
   public Emulated: EmulatedDeviceInfo;
@@ -106,7 +113,9 @@ export class LcuSetupManageElementComponent
   public LastSyncedAt: Date;
 
   public get MaxDevicesReached(): boolean {
-    return this.Devices?.Devices?.length >= this.Devices?.MaxDevicesCount;
+    return (
+      this.DevicesConfig?.TotalDevices >= this.DevicesConfig?.MaxDevicesCount
+    );
   }
 
   /**
@@ -153,6 +162,9 @@ export class LcuSetupManageElementComponent
   @Output('update-refresh-rate')
   public UpdateRefreshRate: EventEmitter<number>;
 
+  @Output('update-telemetry-page')
+  public UpdateTelemetryPage: EventEmitter<number>;
+
   // @Output('update-telemetry-page')
   // public UpdateTelemetryPage: EventEmitter<number>;
 
@@ -194,6 +206,8 @@ export class LcuSetupManageElementComponent
     this.TelemetryPageEvent = new EventEmitter();
 
     this.UpdateRefreshRate = new EventEmitter();
+
+    this.UpdateTelemetryPage = new EventEmitter();
   }
 
   //  Life Cycle
@@ -218,8 +232,30 @@ export class LcuSetupManageElementComponent
   }
 
   //  API Methods
+  public get DeviceNameErrorText(): string {
+    var errorText: string = null;
+    
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('required')) {
+    errorText = 'Device name is required\r\n';
+    }
+    
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('maxlength')) {
+    errorText = 'Device name cannot be longer than 128 characters\r\n';
+    }
+
+    if(this.AddDeviceFormGroup.get('deviceName').hasError('pattern')) {
+      errorText = 'A case-sensitive string of ASCII 7-bit alphanumeric characters plus certain special characters: - . % _ * ? ! ( ) , : = @ $ \' \r\n' 
+    }
+
+    if(this.AddDeviceFormGroup.get('deviceName').hasError('duplicateName')){
+      errorText = ' Device name already exists \r\n';
+    }
+                  
+    return errorText;
+    }
+    
   public DeviceSASTokensModal(): void {
-    if (!this.devicesSasTokensOpened && !!this.Devices?.SASTokens) {
+    if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
       /**
        * Acces component properties not working - shannon
        *
@@ -233,7 +269,7 @@ export class LcuSetupManageElementComponent
         CallbackAction: (val: any) => {}, // function exposed to the modal
         Component: SasTokenDialogComponent, // set component to be used inside the modal
         Data: {
-          SASTokens: this.Devices?.SASTokens,
+          SASTokens: this.DevicesConfig?.SASTokens,
         },
         LabelCancel: 'Close',
         // LabelAction: 'OK',
@@ -256,9 +292,8 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceTablePageEvent(event: any) {
-    console.log("PAGE EVENT", event)
+    console.log('PAGE EVENT', event);
     this.DevicesPageEvent.emit(event);
-
   }
 
   public DownloadTelemetryModal(): void {
@@ -313,7 +348,8 @@ export class LcuSetupManageElementComponent
   public EnrollDeviceSubmit() {
     this.EnrollDevice.emit({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
-    });
+    })
+    this.AddDeviceFormGroup.reset();
   }
 
   public HandleTelemetryPageEvent(event: any) {
@@ -376,12 +412,19 @@ export class LcuSetupManageElementComponent
     // }, 1000);
   }
 
-  public RefreshTelemetry(event: any) {
-    this.Refreshed.emit(event);
-  }
-
   public RefreshRateChanged(event: any) {
     this.UpdateRefreshRate.emit(event);
+  }
+
+  public RefreshTelemetryPage(event: any) {
+    if(!this.Telemetry.Enabled){
+      this.ToggleTelemetryEnabledChanged(true);
+      this.UpdateTelemetryPage.emit(event);
+      this.ToggleTelemetryEnabledChanged(true);
+    }
+    else {
+      this.UpdateTelemetryPage.emit(event);
+    }
   }
 
   public RegenerateAPIKey(keyName: string) {
@@ -426,8 +469,7 @@ export class LcuSetupManageElementComponent
   protected convertToDate(syncDate: string) {
     if (syncDate) {
       this.LastSyncedAt = new Date(Date.parse(syncDate));
-    }
-    else{
+    } else {
       this.LastSyncedAt = null;
     }
   }
@@ -436,16 +478,18 @@ export class LcuSetupManageElementComponent
     if (changes.Devices) {
       this.DeviceSASTokensModal();
 
-      this.setAddingDevice();
-
-      this.DeviceNames = this.Devices?.Devices?.map((d) => d.DeviceName) || [];
+      this.DeviceNames =
+        this.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
     }
+
+    this.setAddingDevice();
 
     if (changes.Dashboard) {
       this.setupFreeboard();
     }
 
-    this.DeviceNames = this.Devices?.Devices?.map((d) => d.DeviceName) || [];
+    this.DeviceNames =
+      this.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
 
     if (changes.Telemetry) {
       if (this.Telemetry) {
@@ -455,7 +499,7 @@ export class LcuSetupManageElementComponent
   }
 
   protected setAddingDevice() {
-    this.AddingDevice = (this.Devices?.Devices?.length || 0) <= 0;
+    this.AddingDevice = (this.DevicesConfig?.Devices?.length || 0) <= 0;
   }
 
   protected setDashboardIFrameURL() {
@@ -471,9 +515,27 @@ export class LcuSetupManageElementComponent
   }
 
   protected setupAddDeviceForm() {
+    const regex: RegExp = /(^[A-Za-z0-9-\.%_\*?!(),:=@$']*$)/;
     this.AddDeviceFormGroup = this.formBldr.group({
-      deviceName: ['', Validators.required],
+      deviceName: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.maxLength(128),
+          Validators.pattern(regex),
+          this.DeviceNameValidator(),
+        ]),
+      ],
     });
+  }
+  /**
+   * Custom Validator to determine if the device name already exists by checking the deviceNames array
+   */
+  protected DeviceNameValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null =>
+      !this.DeviceNames.includes(control.value)
+        ? null
+        : { duplicateName: control.value };
   }
 
   protected setupFreeboard() {
