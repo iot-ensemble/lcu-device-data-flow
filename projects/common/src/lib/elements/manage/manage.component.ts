@@ -85,7 +85,7 @@ export class LcuSetupManageElementComponent
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
-    // debugger;
+
     return this.AddingDevice ? maxDeviceFlex : '100%';
   }
 
@@ -253,7 +253,6 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceSASTokensModal(): void {
-    // debugger;
     if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
       /**
        * Acces component properties not working - shannon
@@ -529,7 +528,6 @@ export class LcuSetupManageElementComponent
     this.setDashboardIFrameURL();
 
     if (this.Dashboard && this.Dashboard.FreeboardConfig) {
-      //   // debugger;
       //   // freeboard.initialize(true);
       //   // const dashboard = freeboard.loadDashboard(
       //   //   this.State.Dashboard.FreeboardConfig,
