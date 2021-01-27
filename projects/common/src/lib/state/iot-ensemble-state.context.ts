@@ -20,7 +20,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   protected oldState: IoTEnsembleState = {};
 
   // API Methods
-  
+
   public ColdQuery(
     startDate: Date = new Date(new Date().setDate(new Date().getDate() - 30)),
     endDate: Date = new Date(),
@@ -49,7 +49,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
       },
       Type: 'ColdQuery',
     });
-    
+
   }
 
   public EnrollDevice(device: IoTEnsembleDeviceEnrollment): void {
@@ -201,7 +201,6 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   protected diffState(reqState: any) {
-    // debugger;
     const stateKeys = Object.keys(reqState);
 
     const diffed = {};
