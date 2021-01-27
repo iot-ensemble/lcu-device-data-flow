@@ -1,21 +1,23 @@
-<h2>Download Telemetry Data</h2>
+<div page-view="#telemetry-download-dialog" [screen-view]="true">
+  <h2>Download Telemetry Data</h2>
 
-<div class="table-container">
-    <p>By default you will be downloading the past 30 days of Telemetry data.</p>
+  <div class="table-container">
+    <p>
+      By default you will be downloading the past 30 days of Telemetry data.
+    </p>
     <div class="download-button-container" fxLayoutAlign="start-center">
-    <button mat-raised-button (click)="JSONDownloadSelected()">
+      <button mat-raised-button (click)="JSONDownloadSelected()">
         Download JSON
       </button>
       <!-- <button mat-raised-button (click)="ZIPDownloadSelected()">
         Download Zip
       </button> -->
     </div>
-</div>
+  </div>
 
-<div class="margin-top-2">
-  <div fxFlex></div>
+  <div class="margin-top-2">
+    <div fxFlex></div>
 
-  <button mat-raised-button (click)="Close()">
-    Close
-  </button>
+    <button mat-raised-button (click)="Close()">Close</button>
+  </div>
 </div>
