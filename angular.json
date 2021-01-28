@@ -195,6 +195,11 @@
                 "input": "./projects/demo/",
                 "output": "/"
               },
+              {
+                "glob": "**/*",
+                "input": "./projects/common/assets/icons",
+                "output": "/assets/icons/"
+              },
               "projects/demo/src/docs"
             ],
             "styles": [
@@ -307,6 +312,11 @@
                 "glob": "package.json",
                 "input": "./projects/app-host/",
                 "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@lowcodeunit/lcu-icons-common/assets/icons",
+                "output": "/assets/icons/"
               }
             ],
             "styles": [
