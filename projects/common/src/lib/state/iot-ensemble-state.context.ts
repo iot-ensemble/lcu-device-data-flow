@@ -1,5 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { StateContext } from '@lcu/common';
+import { GtagCustomParams } from '../models/gtag.models';
+import { GtagService } from '../services/gtag.service';
 import {
   ColdQueryResultTypes,
   IoTEnsembleDeviceEnrollment,
@@ -13,14 +15,14 @@ import {
 })
 export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   // Constructors
-  constructor(protected injector: Injector) {
+  constructor(protected injector: Injector, protected gtag: GtagService) {
     super(injector);
   }
 
   protected oldState: IoTEnsembleState = {};
 
   // API Methods
-  
+
   public ColdQuery(
     startDate: Date = new Date(new Date().setDate(new Date().getDate() - 30)),
     endDate: Date = new Date(),
@@ -33,31 +35,52 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     flatten: boolean = false,
     zip: boolean = false
   ): Promise<object> {
-    console.log("Calling ColdQuery", startDate, endDate, pageSize, page, selectedDeviceIds, includeEmulated, dataType, resultType, flatten, zip)
+    console.log(
+      'Calling ColdQuery',
+      startDate,
+      endDate,
+      pageSize,
+      page,
+      selectedDeviceIds,
+      includeEmulated,
+      dataType,
+      resultType,
+      flatten,
+      zip
+    );
+
+    const args = {
+      DataType: dataType,
+      EndDate: endDate,
+      Flatten: flatten,
+      IncludeEmulated: includeEmulated,
+      Page: page,
+      PageSize: pageSize,
+      ResultType: resultType,
+      SelectedDeviceIDs: selectedDeviceIds,
+      StartDate: startDate,
+      Zip: zip,
+    };
+
+    this.gtagEvent('ColdQuery', args);
+
     return this.Execute({
-      Arguments: {
-        DataType: dataType,
-        EndDate: endDate,
-        Flatten: flatten,
-        IncludeEmulated: includeEmulated,
-        Page: page,
-        PageSize: pageSize,
-        ResultType: resultType,
-        SelectedDeviceIDs: selectedDeviceIds,
-        StartDate: startDate,
-        Zip: zip,
-      },
+      Arguments: args,
       Type: 'ColdQuery',
     });
-    
   }
 
   public EnrollDevice(device: IoTEnsembleDeviceEnrollment): void {
-    console.log("calling enrollDevice")
+    console.log('calling enrollDevice');
+
+    const args = {
+      Device: device,
+    };
+
+    this.gtagEvent('EnrollDevice', args);
+
     this.Execute({
-      Arguments: {
-        Device: device,
-      },
+      Arguments: args,
       Type: 'EnrollDevice',
     });
   }
@@ -66,24 +89,32 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     deviceName: string,
     expiryInSeconds: number = 0
   ): void {
-    console.log("calling issueDeviceSasToken")
+    console.log('calling issueDeviceSasToken');
+
+    const args = {
+      DeviceName: deviceName,
+      ExpiryInSeconds: expiryInSeconds,
+    };
+
+    this.gtagEvent('IssueDeviceSASToken', args);
 
     this.Execute({
-      Arguments: {
-        DeviceName: deviceName,
-        ExpiryInSeconds: expiryInSeconds,
-      },
+      Arguments: args,
       Type: 'IssueDeviceSASToken',
     });
   }
 
   public RevokeDeviceEnrollment(deviceId: string): void {
-    console.log("calling RevokeDeviceEnrollment")
+    console.log('calling RevokeDeviceEnrollment');
+
+    const args = {
+      DeviceID: deviceId,
+    };
+
+    this.gtagEvent('RevokeDeviceEnrollment', args);
 
     this.Execute({
-      Arguments: {
-        DeviceID: deviceId,
-      },
+      Arguments: args,
       Type: 'RevokeDeviceEnrollment',
     });
   }
@@ -92,62 +123,91 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     deviceName: string,
     payload: IoTEnsembleTelemetryPayload
   ): void {
-    console.log("calling sendDeviceMessage")
+    console.log('calling sendDeviceMessage');
+
+    const args = {
+      DeviceName: deviceName,
+      Payload: payload,
+    };
+
+    this.gtagEvent('SendDeviceMessage', args);
 
     this.Execute({
-      Arguments: {
-        DeviceName: deviceName,
-        Payload: payload,
-      },
+      Arguments: args,
       Type: 'SendDeviceMessage',
     });
   }
 
   public ToggleDetailsPane(): void {
-    console.log("calling toggleDetailsPane")
+    console.log('calling toggleDetailsPane');
+
+    const args = {};
+
+    this.gtagEvent('ToggleDetailsPane', args);
 
     this.Execute({
-      Arguments: {},
+      Arguments: args,
       Type: 'ToggleDetailsPane',
     });
   }
 
   public ToggleEmulatedEnabled(): void {
-    console.log("calling ToggleEmulated")
+    console.log('calling ToggleEmulated');
+
+    const args = {};
+
+    this.gtagEvent('ToggleEmulatedEnabled', args);
 
     this.Execute({
-      Arguments: {},
+      Arguments: args,
       Type: 'ToggleEmulatedEnabled',
     });
   }
 
   public ToggleTelemetrySync() {
-    console.log("calling toggleTelemetry")
+    console.log('calling toggleTelemetry');
+
+    const args = {};
+
+    this.gtagEvent('ToggleTelemetrySync', args);
 
     this.Execute({
-      Arguments: {},
+      Arguments: args,
       Type: 'ToggleTelemetrySync',
     });
   }
 
-  public UpdateTelemetrySync(refreshRate: number, page: number, pageSize: number) {
-    console.log("updating telemetry sync page number: ", page);
+  public UpdateTelemetrySync(
+    refreshRate: number,
+    page: number,
+    pageSize: number
+  ) {
+    console.log('updating telemetry sync page number: ', page);
+
+    const args = {
+      RefreshRate: refreshRate,
+      Page: page,
+      PageSize: pageSize,
+    };
+
+    this.gtagEvent('UpdateTelemetrySync', args);
+
     this.Execute({
-      Arguments: {
-        RefreshRate: refreshRate,
-        Page: page,
-        PageSize: pageSize,
-      },
+      Arguments: args,
       Type: 'UpdateTelemetrySync',
     });
   }
 
   public UpdateConnectedDevicesSync(page: number, pageSize: number) {
+    const args = {
+      Page: page,
+      PageSize: pageSize,
+    };
+
+    this.gtagEvent('UpdateConnectedDevicesSync', args);
+
     this.Execute({
-      Arguments: {
-        Page: page,
-        PageSize: pageSize
-      },
+      Arguments: args,
       Type: 'UpdateConnectedDevicesSync',
     });
   }
@@ -160,17 +220,21 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     selectedDeviceIds: string[] = [],
     includeEmulated: boolean = false
   ) {
-    console.log("calling warmQuery")
+    console.log('calling warmQuery');
+
+    const args = {
+      EndDate: endDate,
+      IncludeEmulated: includeEmulated,
+      Page: page,
+      PageSize: pageSize,
+      SelectedDeviceIDs: selectedDeviceIds,
+      StartDate: startDate,
+    };
+
+    this.gtagEvent('WarmQuery', args);
 
     this.Execute({
-      Arguments: {
-        EndDate: endDate,
-        IncludeEmulated: includeEmulated,
-        Page: page,
-        PageSize: pageSize,
-        SelectedDeviceIDs: selectedDeviceIds,
-        StartDate: startDate,
-      },
+      Arguments: args,
       Type: 'WarmQuery',
     });
   }
@@ -188,6 +252,15 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     return 'iotensemble';
   }
 
+  protected gtagEvent(stateAction: string, eventArgs: GtagCustomParams) {
+    this.gtag.Event('state', {
+      state_action: stateAction,
+      state_key: this.loadStateKey(),
+      state_name: this.loadStateName(),
+      ...eventArgs,
+    });
+  }
+
   protected setupReceiveState(groupName: string) {
     this.rt.RegisterHandler(`ReceiveState=>${groupName}`).subscribe((req) => {
       // console.log(`Handled state from ${groupName}`);
@@ -201,7 +274,6 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   }
 
   protected diffState(reqState: any) {
-    // debugger;
     const stateKeys = Object.keys(reqState);
 
     const diffed = {};

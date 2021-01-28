@@ -1,1 +1,45 @@
-@import '../../common/src/assets/common';
+@import "../../common/src/assets/common";
+@include theme-setup($global-theme);
+
+//counters freeboards effect on style when modal is open
+#index-page{
+  top: 0px !important;
+  overflow: hidden;
+}
+
+/**
+* Common styles for Napkin-IDE projects
+*
+* If this starts to get big, think about moving these to another stylesheet
+*/
+.spinner-logo {
+  position: absolute;
+  background-image: fathym-logo(thinky-logo, black, 1);
+  // height: 50px !important;
+  // width: 50px !important;
+  // height: 50px !important;
+  // width: 50px !important;
+  background-repeat: no-repeat;
+}
+
+.wrapperloading {
+  display: none !important;
+}
+
+//TODO:  Move to common and out  of all default styles
+.mat-spinner {
+  ::ng-deep circle {
+      stroke: $success;
+  }
+
+  margin: auto;
+}
+
+.mat-full-width {
+  width: 100%;
+}
+
+.spread {
+  margin: 2em;
+}
+

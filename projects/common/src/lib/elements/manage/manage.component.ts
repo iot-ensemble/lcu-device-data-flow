@@ -85,7 +85,7 @@ export class LcuSetupManageElementComponent
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
-    // debugger;
+
     return this.AddingDevice ? maxDeviceFlex : '100%';
   }
 
@@ -253,7 +253,6 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceSASTokensModal(): void {
-    // debugger;
     if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
       /**
        * Acces component properties not working - shannon
@@ -348,6 +347,7 @@ export class LcuSetupManageElementComponent
     this.EnrollDevice.emit({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
     });
+    this.AddDeviceFormGroup.reset();
   }
 
   public HandleTelemetryPageEvent(event: any) {
@@ -462,7 +462,7 @@ export class LcuSetupManageElementComponent
   }
 
   protected handleStateChanged(changes: SimpleChanges, force: boolean = false) {
-    if (changes.Devices || force) {
+    if (changes.DevicesConfig || force) {
       this.DeviceSASTokensModal();
 
       this.DeviceNames =
@@ -471,7 +471,7 @@ export class LcuSetupManageElementComponent
       this.setAddingDevice();
     }
 
-    if (changes.Dashboardv) {
+    if (changes.Dashboard || force) {
       this.setupFreeboard();
     }
 
@@ -529,7 +529,6 @@ export class LcuSetupManageElementComponent
     this.setDashboardIFrameURL();
 
     if (this.Dashboard && this.Dashboard.FreeboardConfig) {
-      //   // debugger;
       //   // freeboard.initialize(true);
       //   // const dashboard = freeboard.loadDashboard(
       //   //   this.State.Dashboard.FreeboardConfig,
