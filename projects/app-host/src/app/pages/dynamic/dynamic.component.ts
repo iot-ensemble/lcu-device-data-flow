@@ -265,7 +265,7 @@ export class DynamicComponent implements OnInit {
   public UpdateTelemetryPage(page: number) {
     // console.log("calling update page: ", page)
     this.State.Telemetry.Loading = true;
-
+    console.log("STATE HERE: " + this.iotEnsCtxt);
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       page,

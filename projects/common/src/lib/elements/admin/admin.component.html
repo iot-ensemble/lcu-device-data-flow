@@ -1,3 +1,11 @@
-<h2>LcuSetup Admin Next Steps</h2>
+<div>
+  <pre>{{ State.Enterprise?.ChildEnterprises[0] | json }}</pre>
 
-<p>Do stuff and things!</p>
+  <a mat-raised-button (click)="SetActiveEnterprise(State.Enterprise?.ChildEnterprises[0].Lookup)">Set Active</a>
+</div>
+
+<div *ngIf="ActiveChildEnterprise">
+  <pre>{{ ActiveChildEnterprise | json }}</pre>
+
+  <a mat-raised-button (click)="SetActiveEnterprise(null)">Remove Active</a>
+</div>

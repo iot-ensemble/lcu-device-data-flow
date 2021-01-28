@@ -417,14 +417,14 @@ export class LcuSetupManageElementComponent
   }
 
   public RefreshTelemetryPage(event: any) {
-    if(!this.Telemetry.Enabled){
-      this.ToggleTelemetryEnabledChanged(true);
+    // if(!this.Telemetry.Enabled){
+    //   this.ToggleTelemetryEnabledChanged(true);
+    //   this.UpdateTelemetryPage.emit(event);
+    //   this.ToggleTelemetryEnabledChanged(true);
+    // }
+    // else {
       this.UpdateTelemetryPage.emit(event);
-      this.ToggleTelemetryEnabledChanged(true);
-    }
-    else {
-      this.UpdateTelemetryPage.emit(event);
-    }
+    //}
   }
 
   public RegenerateAPIKey(keyName: string) {
@@ -494,6 +494,8 @@ export class LcuSetupManageElementComponent
     if (changes.Telemetry) {
       if (this.Telemetry) {
         this.convertToDate(this.Telemetry.LastSyncedAt);
+        console.log("HANDLING CHANGE");
+
       }
     }
   }

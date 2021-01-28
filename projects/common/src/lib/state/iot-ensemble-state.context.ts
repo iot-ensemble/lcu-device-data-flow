@@ -248,15 +248,17 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     return 'shared';
   }
 
+  protected loadStateName(): string {
+    return 'iotensemble';
+  }
+
   protected gtagEvent(stateAction: string, eventArgs: GtagCustomParams) {
     this.gtag.Event('state', {
       state_action: stateAction,
+      state_key: this.loadStateKey(),
+      state_name: this.loadStateName(),
       ...eventArgs,
     });
-  }
-
-  protected loadStateName(): string {
-    return 'iotensemble';
   }
 
   protected setupReceiveState(groupName: string) {
