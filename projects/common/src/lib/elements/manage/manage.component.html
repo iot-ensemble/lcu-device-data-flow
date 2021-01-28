@@ -164,17 +164,16 @@
           </div>
         </mat-card-content>
 
-        <mat-card-actions>
-          <div fxFlex></div>
-
-          <a
+        <mat-card-actions fxLayoutAlign="end">
+         
+          <button
             mat-raised-button
             color="accent"
             (click)="ToggleAddingDevice()"
             *ngIf="!AddingDevice"
           >
             Enroll New Device
-          </a>
+        </button>
 
           <ng-container *ngIf="AddingDevice && MaxDevicesReached">
             <a
@@ -189,7 +188,7 @@
 
             <a
               *ngIf="DevicesConfig.MaxDevicesCount < 50"
-              mat-raised-button
+              mat-button
               href="/billing/iot"
               color="accent"
               target="_blank"
@@ -354,13 +353,16 @@
         <!-- header buttons -->
         <div
           fxLayout="row"
-          fxLayoutGap="10px"
+          fxLayoutGap="15px"
           fxFlexOrder="2"
           fxFlexOrder.lt-sm="1"
           fxLayoutAlign="end start"
           class="margin-bottom-3"
         >
           <div fxFlex fxLayoutAlign="end start">
+            <!-- /*
+              * Commented out to test svg download icon - shannon
+              */ -->
             <!-- <button
               mat-button
               color="primary"
@@ -402,6 +404,7 @@
         [class.margin-left-5]="Telemetry?.Payloads?.length <= 0"
       >
         <lcu-telemetry-list
+          fxFlex
           [telemetry]="Telemetry"
           (page-event)="HandleTelemetryPageEvent($event)"
         >

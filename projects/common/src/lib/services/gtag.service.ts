@@ -23,7 +23,7 @@ export class GtagService {
 
   //  Constructors
   constructor(protected settings: LCUServiceSettings, protected zone: NgZone) {
-    this.loadGtag();
+    // this.loadGtag(); commented out because of error -shannon
   }
 
   public AddPaymentInfo() {
