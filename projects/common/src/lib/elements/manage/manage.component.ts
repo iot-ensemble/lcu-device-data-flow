@@ -268,10 +268,7 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceSASTokensModal(): void {
-<<<<<<< Updated upstream
-=======
     // debugger;
->>>>>>> Stashed changes
     if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
       /**
        * Acces component properties not working - shannon
@@ -483,10 +480,7 @@ export class LcuSetupManageElementComponent
 
   protected handleStateChanged(changes: SimpleChanges, force: boolean = false) {
     if (changes.DevicesConfig || force) {
-<<<<<<< Updated upstream
-=======
       // debugger;
->>>>>>> Stashed changes
       this.DeviceSASTokensModal();
 
       this.DeviceNames =
