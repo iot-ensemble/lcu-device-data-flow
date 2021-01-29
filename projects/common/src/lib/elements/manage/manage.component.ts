@@ -54,6 +54,7 @@ import { SendMessageDialogComponent } from './controls/send-message-dialog/send-
 import { SasTokenDialogComponent } from './controls/sas-token-dialog/sas-token-dialog.component';
 import { TelemetryDownloadDialogComponent } from './controls/telemetry-download-dialog/telemetry-download-dialog.component';
 import { ColdQueryModel } from '../../models/cold-query.model';
+import { SVGToMatIconModel, SvgToMatIconService } from '@lowcodeunit/lcu-icons-common';
 
 declare var freeboard: any;
 
@@ -82,6 +83,8 @@ export class LcuSetupManageElementComponent
   public AddDeviceFormGroup: FormGroup;
 
   public AddingDevice: boolean;
+
+  protected basePath: string;
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
@@ -174,7 +177,8 @@ export class LcuSetupManageElementComponent
     protected formBldr: FormBuilder,
     protected lcuSvcSettings: LCUServiceSettings,
     protected snackBar: MatSnackBar,
-    protected resolver: ComponentFactoryResolver
+    protected resolver: ComponentFactoryResolver,
+    protected svgIconsService: SvgToMatIconService
   ) {
     super(injector);
 
@@ -217,6 +221,7 @@ export class LcuSetupManageElementComponent
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
+   
     this.handleStateChanged(changes);
   }
 
@@ -226,6 +231,16 @@ export class LcuSetupManageElementComponent
     this.setupAddDeviceForm();
 
     this.handleStateChanged({}, true);
+
+    const icons: Array<SVGToMatIconModel> =
+    [
+      { Name: 'download', IconPath: 'download.svg' },
+      { Name: 'phone', IconPath: 'phone.svg' }
+    ];
+
+    this.basePath = '/assets/icons/svgs/';
+
+    this.svgIconsService.SetIcons(icons, this.basePath);
   }
 
   //  API Methods
@@ -253,6 +268,7 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceSASTokensModal(): void {
+    // debugger;
     if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
       /**
        * Acces component properties not working - shannon
@@ -355,6 +371,7 @@ export class LcuSetupManageElementComponent
   }
 
   public IssueDeviceSASToken(deviceName: string) {
+  
     this.IssuedDeviceSASToken.emit(deviceName);
   }
 
@@ -463,6 +480,7 @@ export class LcuSetupManageElementComponent
 
   protected handleStateChanged(changes: SimpleChanges, force: boolean = false) {
     if (changes.DevicesConfig || force) {
+      // debugger;
       this.DeviceSASTokensModal();
 
       this.DeviceNames =
