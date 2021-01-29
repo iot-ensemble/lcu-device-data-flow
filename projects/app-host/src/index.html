@@ -58,6 +58,9 @@
           },
         },
         Settings: {},
+        User: {
+          Email: "local-tester@fathym.com",
+        },
       };
     </script>
 
@@ -83,6 +86,11 @@
         "https://cdn.oribi.io/XzcwMzAwMzkyNA/oribi.js",
         "ORIBI"
       );
+
+      if (window.LCU?.User?.Email) {
+        debugger;
+        ORIBI.api("setUserEmail", window.LCU?.User?.Email);
+      }
     </script>
   </head>
   <body>
