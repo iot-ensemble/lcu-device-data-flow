@@ -230,26 +230,30 @@ export class LcuSetupManageElementComponent
 
   //  API Methods
   public get DeviceNameErrorText(): string {
-    var errorText: string = null;
+    let errorText: string = null;
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('required')) {
+    if (this.AddDeviceFGDeviceName.hasError('required')) {
       errorText = 'Device name is required\r\n';
     }
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('maxlength')) {
+    if (this.AddDeviceFGDeviceName.hasError('maxlength')) {
       errorText = 'Device name cannot be longer than 128 characters\r\n';
     }
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('pattern')) {
+    if (this.AddDeviceFGDeviceName.hasError('pattern')) {
       errorText =
         "A case-sensitive string of ASCII 7-bit alphanumeric characters plus certain special characters: - . % _ * ? ! ( ) , : = @ $ ' \r\n";
     }
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('duplicateName')) {
+    if (this.AddDeviceFGDeviceName.hasError('duplicateName')) {
       errorText = ' Device name already exists \r\n';
     }
 
     return errorText;
+  }
+
+  public get AddDeviceFGDeviceName(): AbstractControl{
+    return this.AddDeviceFormGroup.get('deviceName');
   }
 
   public DeviceSASTokensModal(): void {
