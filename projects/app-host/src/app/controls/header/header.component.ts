@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
 
   //  Life Cycle
   public ngOnInit(): void {
-    this.Text = 'IoT Ensemble';
+    this.Text = 'IoT Ensemble Beta';
   }
 
   //  API Methods
