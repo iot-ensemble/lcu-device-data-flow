@@ -167,14 +167,14 @@
         <mat-card-actions>
           <div fxFlex></div>
 
-          <a
+          <button
             mat-raised-button
             color="accent"
             (click)="ToggleAddingDevice()"
             *ngIf="!AddingDevice"
           >
             Enroll New Device
-          </a>
+          </button>
 
           <ng-container *ngIf="AddingDevice && MaxDevicesReached">
             <a
@@ -413,7 +413,7 @@
 
         <button
           mat-raised-button
-          color="primary"
+          color="accent"
           (click)="PayloadFormModal()"
           *ngIf="DevicesConfig?.Devices?.length >= 1"
         >
