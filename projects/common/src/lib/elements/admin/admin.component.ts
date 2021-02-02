@@ -1,5 +1,7 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { LCUElementContext, LcuElementComponent } from '@lcu/common';
+import { ColumnDefinitionModel, DataGridConfigModel, DataGridFeaturesModel, DataGridPaginationModel } from '@lowcodeunit/data-grid';
+import { of } from 'rxjs';
 import { IoTEnsembleAdminState } from '../../state/iot-ensemble-admin.state';
 import { IoTEnsembleAdminStateContext } from './../../state/iot-ensemble-admin-state.context';
 import { IoTEnsembleChildEnterprise } from './../../state/iot-ensemble-admin.state';
@@ -23,7 +25,14 @@ export class LcuSetupAdminElementComponent
   //  Properties
   public ActiveChildEnterprise: IoTEnsembleChildEnterprise;
 
+  public EnterpriseGridParameters: DataGridConfigModel;
+
+  public GridParameters: DataGridConfigModel;
+
+  public SelectedEnterpriseDevices: any;
+
   public State: IoTEnsembleAdminState;
+
 
   //  Constructors
   constructor(
@@ -43,22 +52,176 @@ export class LcuSetupAdminElementComponent
   }
 
   //  API Methods
-  public SetActiveEnterprise(lookup: string) {
+
+  public HandlePageEvent(event: any){
+    console.log("Handle page event: ", event);
+
+    this.State.Loading = true;
+    
+    this.adminCtxt.UpdateEnterprisesSync(event.pageIndex + 1, event.pageSize);
+  }
+
+  public SetActiveEnterprise(enterprise: IoTEnsembleChildEnterprise) {
     this.State.Loading = true;
 
-    this.adminCtxt.SetActiveEnterprise(lookup);
+    this.adminCtxt.SetActiveEnterprise(enterprise.Lookup);
   }
 
   //  Helpers
+/**
+   * Setup all features of the grid
+   */
+  protected setupGrid(): void {
+    const columndefs = this.setupGridColumns();
+
+    const features = this.setupGridFeatures();
+
+    this.GridParameters = new DataGridConfigModel(
+      of(this.State.EnterpriseConfig.ChildEnterprises),
+      columndefs,
+      features
+    );
+  }
+
+  protected setupEnterpriseGrid(): void{
+    const columndefs = this.setupEnterpriseGridColumns();
+
+    const features = this.setupEnterpriseGridFeatures();
+
+    this.EnterpriseGridParameters = new DataGridConfigModel(
+      of(this.SelectedEnterpriseDevices),
+      columndefs,
+      features
+    );
+  }
+
+  /**
+   * Create grid columns
+   */
+  protected setupEnterpriseGridColumns(): Array<ColumnDefinitionModel> {
+    return [
+      new ColumnDefinitionModel({
+        ColType: 'DeviceName',
+        Title: 'Device Name',
+        ShowValue: true,
+      }),
+
+      new ColumnDefinitionModel({
+        ColType: 'CloudToDeviceMessageCount',
+        Title: 'Cloud to Device Messages',
+        ShowValue: true,
+      }),    
+    ];
+  }
+
+  protected setupEnterpriseGridFeatures(): DataGridFeaturesModel {
+    const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
+      {
+        Length: this.SetActiveEnterprise.length,
+        PageIndex: 0,
+        PageSize: 5,
+        PageSizeOptions: [5, 10, 25],
+      }
+    );
+
+    const features: DataGridFeaturesModel = new DataGridFeaturesModel({
+      NoData: {
+        ShowInline: true
+      },
+      Paginator: paginationDetails,
+      Filter: false,
+      ShowLoader: true,
+      Highlight: 'rowHighlight',
+      
+    });
+
+    return features;
+  }
+
+  /**
+   * Create grid columns
+   */
+  protected setupGridColumns(): Array<ColumnDefinitionModel> {
+    return [
+      new ColumnDefinitionModel({
+        ColType: 'Name',
+        Title: 'Name',
+        ShowValue: true,
+      }),
+
+      new ColumnDefinitionModel({
+        ColType: 'DeviceCount',
+        Title: 'Device Count',
+        ShowValue: true,
+      }),
+      new ColumnDefinitionModel({
+        ColType: 'SignUpDate',
+        Title: 'Sign Up Date',
+        ShowValue: true,
+      }),
+      new ColumnDefinitionModel({
+        ColType: 'view', // TODO: allow no ColTypes, without setting some random value - shannon
+        ColWidth: '10px',
+        ColBGColor: 'rgba(111,222,333,0.00)',
+        Title: '', // TODO: allow no Titles, without setting '' - shannon
+        ShowValue: false,
+        ShowIcon: true,
+        IconColor: 'green-accent-text',
+        IconConfigFunc: (enterprise: IoTEnsembleChildEnterprise) => {
+          return enterprise.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup ? 'visibility' : 'visibility_off';
+        },
+        Action: {
+          ActionHandler: this.SetActiveEnterprise.bind(this),
+          ActionType: 'button',
+          ActionTooltip: 'Enterprise',
+        },
+      }),     
+    ];
+  }
+  /**
+   * Setup grid features, such as pagination, row colors, etc.
+   */
+  protected setupGridFeatures(): DataGridFeaturesModel {
+    const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
+      {
+        Length: this.State.EnterpriseConfig.TotalChildEnterprisesCount,
+        PageIndex: this.State.EnterpriseConfig.Page - 1,
+        PageSize: this.State.EnterpriseConfig.PageSize,
+        PageSizeOptions: [5, 10, 25],
+      }
+    );
+
+    const features: DataGridFeaturesModel = new DataGridFeaturesModel({
+      NoData: {
+        ShowInline: true
+      },
+      Paginator: paginationDetails,
+      Filter: false,
+      ShowLoader: true,
+      Highlight: 'rowHighlight',
+      
+    });
+
+    return features;
+  }
+
   protected handleStateChanged() {
     console.log(this.State);
 
-    if (this.State.Enterprise) {
-      this.ActiveChildEnterprise = this.State.Enterprise.ChildEnterprises.find(
+    if (this.State.EnterpriseConfig) {
+      this.ActiveChildEnterprise = this.State.EnterpriseConfig.ChildEnterprises.find(
         (ce) => {
-          return ce.Lookup === this.State.Enterprise.ActiveEnterpriseLookup;
+          return ce.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup;
         }
       );
+    }
+    if(this.State.EnterpriseConfig?.ChildEnterprises){
+      this.setupGrid();
+    }
+    if(this.State.EnterpriseConfig?.ActiveEnterpriseLookup){
+      this.SelectedEnterpriseDevices = this.State.EnterpriseConfig.ChildEnterprises.find((enterprise: IoTEnsembleChildEnterprise) => enterprise.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup).Devices;
+
+      this.setupEnterpriseGrid();
     }
   }
 
