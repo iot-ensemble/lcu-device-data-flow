@@ -1,6 +1,10 @@
 <div>
   <div class="margin-top-4">
-    <h3 class="plain-text-bold margin-top-4">API Keys</h3>
+    <mat-card-header>
+      <mat-card-title>
+        API Keys
+      </mat-card-title>
+    </mat-card-header>
 
     <div class="table-container">
       <lcu-data-grid expand [config]="GridParameters"> </lcu-data-grid>
@@ -18,15 +22,27 @@
   <div class="divider-fill-hor margin-top-4"></div>
 
   <div class="margin-top-4">
-    <h3 class="plain-text-bold margin-top-4">Try It</h3>
-
-    <div class="margin-top-4">
-      <lcu-swagger-ui
-        [source]="OpenAPISource"
-        [auth-key]="APIKeys[0]?.Key"
-      ></lcu-swagger-ui>
+    <div>
+      <mat-card-header>
+        <mat-card-title>
+          Try It
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="margin-left-5">
+        <p>
+          Here we have embedded Swagger so that you
+          can see the parameters available for the Cold and 
+          Warm APIs, as well as test to see the responses.
+        </p>
+        <div class="margin-top-4">
+          <lcu-swagger-ui
+            [source]="OpenAPISource"
+            [auth-key]="APIKeys[0]?.Key">
+          </lcu-swagger-ui>
+        </div>
+      </mat-card-content>
     </div>
-
+  
     <div class="divider-fill-hor margin-top-4"></div>
   </div>
 </div>
