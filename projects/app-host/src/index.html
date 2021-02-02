@@ -63,34 +63,6 @@
         },
       };
     </script>
-
-    <script type="application/javascript">
-      (function (b, o, n, g, s, r, c) {
-        if (b[s]) return;
-        b[s] = {};
-        b[s].scriptToken = "XzcwMzAwMzkyNA";
-        b[s].callsQueue = [];
-        b[s].api = function () {
-          b[s].callsQueue.push(arguments);
-        };
-        r = o.createElement(n);
-        c = o.getElementsByTagName(n)[0];
-        r.async = 1;
-        r.src = g;
-        r.id = s + n;
-        c.parentNode.insertBefore(r, c);
-      })(
-        window,
-        document,
-        "script",
-        "https://cdn.oribi.io/XzcwMzAwMzkyNA/oribi.js",
-        "ORIBI"
-      );
-
-      if (window.LCU?.User?.Email) {
-        ORIBI.api("setUserEmail", window.LCU.User.Email);
-      }
-    </script>
   </head>
   <body>
     <lcu-root></lcu-root>
