@@ -219,7 +219,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     page: number = 1,
     selectedDeviceIds: string[] = [],
     includeEmulated: boolean = false
-  ) {
+  ): Promise<object> {
     console.log('calling warmQuery');
 
     const args = {
@@ -233,7 +233,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
 
     this.gtagEvent('WarmQuery', args);
 
-    this.Execute({
+    return this.Execute({
       Arguments: args,
       Type: 'WarmQuery',
     });

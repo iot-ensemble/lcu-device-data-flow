@@ -3,6 +3,8 @@ import { LCUElementContext, LcuElementComponent } from '@lcu/common';
 import { ColumnDefinitionModel, DataGridConfigModel, DataGridFeaturesModel, DataGridPaginationModel } from '@lowcodeunit/data-grid';
 import { of } from 'rxjs';
 import { IoTEnsembleAdminState } from '../../state/iot-ensemble-admin.state';
+import { IoTEnsembleStateContext } from '../../state/iot-ensemble-state.context';
+import { IoTEnsembleDeviceInfo } from '../../state/iot-ensemble.state';
 import { IoTEnsembleAdminStateContext } from './../../state/iot-ensemble-admin-state.context';
 import { IoTEnsembleChildEnterprise } from './../../state/iot-ensemble-admin.state';
 
@@ -29,7 +31,9 @@ export class LcuSetupAdminElementComponent
 
   public GridParameters: DataGridConfigModel;
 
-  public SelectedEnterpriseDevices: any;
+  public SelectedEnterpriseDevices: Array<IoTEnsembleDeviceInfo>;
+
+  public SelectedEnterpriseDeviceIds: Array<string>;
 
   public State: IoTEnsembleAdminState;
 
@@ -37,11 +41,14 @@ export class LcuSetupAdminElementComponent
   //  Constructors
   constructor(
     protected injector: Injector,
-    protected adminCtxt: IoTEnsembleAdminStateContext
+    protected adminCtxt: IoTEnsembleAdminStateContext,
+    protected iotCtxt: IoTEnsembleStateContext
   ) {
     super(injector);
 
     this.State = {};
+
+    this.SelectedEnterpriseDeviceIds =  Array<string>();
   }
 
   //  Life Cycle
@@ -57,14 +64,16 @@ export class LcuSetupAdminElementComponent
     console.log("Handle page event: ", event);
 
     this.State.Loading = true;
-    
+
     this.adminCtxt.UpdateEnterprisesSync(event.pageIndex + 1, event.pageSize);
+    // debugger
   }
 
   public SetActiveEnterprise(enterprise: IoTEnsembleChildEnterprise) {
     this.State.Loading = true;
 
     this.adminCtxt.SetActiveEnterprise(enterprise.Lookup);
+
   }
 
   //  Helpers
@@ -219,7 +228,28 @@ export class LcuSetupAdminElementComponent
       this.setupGrid();
     }
     if(this.State.EnterpriseConfig?.ActiveEnterpriseLookup){
-      this.SelectedEnterpriseDevices = this.State.EnterpriseConfig.ChildEnterprises.find((enterprise: IoTEnsembleChildEnterprise) => enterprise.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup).Devices;
+
+      this.SelectedEnterpriseDevices = this.State.EnterpriseConfig.ChildEnterprises.find((enterprise: IoTEnsembleChildEnterprise) => 
+      enterprise.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup).Devices;
+
+      this.SelectedEnterpriseDevices.forEach(device => {
+        this.SelectedEnterpriseDeviceIds.push(device.DeviceID);
+      });
+
+      console.log("device ids: ", this.SelectedEnterpriseDeviceIds);
+
+      this.iotCtxt.WarmQuery(new Date(new Date().setDate(new Date().getDate() - 1)),
+                              new Date(),
+                              10, 
+                              1, 
+                              this.SelectedEnterpriseDeviceIds, 
+                              true).then((obs: any) => {
+                                console.log('OBS: ', obs);
+                                const blob = new Blob([JSON.stringify(obs.body)], {
+                                  type: 'text/json',
+                                })});
+
+        this.State.Loading = false;
 
       this.setupEnterpriseGrid();
     }
