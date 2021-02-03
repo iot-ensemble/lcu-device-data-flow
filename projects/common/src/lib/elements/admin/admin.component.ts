@@ -66,7 +66,6 @@ export class LcuSetupAdminElementComponent
     this.State.Loading = true;
 
     this.adminCtxt.UpdateEnterprisesSync(event.pageIndex + 1, event.pageSize);
-    // debugger
   }
 
   public SetActiveEnterprise(enterprise: IoTEnsembleChildEnterprise) {
@@ -119,14 +118,19 @@ export class LcuSetupAdminElementComponent
         ColType: 'CloudToDeviceMessageCount',
         Title: 'Cloud to Device Messages',
         ShowValue: true,
-      }),    
+      }),   
+      new ColumnDefinitionModel({
+        ColType: 'LastStatusUpdate',
+        Title: 'Last Status Update',
+        ShowValue: true,
+      }),  
     ];
   }
 
   protected setupEnterpriseGridFeatures(): DataGridFeaturesModel {
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
-        Length: this.SetActiveEnterprise.length,
+        Length: this.SelectedEnterpriseDevices.length,
         PageIndex: 0,
         PageSize: 5,
         PageSizeOptions: [5, 10, 25],
@@ -232,15 +236,18 @@ export class LcuSetupAdminElementComponent
       this.SelectedEnterpriseDevices = this.State.EnterpriseConfig.ChildEnterprises.find((enterprise: IoTEnsembleChildEnterprise) => 
       enterprise.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup).Devices;
 
-      this.SelectedEnterpriseDevices.forEach(device => {
-        this.SelectedEnterpriseDeviceIds.push(device.DeviceID);
+      this.SelectedEnterpriseDevices.forEach(device => { 
+        this.SelectedEnterpriseDeviceIds.push(device.DeviceName);
+        // this.SelectedEnterpriseDeviceIds.push(device.DeviceID);
+        // device.LastStatusUpdate
+
       });
 
       console.log("device ids: ", this.SelectedEnterpriseDeviceIds);
 
-      this.iotCtxt.WarmQuery(new Date(new Date().setDate(new Date().getDate() - 1)),
+      this.iotCtxt.WarmQuery( new Date(new Date().setDate(new Date().getDate() - 1)),
                               new Date(),
-                              10, 
+                              10000, 
                               1, 
                               this.SelectedEnterpriseDeviceIds, 
                               true).then((obs: any) => {
@@ -249,7 +256,18 @@ export class LcuSetupAdminElementComponent
                                   type: 'text/json',
                                 })});
 
-        this.State.Loading = false;
+      // this.iotCtxt.WarmQuery(null,
+      //                         null,
+      //                         null, 
+      //                         null, 
+      //                         null, 
+      //                         true).then((obs: any) => {
+      //                           console.log('OBS: ', obs);
+      //                           const blob = new Blob([JSON.stringify(obs.body)], {
+      //                             type: 'text/json',
+      //                           })});
+
+        
 
       this.setupEnterpriseGrid();
     }
@@ -257,7 +275,7 @@ export class LcuSetupAdminElementComponent
 
   protected setupStateHandler() {
     this.adminCtxt.Context.subscribe((state) => {
-      this.State = Object.assign(this.State, state);
+      this.State =  state;
 
       this.handleStateChanged();
     });

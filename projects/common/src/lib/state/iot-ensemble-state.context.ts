@@ -220,7 +220,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     selectedDeviceIds: string[] = [],
     includeEmulated: boolean = false
   ): Promise<object> {
-    console.log('calling warmQuery');
+    console.log('calling warmQuery', startDate, endDate, pageSize, page, selectedDeviceIds,  includeEmulated);
 
     const args = {
       EndDate: endDate,
