@@ -15,7 +15,6 @@ import {
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { GtagService } from '@iot-ensemble/lcu-setup-common';
 
 @Component({
   selector: 'lcu-dynamic',
@@ -265,7 +264,7 @@ export class DynamicComponent implements OnInit {
   public UpdateTelemetryPage(page: number) {
     // console.log("calling update page: ", page)
     this.State.Telemetry.Loading = true;
-    console.log("STATE HERE: " + this.iotEnsCtxt);
+    debugger;
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       page,

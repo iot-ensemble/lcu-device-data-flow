@@ -88,7 +88,7 @@ export class LcuSetupManageElementComponent
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
-// debugger;
+
     return this.AddingDevice ? maxDeviceFlex : '100%';
   }
 
@@ -226,7 +226,7 @@ export class LcuSetupManageElementComponent
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-   
+
     this.handleStateChanged(changes);
   }
 
@@ -251,26 +251,27 @@ export class LcuSetupManageElementComponent
   //  API Methods
   public get DeviceNameErrorText(): string {
     var errorText: string = null;
-    
+
     if (this.AddDeviceFormGroup.get('deviceName').hasError('required')) {
-    errorText = 'Device name is required\r\n';
+      errorText = 'Device name is required\r\n';
     }
-    
+
     if (this.AddDeviceFormGroup.get('deviceName').hasError('maxlength')) {
-    errorText = 'Device name cannot be longer than 128 characters\r\n';
+      errorText = 'Device name cannot be longer than 128 characters\r\n';
     }
 
-    if(this.AddDeviceFormGroup.get('deviceName').hasError('pattern')) {
-      errorText = 'A case-sensitive string of ASCII 7-bit alphanumeric characters plus certain special characters: - . % _ * ? ! ( ) , : = @ $ \' \r\n' 
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('pattern')) {
+      errorText =
+        "A case-sensitive string of ASCII 7-bit alphanumeric characters plus certain special characters: - . % _ * ? ! ( ) , : = @ $ ' \r\n";
     }
 
-    if(this.AddDeviceFormGroup.get('deviceName').hasError('duplicateName')){
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('duplicateName')) {
       errorText = ' Device name already exists \r\n';
     }
-                  
+
     return errorText;
-    }
-    
+  }
+
   public DeviceSASTokensModal(): void {
     // debugger;
     if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
@@ -366,7 +367,7 @@ export class LcuSetupManageElementComponent
   public EnrollDeviceSubmit() {
     this.EnrollDevice.emit({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
-    })
+    });
     this.AddDeviceFormGroup.reset();
   }
 
@@ -443,9 +444,8 @@ export class LcuSetupManageElementComponent
     // }
     // else {
       this.UpdateTelemetryPage.emit(event);
-    //}
+    // }
   }
-
   public RegenerateAPIKey(keyName: string) {
     this.RegeneratedAPIKey.emit(keyName);
   }
@@ -500,22 +500,20 @@ export class LcuSetupManageElementComponent
 
       this.DeviceNames =
         this.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
+
+      this.setAddingDevice();
     }
 
-    this.setAddingDevice();
-
-    if (changes.Dashboard) {
+    if (changes.Dashboard || force) {
       this.setupFreeboard();
     }
 
     this.DeviceNames =
       this.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
 
-    if (changes.Telemetry) {
+    if (changes.Telemetry || force) {
       if (this.Telemetry) {
         this.convertToDate(this.Telemetry.LastSyncedAt);
-        console.log("HANDLING CHANGE");
-
       }
     }
   }
@@ -564,7 +562,6 @@ export class LcuSetupManageElementComponent
     this.setDashboardIFrameURL();
 
     if (this.Dashboard && this.Dashboard.FreeboardConfig) {
-      //   // debugger;
       //   // freeboard.initialize(true);
       //   // const dashboard = freeboard.loadDashboard(
       //   //   this.State.Dashboard.FreeboardConfig,
