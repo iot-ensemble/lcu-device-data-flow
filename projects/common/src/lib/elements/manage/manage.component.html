@@ -167,14 +167,14 @@
         <mat-card-actions>
           <div fxFlex></div>
 
-          <a
+          <button
             mat-raised-button
             color="accent"
             (click)="ToggleAddingDevice()"
             *ngIf="!AddingDevice"
           >
             Enroll New Device
-          </a>
+          </button>
 
           <ng-container *ngIf="AddingDevice && MaxDevicesReached">
             <a
@@ -354,6 +354,7 @@
         <!-- header buttons -->
         <div
           fxLayout="row"
+          fxLayoutGap="10px"
           fxFlexOrder="2"
           fxFlexOrder.lt-sm="1"
           fxLayoutAlign="end start"
@@ -361,21 +362,28 @@
         >
           <div fxFlex fxLayoutAlign="end start">
             <button
-            mat-button
-            color="primary"
-            matTooltip="Refresh Telemetry Data"
-            (click)="RefreshTelemetryPage()"
-          >
-          <mat-icon id="refresh">refresh</mat-icon>
-          </button>
-            <button
+              mat-button
+              color="primary"
+              matTooltip="Refresh Telemetry Data"
+              (click)="RefreshTelemetryPage()"
+            >
+              <mat-icon id="refresh">refresh</mat-icon>
+            </button>
+            <!-- <button
               mat-button
               color="primary"
               matTooltip="Download Telemetry Data"
               (click)="DownloadTelemetryModal()"
-            >
-              <mat-icon id="telemetry-download-element">download</mat-icon>
-            </button>
+            > -->
+              <mat-icon 
+                id="telemetry-download-element" 
+                class="cursor-pointer"
+                svgIcon="download"
+                color="primary"
+                matTooltip="Download Telemetry Data"
+                (click)="DownloadTelemetryModal()"></mat-icon>
+              <!-- <mat-icon id="telemetry-download-element">download</mat-icon> -->
+            <!-- </button> -->
           </div>
           <lcu-enabled-toggle
             class="margin-right-3"
@@ -412,7 +420,7 @@
 
         <button
           mat-raised-button
-          color="primary"
+          color="accent"
           (click)="PayloadFormModal()"
           *ngIf="DevicesConfig?.Devices?.length >= 1"
         >
