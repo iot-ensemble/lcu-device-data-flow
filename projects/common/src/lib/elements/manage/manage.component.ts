@@ -312,7 +312,7 @@ export class LcuSetupManageElementComponent
 
   public DeviceTablePageEvent(event: any) {
     console.log('PAGE EVENT', event);
-    this.DevicesPageEvent.emit(event);
+    this.DevicesPageEvent.emit(1);
   }
 
   public DownloadTelemetryModal(): void {
@@ -376,7 +376,7 @@ export class LcuSetupManageElementComponent
   }
 
   public IssueDeviceSASToken(deviceName: string) {
-  
+
     this.IssuedDeviceSASToken.emit(deviceName);
   }
 
@@ -443,7 +443,7 @@ export class LcuSetupManageElementComponent
     //   this.ToggleTelemetryEnabledChanged(true);
     // }
     // else {
-      this.UpdateTelemetryPage.emit(event);
+      this.UpdateTelemetryPage.emit(1);
     // }
   }
   public RegenerateAPIKey(keyName: string) {
