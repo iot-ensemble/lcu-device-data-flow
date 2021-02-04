@@ -1,5 +1,5 @@
-import { Component, OnInit, Injector } from '@angular/core';
-import { LCUElementContext, LcuElementComponent } from '@lcu/common';
+import { Component, OnInit, Injector, SimpleChanges } from '@angular/core';
+import { LCUElementContext, LcuElementComponent, DataPipeConstants } from '@lcu/common';
 import { ColumnDefinitionModel, DataGridConfigModel, DataGridFeaturesModel, DataGridPaginationModel } from '@lowcodeunit/data-grid';
 import { of } from 'rxjs';
 import { IoTEnsembleAdminState } from '../../state/iot-ensemble-admin.state';
@@ -52,6 +52,7 @@ export class LcuSetupAdminElementComponent
   }
 
   //  Life Cycle
+
   public ngOnInit() {
     super.ngOnInit();
 
@@ -66,6 +67,15 @@ export class LcuSetupAdminElementComponent
     this.State.Loading = true;
 
     this.adminCtxt.UpdateEnterprisesSync(event.pageIndex + 1, event.pageSize);
+  }
+
+  public RevokeClick(device: IoTEnsembleDeviceInfo): void {
+    if (
+      confirm(`Are you sure you want to remove device '${device.DeviceName}'?`)
+    ) {
+      this.State.Loading = true;
+      this.iotCtxt.RevokeDeviceEnrollment(device.DeviceID);
+    }
   }
 
   public SetActiveEnterprise(enterprise: IoTEnsembleChildEnterprise) {
@@ -119,11 +129,28 @@ export class LcuSetupAdminElementComponent
         Title: 'Cloud to Device Messages',
         ShowValue: true,
       }),   
+
       new ColumnDefinitionModel({
-        ColType: 'LastStatusUpdate',
-        Title: 'Last Status Update',
+        ColType: 'ActivelySendingData',
+        Title: 'Active',
         ShowValue: true,
       }),  
+
+      new ColumnDefinitionModel({
+        ColType: 'actions',
+        ColWidth: '10px',
+        Title: '',
+        ShowValue: false,
+        ShowIcon: true,
+        IconColor: 'red-accent-text',
+        IconConfigFunc: () => 'delete',
+        Action: {
+          ActionHandler: this.RevokeClick.bind(this),
+          ActionType: 'button',
+          ActionTooltip: 'Revoke',
+        },
+      }),
+
     ];
   }
 
@@ -171,6 +198,7 @@ export class LcuSetupAdminElementComponent
         ColType: 'SignUpDate',
         Title: 'Sign Up Date',
         ShowValue: true,
+        Pipe: DataPipeConstants.DATE_TIME_ZONE_FMT
       }),
       new ColumnDefinitionModel({
         ColType: 'view', // TODO: allow no ColTypes, without setting some random value - shannon
@@ -186,7 +214,7 @@ export class LcuSetupAdminElementComponent
         Action: {
           ActionHandler: this.SetActiveEnterprise.bind(this),
           ActionType: 'button',
-          ActionTooltip: 'Enterprise',
+          ActionTooltip: 'View Enterprise Devices',
         },
       }),     
     ];
@@ -237,9 +265,9 @@ export class LcuSetupAdminElementComponent
       enterprise.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup).Devices;
 
       this.SelectedEnterpriseDevices.forEach(device => { 
+        //DeviceID has the enterpriseLookup appended to the front of the device name
+        //however deviceId when returned from warm query is the deviceName
         this.SelectedEnterpriseDeviceIds.push(device.DeviceName);
-        // this.SelectedEnterpriseDeviceIds.push(device.DeviceID);
-        // device.LastStatusUpdate
 
       });
 
@@ -247,28 +275,41 @@ export class LcuSetupAdminElementComponent
 
       this.iotCtxt.WarmQuery( new Date(new Date().setDate(new Date().getDate() - 1)),
                               new Date(),
-                              10000, 
+                              10, 
                               1, 
                               this.SelectedEnterpriseDeviceIds, 
-                              true).then((obs: any) => {
-                                console.log('OBS: ', obs);
-                                const blob = new Blob([JSON.stringify(obs.body)], {
-                                  type: 'text/json',
-                                })});
+                              true)
+        .then((obs: any) => {
+          console.log('OBS: ', obs);
+          //Determine if the payload is recent
+          obs.body.Payloads.forEach((payload:any) => {
+            if(this.SelectedEnterpriseDeviceIds.includes(payload.DeviceID)){
+              let payloadTimeMins = Math.floor((new Date(payload.EventEnqueuedUtcTime).getTime()/ (1000 * 60)));
+              let currentTimeMins = Math.floor((new Date().getTime() / (1000 * 60)));
+              // console.log("PAYLOAD TIME: ", payloadTimeMins)
+              // console.log("CURRENT TIME: ", currentTimeMins)
 
-      // this.iotCtxt.WarmQuery(null,
-      //                         null,
-      //                         null, 
-      //                         null, 
-      //                         null, 
-      //                         true).then((obs: any) => {
-      //                           console.log('OBS: ', obs);
-      //                           const blob = new Blob([JSON.stringify(obs.body)], {
-      //                             type: 'text/json',
-      //                           })});
+              let device = this.State.EnterpriseConfig.ChildEnterprises
+                .find(ent => ent.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup)
+                .Devices.find(device => device.DeviceName === payload.DeviceID);
 
-        
-
+                if(payloadTimeMins >= currentTimeMins - 60){
+                  console.log("ACTIVE")
+                  device.ActivelySendingData = true;
+                                          
+                }
+                else if(!device.ActivelySendingData){
+                  console.log("NOT ACTIVE")
+                  device.ActivelySendingData = false;
+                }
+            }
+          });
+                                
+          const blob = new Blob([JSON.stringify(obs.body)], {
+                       type: 'text/json',
+                       })
+        });
+ 
       this.setupEnterpriseGrid();
     }
   }
