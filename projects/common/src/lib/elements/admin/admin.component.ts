@@ -74,7 +74,17 @@ export class LcuSetupAdminElementComponent
       confirm(`Are you sure you want to remove device '${device.DeviceName}'?`)
     ) {
       this.State.Loading = true;
-      this.iotCtxt.RevokeDeviceEnrollment(device.DeviceID);
+      this.adminCtxt.RevokeDeviceEnrollment(device.DeviceID);
+    }
+  }
+
+  public RevokeChildEnterprise(ent: any): void{
+    if (
+      confirm(`Are you sure you want to remove child enterprise '${ent}'?`)
+    ) {
+      // this.State.Loading = true;
+      console.log("revoking ", ent);
+      // this.iotCtxt.RevokeDeviceEnrollment(device.DeviceID);
     }
   }
 
@@ -216,7 +226,23 @@ export class LcuSetupAdminElementComponent
           ActionType: 'button',
           ActionTooltip: 'View Enterprise Devices',
         },
-      }),     
+      }),  
+
+      new ColumnDefinitionModel({
+        ColType: 'actions',
+        ColWidth: '10px',
+        Title: '',
+        ShowValue: false,
+        ShowIcon: true,
+        IconColor: 'red-accent-text',
+        IconConfigFunc: () => 'delete',
+        Action: {
+          ActionHandler: this.RevokeChildEnterprise.bind(this),
+          ActionType: 'button',
+          ActionTooltip: 'Revoke',
+        },
+      }),
+      
     ];
   }
   /**

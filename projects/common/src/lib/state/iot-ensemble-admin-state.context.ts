@@ -23,7 +23,24 @@ export class IoTEnsembleAdminStateContext extends StateContext<IoTEnsembleAdminS
 
   protected oldState: IoTEnsembleAdminState = {};
 
+  
+
   // API Methods
+  public RevokeDeviceEnrollment(deviceID: string){
+    console.log('Admin revoking device Id: ', deviceID, lookup);
+
+    const args = {
+      DeviceID: deviceID
+    };
+
+    this.gtagEvent('RevokeDeviceEnrollment', args);
+
+    this.Execute({
+      Arguments: args,
+      Type: 'RevokeDeviceEnrollment',
+    });
+  }
+
   public SetActiveEnterprise(lookup: string) {
     console.log('Setting active enterprise');
 
