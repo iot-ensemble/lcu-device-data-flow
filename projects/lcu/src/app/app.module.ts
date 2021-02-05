@@ -16,6 +16,8 @@ import {
 } from '@iot-ensemble/lcu-setup-common';
 import { createCustomElement } from '@angular/elements';
 
+import 'zone.js/dist/zone';
+
 @NgModule({
   declarations: [],
   imports: [
