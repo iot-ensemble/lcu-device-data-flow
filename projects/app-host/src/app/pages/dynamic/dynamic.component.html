@@ -1,12 +1,6 @@
 <div fxFlexFill>
-  <div
-    fxFlexFill
-    fxLayout="column"
-    fxLayoutGap="5px">
-    <div
-      fxLayout="row"
-      fxLayout.lt-sm="column"
-      fxLayoutGap="5px">
+  <div fxFlexFill fxLayout="column" fxLayoutGap="5px">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="5px">
       <div
         fxFlex
         fxLayout.lt-md="column"
@@ -17,7 +11,8 @@
           class="welcome-index"
           fxLayout="row"
           fxLayout.lt-md="column"
-          fxLayoutGap="30px">
+          fxLayoutGap="30px"
+        >
           <div fxFlex="30">
             <h1 fxLayout="column">
               <span class="plain-text theme-accent-text margin-bottom-2">
@@ -27,7 +22,10 @@
             </h1>
           </div>
 
-          <div ngClass.lt-md="divider-fill-hor" ngClass.gt-sm="divider-fill-vert"></div>
+          <div
+            ngClass.lt-md="divider-fill-hor"
+            ngClass.gt-sm="divider-fill-vert"
+          ></div>
 
           <div fxLayout="column">
             <h2 class="plain-text theme-accent-text">Device Dashboard</h2>
@@ -40,18 +38,16 @@
         </div>
       </div>
 
-      <div fxLayout.sm="column" fxFlex="30" fxFlex class="background-fill blank-header"></div>
+      <div
+        fxLayout.sm="column"
+        fxFlex="30"
+        fxFlex
+        class="background-fill blank-header"
+      ></div>
     </div>
 
-    <div
-    fxFlexFill
-    fxLayout="row"
-    fxLayout.lt-md="column">
-      <div
-      fxFlex
-      fxLayout="row"
-      fxLayout.lt-md="column"
-      fxLayoutGap="5px">
+    <div fxFlexFill fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="5px">
         <!-- left side -->
         <div
           [@OnExpandHorizontal]="SidePanelAction()"
@@ -62,17 +58,13 @@
           class="background-fill box-side-triangle"
         >
           <div fxLayout="column" class="side-column">
-            <div
-              class="side-toggle-container"
-
+            <div class="side-toggle-container">
+              <button
+                mat-icon-button
+                (click)="ToggleSideNav()"
               >
-
-              <button mat-icon-button (click)="ToggleSideNav()" *ngIf="!State.Loading">
-
                 <div *ngIf="AnimationSrvc.Direction === 'HORIZONTAL'">
-                  <mat-icon *ngIf="AnimationSrvc.IsOpen">
-                    arrow_left
-                  </mat-icon>
+                  <mat-icon *ngIf="AnimationSrvc.IsOpen"> arrow_left </mat-icon>
                   <mat-icon *ngIf="!AnimationSrvc.IsOpen">
                     arrow_right
                   </mat-icon>
@@ -100,7 +92,8 @@
                 fxLayout="column"
                 ngClass.gt-sm="padding-top-5"
                 ngClass.lt-md="padding-bottom-5"
-                class="padding-left-5 padding-right-5">
+                class="padding-left-5 padding-right-5"
+              >
                 <div class="divider-fill-hor"></div>
 
                 <h3 class="mat-display-5 plain-text whats-next-text">
@@ -120,7 +113,7 @@
 
                 <div class="divider-fill-hor"></div>
               </div>
-          </div>
+            </div>
           </div>
         </div>
         <!--^^^ Left Side ^^^-->
@@ -132,31 +125,7 @@
           fxLayoutGap="1em"
           class="background-fill padding-left-2 padding-right-2 padding-top-2"
         >
-          <lcu-setup-manage-element
-            *ngIf="State && !State.Loading"
-            [dashboard]="State.Dashboard"
-            [devices-config]="State.DevicesConfig"
-            [emulated]="State.Emulated"
-            [storage]="State.Storage"
-            [telemetry]="State.Telemetry"
-            (issued-device-sas-token)="IssueDeviceSASToken($event)"
-            (refreshed)="Refresh($event)"
-            (revoke-device-enrollment)="RevokeDeviceEnrollment($event)"
-            (regenerated-api-key)="RegenerateAPIKey($event)"
-            (sent-device-message)="SendDeviceMessage($event)"
-            (telemetry-download)="TelemetryDownload($event)"
-            (toggle-device-telemetry-enabled)="ToggleTelemetryEnabled()"
-            (toggle-emulated-enabled)="ToggleEmulatedEnabled()"
-            (devices-page-event)="HandleDevicePageEvent($event)"
-            (telemetry-page-event)="HandleTelemetryPageEvent($event)"
-            (update-refresh-rate)="UpdateRefreshRate($event)"
-          ></lcu-setup-manage-element>
-
-          <lcu-loader [loading]="State.Loading"></lcu-loader>
-          <div  *ngIf="State.Loading" fxLayoutAlign="space-around center">
-            <p *ngIf="!State.UserEnterpriseLookup">Setting up your Dashboard, connecting you to the shared IoT flow, and preparing your APIs.</p>
-            <p *ngIf="State.UserEnterpriseLookup">Loading your Dashboard.</p>
-          </div>
+          <lcu-setup-manage-element></lcu-setup-manage-element>
         </div>
         <!--^^^ Content ^^^-->
       </div>

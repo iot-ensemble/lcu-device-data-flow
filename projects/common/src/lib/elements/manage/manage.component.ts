@@ -79,16 +79,16 @@ export class LcuSetupManageElementComponent
   extends LcuElementComponent<LcuSetupManageContext>
   implements OnInit, OnDestroy {
   //  Fields
-  protected stateHandlerSub: Subscription;
+  protected basePath: string;
 
   protected devicesSasTokensOpened: boolean;
+
+  protected stateHandlerSub: Subscription;
 
   //  Properties
   public AddDeviceFormGroup: FormGroup;
 
   public AddingDevice: boolean;
-
-  protected basePath: string;
 
   public get ConnectedDevicesInfoCardFlex(): string {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
