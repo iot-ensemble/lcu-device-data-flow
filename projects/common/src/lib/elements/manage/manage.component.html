@@ -360,21 +360,21 @@
           fxLayoutAlign="end start"
           class="margin-bottom-3"
         >
-          <div fxFlex fxLayoutAlign="end start">
-            <button
-              mat-button
+          <div fxFlex>
+              <mat-icon 
+              class="cursor-pointer"
               color="primary"
               matTooltip="Refresh Telemetry Data"
               (click)="RefreshTelemetryPage()"
-            >
-              <mat-icon id="refresh">refresh</mat-icon>
-            </button>
+              >refresh</mat-icon>
+          </div>
             <!-- <button
               mat-button
               color="primary"
               matTooltip="Download Telemetry Data"
               (click)="DownloadTelemetryModal()"
             > -->
+            <div fxFlex>
               <mat-icon 
                 id="telemetry-download-element" 
                 class="cursor-pointer"
@@ -384,7 +384,7 @@
                 (click)="DownloadTelemetryModal()"></mat-icon>
               <!-- <mat-icon id="telemetry-download-element">download</mat-icon> -->
             <!-- </button> -->
-          </div>
+            </div>
           <lcu-enabled-toggle
             class="margin-right-3"
             [enabled]="Telemetry?.Enabled"

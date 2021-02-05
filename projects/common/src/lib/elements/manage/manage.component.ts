@@ -436,7 +436,7 @@ export class LcuSetupManageElementComponent
     this.UpdateRefreshRate.emit(event);
   }
 
-  public RefreshTelemetryPage(event: any) {
+  public RefreshTelemetryPage() {
     // if(!this.Telemetry.Enabled){
     //   this.ToggleTelemetryEnabledChanged(true);
     //   this.UpdateTelemetryPage.emit(event);
