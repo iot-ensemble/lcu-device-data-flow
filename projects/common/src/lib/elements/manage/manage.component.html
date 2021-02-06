@@ -116,7 +116,7 @@
         </div>
         <mat-card-content
           [class.margin-left-5]="
-            AddingDevice || DevicesConfig?.Devices?.length <= 0
+            AddingDevice || State.DevicesConfig?.Devices?.length <= 0
           "
         >
 
@@ -328,8 +328,8 @@
           >
             <div matTooltip="Updates successful">
               <mat-icon
-                [class.success-dot]="Telemetry?.Enabled"
-                [class.error-dot]="!Telemetry?.Enabled"
+                [class.success-dot]="State.Telemetry?.Enabled"
+                [class.error-dot]="!State.Telemetry?.Enabled"
               >
                 stop_circle
               </mat-icon>
@@ -345,7 +345,7 @@
           fxLayoutAlign="end center"
         > -->
           <!-- <lcu-refresh-select
-                    [telemetry]="Telemetry"
+                    [telemetry]="State.Telemetry"
                     (refresh-rate-changed)="RefreshRateChanged($event)"
                   >
                   </lcu-refresh-select> -->
@@ -380,9 +380,9 @@
           </div>
           <lcu-enabled-toggle
             class="margin-right-3"
-            [enabled]="Telemetry?.Enabled"
+            [enabled]="State.Telemetry?.Enabled"
             enabled-text="Live"
-            [loading]="Telemetry?.Loading"
+            [loading]="State.Telemetry?.Loading"
             (enabled-toggled)="ToggleTelemetryEnabledChanged($event)"
           >
           </lcu-enabled-toggle>
@@ -400,10 +400,10 @@
       </div>
 
       <mat-card-content
-        [class.margin-left-5]="Telemetry?.Payloads?.length <= 0"
+        [class.margin-left-5]="State.Telemetry?.Payloads?.length <= 0"
       >
         <lcu-telemetry-list
-          [telemetry]="Telemetry"
+          [telemetry]="State.Telemetry"
           (page-event)="HandleTelemetryPageEvent($event)"
         >
         </lcu-telemetry-list>
