@@ -200,7 +200,7 @@ export class GtagService {
 
       script.src =
         'https://www.googletagmanager.com/gtag/js?id=' +
-        this.settings.State.Google.Analytics.MeasurementID;
+        this.settings.State.Google?.Analytics?.MeasurementID;
 
       script.type = 'text/javascript';
 
@@ -215,7 +215,7 @@ export class GtagService {
 
       gtag('js', new Date());
 
-      gtag('config', this.settings.State.Google.Analytics.MeasurementID, {
+      gtag('config', this.settings.State.Google?.Analytics?.MeasurementID, {
         send_page_view: true,
       });
 
