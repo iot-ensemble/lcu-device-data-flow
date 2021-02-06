@@ -16,6 +16,7 @@
           >
             <mat-icon>contactless</mat-icon>
           </div>
+
           <mat-card-title> Emulated Devices </mat-card-title>
         </mat-card-header>
 
@@ -29,8 +30,8 @@
         >
           <lcu-enabled-toggle
             class="margin-right-3"
-            [enabled]="Emulated?.Enabled"
-            [loading]="Emulated?.Loading"
+            [enabled]="State.Emulated?.Enabled"
+            [loading]="State.Emulated?.Loading"
             (enabled-toggled)="ToggleEmulatedEnabledChanged($event)"
           >
           </lcu-enabled-toggle>
@@ -100,7 +101,7 @@
             fxLayoutAlign="end start"
             class="margin-bottom-3"
           >
-          <lcu-loader [loading]="DevicesConfig?.Loading" [diameter]="50">
+          <lcu-loader [loading]="State.DevicesConfig?.Loading" [diameter]="50">
           </lcu-loader>
             <a
               href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
@@ -115,7 +116,7 @@
         </div>
         <mat-card-content
           [class.margin-left-5]="
-            AddingDevice || DevicesConfig?.Devices?.length <= 0
+            AddingDevice || State.DevicesConfig?.Devices?.length <= 0
           "
         >
 
@@ -130,18 +131,18 @@
 
             <ng-container *ngIf="MaxDevicesReached">
               <p
-                *ngIf="DevicesConfig.MaxDevicesCount < 50"
+                *ngIf="State.DevicesConfig.MaxDevicesCount < 50"
                 class="paragraph-text"
               >
                 Click "Upgrade Now" to see other plans where you can connect
                 more than
-                {{ DevicesConfig.MaxDevicesCount }}
-                {{ DevicesConfig.MaxDevicesCount > 1 ? "devices" : "device" }},
+                {{ State.DevicesConfig.MaxDevicesCount }}
+                {{ State.DevicesConfig.MaxDevicesCount > 1 ? "devices" : "device" }},
                 increase your data velocity, increase your data retention and
                 other great benefits.
               </p>
               <p
-                *ngIf="DevicesConfig.MaxDevicesCount === 50"
+                *ngIf="State.DevicesConfig.MaxDevicesCount === 50"
                 class="paragraph-text"
               >
                 Please contact Fathym at
@@ -155,7 +156,7 @@
 
           <div class="device-list" *ngIf="!AddingDevice">
             <lcu-devices-table
-              [devices-config]="DevicesConfig"
+              [devices-config]="State.DevicesConfig"
               (issued-sas-token)="IssueDeviceSASToken($event)"
               (page-event)="DeviceTablePageEvent($event)"
               (revoked)="RevokeDeviceEnrollmentClick($event)"
@@ -188,7 +189,7 @@
             </a>
 
             <a
-              *ngIf="DevicesConfig.MaxDevicesCount < 50"
+              *ngIf="State.DevicesConfig.MaxDevicesCount < 50"
               mat-raised-button
               href="/billing/iot"
               color="accent"
@@ -281,7 +282,7 @@
                 mat-raised-button
                 type="submit"
                 color="primary"
-                *ngIf="!DevicesConfig?.Loading"
+                *ngIf="!State.DevicesConfig?.Loading"
                 [disabled]="!AddDeviceFormGroup.valid"
               >
                 Enroll Device
@@ -327,8 +328,8 @@
           >
             <div matTooltip="Updates successful">
               <mat-icon
-                [class.success-dot]="Telemetry?.Enabled"
-                [class.error-dot]="!Telemetry?.Enabled"
+                [class.success-dot]="State.Telemetry?.Enabled"
+                [class.error-dot]="!State.Telemetry?.Enabled"
               >
                 stop_circle
               </mat-icon>
@@ -344,7 +345,7 @@
           fxLayoutAlign="end center"
         > -->
           <!-- <lcu-refresh-select
-                    [telemetry]="Telemetry"
+                    [telemetry]="State.Telemetry"
                     (refresh-rate-changed)="RefreshRateChanged($event)"
                   >
                   </lcu-refresh-select> -->
@@ -367,8 +368,8 @@
               matTooltip="Download Telemetry Data"
               (click)="DownloadTelemetryModal()"
             > -->
-              <mat-icon 
-                id="telemetry-download-element" 
+              <mat-icon
+                id="telemetry-download-element"
                 class="cursor-pointer"
                 svgIcon="download"
                 color="primary"
@@ -379,9 +380,9 @@
           </div>
           <lcu-enabled-toggle
             class="margin-right-3"
-            [enabled]="Telemetry?.Enabled"
+            [enabled]="State.Telemetry?.Enabled"
             enabled-text="Live"
-            [loading]="Telemetry?.Loading"
+            [loading]="State.Telemetry?.Loading"
             (enabled-toggled)="ToggleTelemetryEnabledChanged($event)"
           >
           </lcu-enabled-toggle>
@@ -399,10 +400,10 @@
       </div>
 
       <mat-card-content
-        [class.margin-left-5]="Telemetry?.Payloads?.length <= 0"
+        [class.margin-left-5]="State.Telemetry?.Payloads?.length <= 0"
       >
         <lcu-telemetry-list
-          [telemetry]="Telemetry"
+          [telemetry]="State.Telemetry"
           (page-event)="HandleTelemetryPageEvent($event)"
         >
         </lcu-telemetry-list>
@@ -415,7 +416,7 @@
           mat-raised-button
           color="accent"
           (click)="PayloadFormModal()"
-          *ngIf="DevicesConfig?.Devices?.length >= 1"
+          *ngIf="State.DevicesConfig?.Devices?.length >= 1"
         >
           Send Device Message
         </button>
@@ -544,6 +545,7 @@
           </div>
         </div>
       </div>
+
       <mat-card-content>
         <div class="margin-left-5 margin-top-2">
           Use the API keys to get your data downstream to the dashboards and
@@ -552,8 +554,8 @@
         </div>
 
         <lcu-api-access
-          [api-keys]="Storage?.APIKeys"
-          [open-api-source]="Storage?.OpenAPISource"
+          [api-keys]="State.Storage?.APIKeys"
+          [open-api-source]="State.Storage?.OpenAPISource"
           (regenerated)="RegenerateAPIKey($event)"
         ></lcu-api-access>
       </mat-card-content>
@@ -562,4 +564,15 @@
     </mat-card>
   </div>
   <!--^^^ Storage Access ^^^-->
+
+  <lcu-loader [loading]="State.Loading"></lcu-loader>
+
+  <div *ngIf="State.Loading" fxLayoutAlign="margin-3 center">
+    <p *ngIf="!State.UserEnterpriseLookup">
+      Setting up your Dashboard, connecting you to the shared IoT flow,
+      and preparing your APIs.
+    </p>
+
+    <p *ngIf="State.UserEnterpriseLookup">Loading your Dashboard.</p>
+  </div>
 </div>

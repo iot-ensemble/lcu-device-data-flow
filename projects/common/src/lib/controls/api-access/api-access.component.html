@@ -31,18 +31,19 @@
       <mat-card-content class="margin-left-5">
         <p>
           Here we have embedded Swagger so that you
-          can see the parameters available for the Cold and 
+          can see the parameters available for the Cold and
           Warm APIs, as well as test to see the responses.
         </p>
         <div class="margin-top-4">
           <lcu-swagger-ui
             [source]="OpenAPISource"
-            [auth-key]="APIKeys[0]?.Key">
+            [auth-key]="APIKeys[0]?.Key"
+            *ngIf="APIKeys?.length > 0">
           </lcu-swagger-ui>
         </div>
       </mat-card-content>
     </div>
-  
+
     <div class="divider-fill-hor margin-top-4"></div>
   </div>
 </div>
