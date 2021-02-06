@@ -29,7 +29,7 @@ import { environment } from '../environments/environment';
     MaterialModule,
     FlexLayoutModule,
     FathymSharedModule.forRoot(),
-    // LcuSetupModule.forRoot(),
+    LcuSetupModule.forRoot(),
     PipeModule
   ],
   providers: [
