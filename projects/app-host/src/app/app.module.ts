@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DynamicComponent } from './pages/dynamic/dynamic.component';
@@ -29,7 +29,7 @@ import { environment } from '../environments/environment';
     MaterialModule,
     FlexLayoutModule,
     FathymSharedModule.forRoot(),
-    LcuSetupModule.forRoot(),
+    // LcuSetupModule.forRoot(),
     PipeModule
   ],
   providers: [
@@ -40,5 +40,6 @@ import { environment } from '../environments/environment';
   ],
   bootstrap: [AppComponent],
   exports: [DynamicComponent, HeaderComponent, FooterComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}
