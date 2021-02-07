@@ -8,10 +8,10 @@ import {
   MaterialModule,
   PipeModule,
 } from '@lcu/common';
-import { LcuSetupManageElementComponent } from './elements/manage/manage.component';
-import { LcuSetupAdminElementComponent } from './elements/admin/admin.component';
-import { LcuSetupDevicesElementComponent } from './elements/devices/devices.component';
-import { LcuSetupSetupElementComponent } from './elements/setup/setup.component';
+import { LcuDeviceDataFlowManageElementComponent } from './elements/manage/manage.component';
+import { LcuDeviceDataFlowAdminElementComponent } from './elements/admin/admin.component';
+import { LcuDeviceDataFlowDevicesElementComponent } from './elements/devices/devices.component';
+import { LcuDeviceDataFlowSetupElementComponent } from './elements/setup/setup.component';
 import { IoTEnsembleStateContext } from './state/iot-ensemble-state.context';
 import { LoaderComponent } from './controls/loader/loader.component';
 import { TelemetryListComponent } from './elements/controls/telemetry-list/telemetry-list.component';
@@ -35,10 +35,10 @@ import { EventDirective } from './directives/analytics/event.directive';
 
 @NgModule({
   declarations: [
-    LcuSetupManageElementComponent,
-    LcuSetupAdminElementComponent,
-    LcuSetupDevicesElementComponent,
-    LcuSetupSetupElementComponent,
+    LcuDeviceDataFlowManageElementComponent,
+    LcuDeviceDataFlowAdminElementComponent,
+    LcuDeviceDataFlowDevicesElementComponent,
+    LcuDeviceDataFlowSetupElementComponent,
     LoaderComponent,
     TelemetryListComponent,
     EnabledToggleComponent,
@@ -66,10 +66,10 @@ import { EventDirective } from './directives/analytics/event.directive';
     PipeModule,
   ],
   exports: [
-    LcuSetupManageElementComponent,
-    LcuSetupAdminElementComponent,
-    LcuSetupDevicesElementComponent,
-    LcuSetupSetupElementComponent,
+    LcuDeviceDataFlowManageElementComponent,
+    LcuDeviceDataFlowAdminElementComponent,
+    LcuDeviceDataFlowDevicesElementComponent,
+    LcuDeviceDataFlowSetupElementComponent,
     LoaderComponent,
     TelemetryListComponent,
     EnabledToggleComponent,
@@ -87,10 +87,10 @@ import { EventDirective } from './directives/analytics/event.directive';
     EventDirective,
   ],
   entryComponents: [
-    LcuSetupManageElementComponent,
-    LcuSetupAdminElementComponent,
-    LcuSetupDevicesElementComponent,
-    LcuSetupSetupElementComponent,
+    LcuDeviceDataFlowManageElementComponent,
+    LcuDeviceDataFlowAdminElementComponent,
+    LcuDeviceDataFlowDevicesElementComponent,
+    LcuDeviceDataFlowSetupElementComponent,
     PayloadComponent,
     RefreshSelectComponent,
     GenericModalComponent,
@@ -100,10 +100,10 @@ import { EventDirective } from './directives/analytics/event.directive';
     TelemetryDownloadDialogComponent,
   ],
 })
-export class LcuSetupModule {
-  static forRoot(): ModuleWithProviders<LcuSetupModule> {
+export class LcuDeviceDataFlowModule {
+  static forRoot(): ModuleWithProviders<LcuDeviceDataFlowModule> {
     return {
-      ngModule: LcuSetupModule,
+      ngModule: LcuDeviceDataFlowModule,
       providers: [
         IoTEnsembleStateContext,
         AnimationService,

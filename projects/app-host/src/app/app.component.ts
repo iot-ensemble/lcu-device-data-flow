@@ -9,7 +9,7 @@ import {
   IoTEnsembleState,
   IoTEnsembleStateContext,
   BreakpointUtils,
-} from '@iot-ensemble/lcu-setup-common';
+} from '@iot-ensemble/lcu-device-data-flow-common';
 
 @Component({
   selector: 'lcu-root',

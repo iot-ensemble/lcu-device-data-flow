@@ -64,19 +64,19 @@ declare var freeboard: any;
 
 declare var window: any;
 
-export class LcuSetupManageElementState {}
+export class LcuDeviceDataFlowManageElementState {}
 
-export class LcuSetupManageContext extends LCUElementContext<LcuSetupManageElementState> {}
+export class LcuDeviceDataFlowManageContext extends LCUElementContext<LcuDeviceDataFlowManageElementState> {}
 
-export const SELECTOR_LCU_SETUP_MANAGE_ELEMENT = 'lcu-setup-manage-element';
+export const SELECTOR_LCU_DEVICE_DATA_FLOW_MANAGE_ELEMENT = 'lcu-device-data-flow-manage-element';
 
 @Component({
-  selector: SELECTOR_LCU_SETUP_MANAGE_ELEMENT,
+  selector: SELECTOR_LCU_DEVICE_DATA_FLOW_MANAGE_ELEMENT,
   templateUrl: './manage.component.html',
   styleUrls: ['./manage.component.scss'],
 })
-export class LcuSetupManageElementComponent
-  extends LcuElementComponent<LcuSetupManageContext>
+export class LcuDeviceDataFlowManageElementComponent
+  extends LcuElementComponent<LcuDeviceDataFlowManageContext>
   implements OnInit, OnDestroy {
   //  Fields
   protected basePath: string;
