@@ -13,7 +13,7 @@ import {
 } from '@lcu/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { LcuSetupModule } from '@iot-ensemble/lcu-setup-common';
+import { LcuDeviceDataFlowModule } from '@iot-ensemble/lcu-device-data-flow-common';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -29,7 +29,7 @@ import { environment } from '../environments/environment';
     MaterialModule,
     FlexLayoutModule,
     FathymSharedModule.forRoot(),
-    LcuSetupModule.forRoot(),
+    // LcuDeviceDataFlowModule.forRoot(),
     PipeModule
   ],
   providers: [

@@ -2,24 +2,24 @@
 	"templates": {
 		"repository": "lowcodeunit-devkit/lcu-cli-templates-core",
 		"scope": "@iot-ensemble",
-		"workspace": "lcu-setup"
+		"workspace": "lcu-device-data-flow"
 	},
 	"config": {
 		"wc": [
-			"wc/lcu-setup.lcu.js"
+			"wc/lcu-device-data-flow.lcu.js"
 		],
 		"solutions": {
 			"manage": {
-				"element": "lcu-setup-manage-element"
+				"element": "lcu-device-data-flow-manage-element"
 			},
 			"admin": {
-				"element": "lcu-setup-admin-element"
+				"element": "lcu-device-data-flow-admin-element"
 			},
 			"devices": {
-				"element": "lcu-setup-devices-element"
+				"element": "lcu-device-data-flow-devices-element"
 			},
 			"setup": {
-				"element": "lcu-setup-setup-element"
+				"element": "lcu-device-data-flow-setup-element"
 			}
 		},
 		"elements": {},
