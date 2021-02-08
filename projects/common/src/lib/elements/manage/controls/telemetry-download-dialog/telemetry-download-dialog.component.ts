@@ -1,11 +1,11 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as FileSaver from 'file-saver';
 import * as JSZip from 'jszip';
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { GenericModalModel } from 'projects/common/src/lib/models/generice-modal.model';
-import { IoTEnsembleStateContext } from 'projects/common/src/lib/state/iot-ensemble-state.context';
+// import { IoTEnsembleStateContext } from 'projects/common/src/lib/state/iot-ensemble-state.context';
 import {
   ColdQueryDataTypes,
   ColdQueryResultTypes,
@@ -31,20 +31,16 @@ export class TelemetryDownloadDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: GenericModalModel,
     protected http: HttpClient,
-    protected iotEnsCtxt: IoTEnsembleStateContext,
+    // protected iotEnsCtxt: IoTEnsembleStateContext,
     public dialogRef: MatDialogRef<TelemetryDownloadDialogComponent>
   ) {
     this.deviceIDs = [];
 
-    this.State = {};
   }
 
   //Life Cycle
   ngOnInit(): void {
-    this.iotEnsCtxt.Context.subscribe((state: IoTEnsembleState) => {
-      this.State = state;
-      this.stateChanged();
-    });
+    this.getDeviceIDs();
   }
 
   //API Methods
@@ -104,18 +100,12 @@ export class TelemetryDownloadDialogComponent implements OnInit {
   //Helpers
 
   protected getDeviceIDs() {
-    this.State.DevicesConfig.Devices.forEach((device) => {
+    this.data.Data.forEach((device) => {
       this.deviceIDs.push(device.DeviceID);
     });
     console.log('Device IDs: ', this.deviceIDs);
   }
 
-  protected stateChanged() {
-    console.log('State From telemetry MODAL: ', this.State);
-    if (this.State.DevicesConfig) {
-      this.getDeviceIDs();
-    }
-  }
   protected closeAndDownload() {
     this.dialogRef.close(this.coldQueryConfig);
   }
