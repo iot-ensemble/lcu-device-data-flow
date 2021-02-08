@@ -27,7 +27,7 @@ export class IoTEnsembleAdminStateContext extends StateContext<IoTEnsembleAdminS
 
   // API Methods
   public RevokeDeviceEnrollment(deviceID: string){
-    console.log('Admin revoking device Id: ', deviceID, lookup);
+    console.log('Admin revoking device Id: ', deviceID);
 
     const args = {
       DeviceID: deviceID
