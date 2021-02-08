@@ -5,7 +5,6 @@ import * as FileSaver from 'file-saver';
 import * as JSZip from 'jszip';
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { GenericModalModel } from 'projects/common/src/lib/models/generice-modal.model';
-// import { IoTEnsembleStateContext } from 'projects/common/src/lib/state/iot-ensemble-state.context';
 import {
   ColdQueryDataTypes,
   ColdQueryResultTypes,
@@ -31,7 +30,6 @@ export class TelemetryDownloadDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: GenericModalModel,
     protected http: HttpClient,
-    // protected iotEnsCtxt: IoTEnsembleStateContext,
     public dialogRef: MatDialogRef<TelemetryDownloadDialogComponent>
   ) {
     this.deviceIDs = [];
