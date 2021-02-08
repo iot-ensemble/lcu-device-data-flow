@@ -565,7 +565,7 @@ export class LcuDeviceDataFlowManageElementComponent
   protected setDashboardIFrameURL() {
     const source = this.State?.Dashboard?.FreeboardConfig
       ? JSON.stringify(this.State?.Dashboard?.FreeboardConfig)
-      : '';
+      : '{}';
 
     this.FreeboardURL = this.lcuSvcSettings.State.FreeboardURL || '/freeboard';
 
