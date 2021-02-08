@@ -8,19 +8,19 @@ import { IoTEnsembleDeviceInfo } from '../../state/iot-ensemble.state';
 import { IoTEnsembleAdminStateContext } from './../../state/iot-ensemble-admin-state.context';
 import { IoTEnsembleChildEnterprise } from './../../state/iot-ensemble-admin.state';
 
-export class LcuSetupAdminElementState {}
+export class LcuDeviceDataFlowAdminElementState {}
 
-export class LcuSetupAdminContext extends LCUElementContext<LcuSetupAdminElementState> {}
+export class LcuDeviceDataFlowAdminContext extends LCUElementContext<LcuDeviceDataFlowAdminElementState> {}
 
-export const SELECTOR_LCU_SETUP_ADMIN_ELEMENT = 'lcu-setup-admin-element';
+export const SELECTOR_LCU_DEVICE_DATA_FLOW_ADMIN_ELEMENT = 'lcu-device-data-flow-admin-element';
 
 @Component({
-  selector: SELECTOR_LCU_SETUP_ADMIN_ELEMENT,
+  selector: SELECTOR_LCU_DEVICE_DATA_FLOW_ADMIN_ELEMENT,
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
 })
-export class LcuSetupAdminElementComponent
-  extends LcuElementComponent<LcuSetupAdminContext>
+export class LcuDeviceDataFlowAdminElementComponent
+  extends LcuElementComponent<LcuDeviceDataFlowAdminContext>
   implements OnInit {
   //  Fields
 

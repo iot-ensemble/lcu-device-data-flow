@@ -58,30 +58,32 @@ export class GtagService {
   }
 
   public Event(action: string, params?: GtagEventParams): Promise<void> {
-    // Wraps the event call into a Promise
-    return this.zone.runOutsideAngular(
-      () =>
-        new Promise((resolve, reject) => {
-          try {
-            // Triggers a 1s time-out timer
-            const tmr = setTimeout(
-              () => reject(new Error('gtag call timed-out')),
-              this.settings.State.Google?.Analytics?.Timeout || 10000
-            );
-            // Performs the event call resolving with the event callback
-            this.gtag('event', action, {
-              ...params,
-              event_callback: () => {
-                clearTimeout(tmr);
-                resolve();
-              },
-            });
-          } catch (e) {
-            // Rejects the promise on errors
-            reject(e);
-          }
-        })
-    );
+    if (this.gtag) {
+      // Wraps the event call into a Promise
+      return this.zone.runOutsideAngular(
+        () =>
+          new Promise((resolve, reject) => {
+            try {
+              // Triggers a 1s time-out timer
+              const tmr = setTimeout(
+                () => reject(new Error('gtag call timed-out')),
+                this.settings.State.Google?.Analytics?.Timeout || 10000
+              );
+              // Performs the event call resolving with the event callback
+              this.gtag('event', action, {
+                ...params,
+                event_callback: () => {
+                  clearTimeout(tmr);
+                  resolve();
+                },
+              });
+            } catch (e) {
+              // Rejects the promise on errors
+              reject(e);
+            }
+          })
+      );
+    }
   }
 
   public Exception(description?: string, fatal?: boolean) {
@@ -150,7 +152,9 @@ export class GtagService {
   }
 
   public Set(params: GtagCustomParams): void {
-    return this.gtag('set', params);
+    if (this.gtag) {
+      this.gtag('set', params);
+    }
   }
 
   public Share(method?: string, content?: GtagContent) {
@@ -200,7 +204,7 @@ export class GtagService {
 
       script.src =
         'https://www.googletagmanager.com/gtag/js?id=' +
-        this.settings.State.Google.Analytics.MeasurementID;
+        this.settings.State.Google?.Analytics?.MeasurementID;
 
       script.type = 'text/javascript';
 
@@ -215,7 +219,7 @@ export class GtagService {
 
       gtag('js', new Date());
 
-      gtag('config', this.settings.State.Google.Analytics.MeasurementID, {
+      gtag('config', this.settings.State.Google?.Analytics?.MeasurementID, {
         send_page_view: true,
       });
 

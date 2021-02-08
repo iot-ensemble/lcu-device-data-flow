@@ -16,7 +16,7 @@
 			"dom"
 		],
 		"paths": {
-			"@iot-ensemble/lcu-setup-common": [
+			"@iot-ensemble/lcu-device-data-flow-common": [
 				"dist/common/common",
 				"dist/common"
 			]

@@ -1,5 +1,5 @@
 {
-	"name": "@iot-ensemble/lcu-setup-common",
+	"name": "@iot-ensemble/lcu-device-data-flow-common",
 	"version": "0.0.2",
 	"peerDependencies": {
 		"@angular/common": "^10.2.0",
