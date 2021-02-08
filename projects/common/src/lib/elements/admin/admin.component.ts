@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector, SimpleChanges } from '@angular/core';
 import { LCUElementContext, LcuElementComponent, DataPipeConstants } from '@lcu/common';
 import { ColumnDefinitionModel, DataGridConfigModel, DataGridFeaturesModel, DataGridPaginationModel } from '@lowcodeunit/data-grid';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { IoTEnsembleAdminState } from '../../state/iot-ensemble-admin.state';
 import { IoTEnsembleStateContext } from '../../state/iot-ensemble-state.context';
 import { IoTEnsembleDeviceInfo } from '../../state/iot-ensemble.state';
@@ -219,7 +219,7 @@ export class LcuSetupAdminElementComponent
         ShowIcon: true,
         IconColor: 'green-accent-text',
         IconConfigFunc: (enterprise: IoTEnsembleChildEnterprise) => {
-          return enterprise.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup ? 'visibility' : 'visibility_off';
+          return enterprise.Lookup === this.State?.EnterpriseConfig?.ActiveEnterpriseLookup ? 'visibility' : 'visibility_off';
         },
         Action: {
           ActionHandler: this.SetActiveEnterprise.bind(this),
@@ -275,69 +275,78 @@ export class LcuSetupAdminElementComponent
   protected handleStateChanged() {
     console.log(this.State);
 
-    if (this.State.EnterpriseConfig) {
-      this.ActiveChildEnterprise = this.State.EnterpriseConfig.ChildEnterprises.find(
-        (ce) => {
-          return ce.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup;
-        }
-      );
-    }
     if(this.State.EnterpriseConfig?.ChildEnterprises){
       this.setupGrid();
     }
+
     if(this.State.EnterpriseConfig?.ActiveEnterpriseLookup){
+      this.setupActiveEnterprise();
+      this.setupEnterpriseGrid();
 
-      this.SelectedEnterpriseDevices = this.State.EnterpriseConfig.ChildEnterprises.find((enterprise: IoTEnsembleChildEnterprise) => 
-      enterprise.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup).Devices;
+    }
 
-      this.SelectedEnterpriseDevices.forEach(device => { 
-        //DeviceID has the enterpriseLookup appended to the front of the device name
-        //however deviceId when returned from warm query is the deviceName
-        this.SelectedEnterpriseDeviceIds.push(device.DeviceName);
+  }
+/**
+ * Sets up the active enterprise and calls warmQuery to 
+ */
+  protected setupActiveEnterprise() {
+    this.ActiveChildEnterprise = this.State.EnterpriseConfig.ChildEnterprises.find(
+      (ce) => {
+        return ce.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup;
+      }
+    );
 
+    this.SelectedEnterpriseDevices = this.ActiveChildEnterprise.Devices;
+
+    this.SelectedEnterpriseDeviceIds = new Array<string>();
+
+    this.SelectedEnterpriseDevices.forEach(device => { 
+      //DeviceID has the enterpriseLookup appended to the front of the device name
+      //however deviceId when returned from warm query is the deviceName
+      this.SelectedEnterpriseDeviceIds.push(device.DeviceName);
+      // this.SelectedEnterpriseDeviceIds.push(device.DeviceID);
+    });
+
+    // console.log("device ids: ", this.SelectedEnterpriseDeviceIds);
+
+    this.iotCtxt.WarmQuery( new Date(new Date().setDate(new Date().getDate() - 1)),
+                            new Date(),
+                            100, 
+                            1, 
+                            this.SelectedEnterpriseDeviceIds, 
+                            true)
+      .then((obs: any) => {
+        console.log('OBS: ', obs);
+        this.determineActiveDevices(obs);
       });
 
-      console.log("device ids: ", this.SelectedEnterpriseDeviceIds);
+  
+  }
 
-      this.iotCtxt.WarmQuery( new Date(new Date().setDate(new Date().getDate() - 1)),
-                              new Date(),
-                              10, 
-                              1, 
-                              this.SelectedEnterpriseDeviceIds, 
-                              true)
-        .then((obs: any) => {
-          console.log('OBS: ', obs);
-          //Determine if the payload is recent
-          obs.body.Payloads.forEach((payload:any) => {
-            if(this.SelectedEnterpriseDeviceIds.includes(payload.DeviceID)){
-              let payloadTimeMins = Math.floor((new Date(payload.EventEnqueuedUtcTime).getTime()/ (1000 * 60)));
-              let currentTimeMins = Math.floor((new Date().getTime() / (1000 * 60)));
-              // console.log("PAYLOAD TIME: ", payloadTimeMins)
-              // console.log("CURRENT TIME: ", currentTimeMins)
+  //Determine if the payload is recent
+  protected determineActiveDevices(obs: any){
+    obs.body.Payloads.forEach((payload:any) => {
+      if(this.SelectedEnterpriseDeviceIds.includes(payload.DeviceID)){
 
-              let device = this.State.EnterpriseConfig.ChildEnterprises
-                .find(ent => ent.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup)
-                .Devices.find(device => device.DeviceName === payload.DeviceID);
+        let payloadTimeMins = Math.floor((new Date(payload.EventEnqueuedUtcTime).getTime()/ (1000 * 60)));
+        let currentTimeMins = Math.floor((new Date().getTime() / (1000 * 60)));
 
-                if(payloadTimeMins >= currentTimeMins - 60){
-                  console.log("ACTIVE")
-                  device.ActivelySendingData = true;
-                                          
-                }
-                else if(!device.ActivelySendingData){
-                  console.log("NOT ACTIVE")
-                  device.ActivelySendingData = false;
-                }
-            }
-          });
-                                
-          const blob = new Blob([JSON.stringify(obs.body)], {
-                       type: 'text/json',
-                       })
-        });
- 
-      this.setupEnterpriseGrid();
-    }
+        // console.log('payload time: ', payloadTimeMins)
+        // console.log('current time: ', currentTimeMins)
+        
+        let device = this.ActiveChildEnterprise.Devices.find(device => 
+          device.DeviceName === payload.DeviceID);
+
+          if(payloadTimeMins >= currentTimeMins - 60){
+            // console.log("ACTIVE")
+            device.ActivelySendingData = true;                     
+          }
+          
+          else if(!device.ActivelySendingData){
+            device.ActivelySendingData = false;
+          }
+      }
+    });
   }
 
   protected setupStateHandler() {
