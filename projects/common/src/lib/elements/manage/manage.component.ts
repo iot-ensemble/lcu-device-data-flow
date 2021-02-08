@@ -388,9 +388,6 @@ export class LcuDeviceDataFlowManageElementComponent
     );
   }
 
-  public RefreshTelemetryPage() {
-      this.UpdateTelemetryPage(1);
-  }
   public RegenerateAPIKey(keyName: string) {
     // this.State.Loading = true;
 
