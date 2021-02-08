@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DynamicComponent } from './pages/dynamic/dynamic.component';
@@ -13,7 +13,7 @@ import {
 } from '@lcu/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { LcuSetupModule } from '@iot-ensemble/lcu-setup-common';
+import { LcuDeviceDataFlowModule } from '@iot-ensemble/lcu-device-data-flow-common';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -29,7 +29,7 @@ import { environment } from '../environments/environment';
     MaterialModule,
     FlexLayoutModule,
     FathymSharedModule.forRoot(),
-    LcuSetupModule.forRoot(),
+    // LcuDeviceDataFlowModule.forRoot(),
     PipeModule
   ],
   providers: [
@@ -40,5 +40,6 @@ import { environment } from '../environments/environment';
   ],
   bootstrap: [AppComponent],
   exports: [DynamicComponent, HeaderComponent, FooterComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {}

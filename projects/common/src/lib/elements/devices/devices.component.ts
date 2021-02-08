@@ -1,18 +1,18 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { LCUElementContext, LcuElementComponent } from '@lcu/common';
 
-export class LcuSetupDevicesElementState {}
+export class LcuDeviceDataFlowDevicesElementState {}
 
-export class LcuSetupDevicesContext extends LCUElementContext<LcuSetupDevicesElementState> {}
+export class LcuDeviceDataFlowDevicesContext extends LCUElementContext<LcuDeviceDataFlowDevicesElementState> {}
 
-export const SELECTOR_LCU_SETUP_DEVICES_ELEMENT = 'lcu-setup-devices-element';
+export const SELECTOR_LCU_DEVICE_DATA_FLOW_DEVICES_ELEMENT = 'lcu-device-data-flow-devices-element';
 
 @Component({
-  selector: SELECTOR_LCU_SETUP_DEVICES_ELEMENT,
+  selector: SELECTOR_LCU_DEVICE_DATA_FLOW_DEVICES_ELEMENT,
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.scss']
 })
-export class LcuSetupDevicesElementComponent extends LcuElementComponent<LcuSetupDevicesContext> implements OnInit {
+export class LcuDeviceDataFlowDevicesElementComponent extends LcuElementComponent<LcuDeviceDataFlowDevicesContext> implements OnInit {
   //  Fields
 
   //  Properties

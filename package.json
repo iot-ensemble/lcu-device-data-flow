@@ -1,5 +1,5 @@
 {
-	"name": "@iot-ensemble/lcu-setup",
+	"name": "@iot-ensemble/lcu-device-data-flow",
 	"version": "0.0.2",
 	"scripts": {
 		"build:app-host": "ng build app-host --prod",
@@ -16,10 +16,11 @@
 		"deploy:lcu": "npm version patch --prefix projects/lcu && npm run build:lcu && npm publish ./dist/lcu --access public",
 		"ng": "ng",
 		"pack": "npm run pack:lcu",
-		"pack:join": "concat-glob-cli -f \"dist/lcu/wc/lcu.*.js\" -o dist/lcu/wc/lcu-setup.lcu.js",
-		"pack:lcu": "rimraf dist/lcu/wc && mkdirp dist/lcu/wc && npm run pack:main && npm run pack:pollyfills && npm run pack:join",
+		"pack:join": "concat-glob-cli -f \"dist/lcu/wc/lcu.*.js\" -o dist/lcu/wc/lcu-device-data-flow.lcu.js",
+		"pack:lcu": "rimraf dist/lcu/wc && mkdirp dist/lcu/wc && npm run pack:main && npm run pack:pollyfills && npm run pack:join && npm run pack:styles",
 		"pack:main": "concat-glob-cli -f \"dist/lcu/main.*.js\" -o dist/lcu/wc/lcu.startup.js",
 		"pack:pollyfills": "concat-glob-cli -f \"dist/lcu/scripts.*.js\" -o dist/lcu/wc/lcu.pollyfills.js",
+		"pack:styles": "concat-glob-cli -f \"dist/lcu/styles.*.css\" -o dist/lcu/wc/lcu-device-data-flow.lcu.css",
 		"start": "ng serve app-host --port=4253 --aot false",
 		"build": "npm run build:common && npm run build:lcu",
 		"test": "ng test",
