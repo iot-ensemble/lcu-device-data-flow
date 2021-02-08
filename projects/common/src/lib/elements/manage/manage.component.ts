@@ -189,6 +189,7 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   //  API Methods
+  
   public ColdQuery() {
     this.State.Loading = true;
 
@@ -203,6 +204,10 @@ export class LcuDeviceDataFlowManageElementComponent
     });
 
     this.AddDeviceFormGroup.reset();
+  }
+
+  public get AddDeviceFGDeviceName(): AbstractControl{
+    return this.AddDeviceFormGroup.get('deviceName');
   }
 
   public DeviceSASTokensModal(): void {
