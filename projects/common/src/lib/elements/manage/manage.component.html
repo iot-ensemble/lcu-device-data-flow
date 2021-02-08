@@ -432,81 +432,6 @@
   </div>
   <!--^^^ Telemetry ^^^-->
 
-  <!-- Dashboard -->
-  <div class="dashboard section">
-    <mat-card fxLayout="column">
-      <div fxLayout="row" fxLayout.lt-sm="column">
-        <mat-card-header
-          fxFlex
-          fxFlexOrder="1"
-          fxFlexOrder.lt-sm="2"
-          fxLayout="row"
-        >
-          <div
-            mat-card-avatar
-            fxLayoutAlign="center center"
-            class="orange-accent"
-          >
-            <mat-icon>dashboard</mat-icon>
-          </div>
-
-          <mat-card-title>Devices Dashboard</mat-card-title>
-        </mat-card-header>
-        <!-- header buttons -->
-        <div
-          fxLayout="row"
-          fxFlexOrder="2"
-          fxFlexOrder.lt-sm="1"
-          fxLayoutAlign="end start"
-          class="margin-bottom-3"
-        >
-          <div
-            fxFlex
-            fxLayout="row"
-            fxLayoutAlign="end start"
-            class="margin-bottom-3"
-          >
-            <a
-              href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
-              target="_blank"
-              lcuEvent="click"
-              label="Devices Dashboard"
-              category="help"
-            >
-              <mat-icon matTooltip="More info">help_outline</mat-icon>
-            </a>
-          </div>
-        </div>
-      </div>
-      <mat-card-content>
-        <div class="margin-left-5 padding-bottom-2 margin-top-2">
-          Here we have provided an example open-source dashboard Freeboard to
-          show how your data can be visualized. Freeboard provides simple and
-          easy to use dashboards for your devices.
-        </div>
-        <div class="freeboard-display padding-top-2">
-          <!-- <iframe
-            [src]="DashboardIFrameURL"
-            width="100%"
-            height="750px"
-            frameborder="0"
-          ></iframe> -->
-          {{ DashboardIFrameURL }}
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <!--^^^ Dashboard ^^^-->
-
-  <!-- Device Reports -->
-  <!-- <div class="device-reports widget">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Device Reports</mat-card-title>
-              </mat-card-header>
-            </mat-card>
-          </div> -->
-
   <!-- Storage Access -->
   <div class="storage-access section">
     <mat-card fxLayout="column">
@@ -573,14 +498,91 @@
   </div>
   <!--^^^ Storage Access ^^^-->
 
-  <lcu-loader [loading]="State.Loading"></lcu-loader>
+  <!-- Dashboard -->
+  <div class="dashboard section">
+    <mat-card fxLayout="column">
+      <div fxLayout="row" fxLayout.lt-sm="column">
+        <mat-card-header
+          fxFlex
+          fxFlexOrder="1"
+          fxFlexOrder.lt-sm="2"
+          fxLayout="row"
+        >
+          <div
+            mat-card-avatar
+            fxLayoutAlign="center center"
+            class="orange-accent"
+          >
+            <mat-icon>dashboard</mat-icon>
+          </div>
 
-  <div *ngIf="State.Loading" fxLayoutAlign="margin-3 center">
-    <p *ngIf="!State.UserEnterpriseLookup">
-      Setting up your Dashboard, connecting you to the shared IoT flow, and
-      preparing your APIs.
-    </p>
+          <mat-card-title>Devices Dashboard</mat-card-title>
+        </mat-card-header>
+        <!-- header buttons -->
+        <div
+          fxLayout="row"
+          fxFlexOrder="2"
+          fxFlexOrder.lt-sm="1"
+          fxLayoutAlign="end start"
+          class="margin-bottom-3"
+        >
+          <div
+            fxFlex
+            fxLayout="row"
+            fxLayoutAlign="end start"
+            class="margin-bottom-3"
+          >
+            <a
+              href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
+              target="_blank"
+              lcuEvent="click"
+              label="Devices Dashboard"
+              category="help"
+            >
+              <mat-icon matTooltip="More info">help_outline</mat-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+      <mat-card-content>
+        <div class="margin-left-5 padding-bottom-2 margin-top-2">
+          Here we have provided an example open-source dashboard Freeboard to
+          show how your data can be visualized. Freeboard provides simple and
+          easy to use dashboards for your devices.
+        </div>
+        <div class="freeboard-display padding-top-2">
+          <iframe
+            [src]="DashboardIFrameURL"
+            width="100%"
+            height="750px"
+            frameborder="0"
+          ></iframe>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <!--^^^ Dashboard ^^^-->
 
-    <p *ngIf="State.UserEnterpriseLookup">Loading your Dashboard.</p>
+  <!-- Device Reports -->
+  <!-- <div class="device-reports widget">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Device Reports</mat-card-title>
+              </mat-card-header>
+            </mat-card>
+          </div> -->
+
+  <!-- Loading -->
+  <div>
+    <lcu-loader [loading]="State.Loading"></lcu-loader>
+
+    <div *ngIf="State.Loading" fxLayoutAlign="margin-3 center">
+      <p *ngIf="!State.UserEnterpriseLookup">
+        Setting up your Dashboard, connecting you to the shared IoT flow, and
+        preparing your APIs.
+      </p>
+
+      <p *ngIf="State.UserEnterpriseLookup">Loading your Dashboard.</p>
+    </div>
   </div>
 </div>
