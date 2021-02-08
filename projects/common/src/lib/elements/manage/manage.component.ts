@@ -266,7 +266,7 @@ export class LcuDeviceDataFlowManageElementComponent
       CallbackAction: (val: any) => {}, // function exposed to the modal
       Component: TelemetryDownloadDialogComponent, // set component to be used inside the modal
       Data: {
-        DeviceNames: this.State?.Telemetry.Payloads,
+        Devices: this.State?.DevicesConfig.Devices,
       },
       LabelCancel: 'Cancel',
       LabelAction: 'OK',
