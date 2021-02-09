@@ -1,11 +1,29 @@
-<div>
+<!-- <div>
   <pre>{{ State.Enterprise?.ChildEnterprises[0] | json }}</pre>
 
   <a mat-raised-button (click)="SetActiveEnterprise(State.Enterprise?.ChildEnterprises[0].Lookup)">Set Active</a>
-</div>
+</div> -->
 
-<div *ngIf="ActiveChildEnterprise">
-  <pre>{{ ActiveChildEnterprise | json }}</pre>
 
-  <a mat-raised-button (click)="SetActiveEnterprise(null)">Remove Active</a>
-</div>
+
+<lcu-loader [loading]="State.Loading"></lcu-loader>
+
+<lcu-data-grid
+    expand
+    [config]="GridParameters"
+    (page-event)="HandlePageEvent($event)"
+  ></lcu-data-grid>
+
+  <div *ngIf="ActiveChildEnterprise">
+    <!-- <pre>{{ ActiveChildEnterprise | json }}</pre> -->
+
+    <h2>Selected Enterprise</h2>
+
+    <lcu-data-grid
+    expand
+    [config]="EnterpriseGridParameters"
+    (page-event)="HandleEnterprisePageEvent($event)"
+  ></lcu-data-grid>
+  
+    <a mat-raised-button (click)="SetActiveEnterprise(null)">Remove Active</a>
+  </div> 
