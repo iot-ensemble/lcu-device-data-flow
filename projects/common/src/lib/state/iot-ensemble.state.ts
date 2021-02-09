@@ -72,6 +72,8 @@ export class IoTEnsembleConnectedDevicesConfig {
 
   public SASTokens?: { [deviceName: string]: string };
 
+  public Status?: Status;
+
   public TotalDevices?: number;
 }
 
