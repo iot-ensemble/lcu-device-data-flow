@@ -78,6 +78,8 @@ export class IoTEnsembleConnectedDevicesConfig {
 export class IoTEnsembleDeviceInfo {
   [prop: string]: any;
 
+  public ActivelySendingData?: boolean;
+
   public AuthenticationType?: string;
 
   public CloudToDeviceMessageCount?: number;
@@ -89,6 +91,7 @@ export class IoTEnsembleDeviceInfo {
   public DeviceName?: string;
 
   public LastStatusUpdate?: Status;
+
 }
 
 export class IoTEnsembleTelemetry {

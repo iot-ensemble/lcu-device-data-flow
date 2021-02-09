@@ -23,7 +23,24 @@ export class IoTEnsembleAdminStateContext extends StateContext<IoTEnsembleAdminS
 
   protected oldState: IoTEnsembleAdminState = {};
 
+  
+
   // API Methods
+  public RevokeDeviceEnrollment(deviceID: string){
+    console.log('Admin revoking device Id: ', deviceID);
+
+    const args = {
+      DeviceID: deviceID
+    };
+
+    this.gtagEvent('RevokeDeviceEnrollment', args);
+
+    this.Execute({
+      Arguments: args,
+      Type: 'RevokeDeviceEnrollment',
+    });
+  }
+
   public SetActiveEnterprise(lookup: string) {
     console.log('Setting active enterprise');
 
@@ -36,6 +53,20 @@ export class IoTEnsembleAdminStateContext extends StateContext<IoTEnsembleAdminS
     this.Execute({
       Arguments: args,
       Type: 'SetActiveEnterprise',
+    });
+  }
+
+  public UpdateEnterprisesSync(page: number, pageSize: number) {
+    const args = {
+      Page: page,
+      PageSize: pageSize,
+    };
+
+    this.gtagEvent('UpdateEnterprisesSync', args);
+
+    this.Execute({
+      Arguments: args,
+      Type: 'UpdateEnterprisesSync',
     });
   }
 
