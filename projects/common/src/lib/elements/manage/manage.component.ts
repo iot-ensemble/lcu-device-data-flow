@@ -59,6 +59,7 @@ import {
   SvgToMatIconService,
 } from '@lowcodeunit/lcu-icons-common';
 import { IoTEnsembleStateContext } from '../../state/iot-ensemble-state.context';
+import { JsonHubProtocol } from '@aspnet/signalr';
 
 declare var freeboard: any;
 
@@ -97,12 +98,12 @@ export class LcuDeviceDataFlowManageElementComponent
   public get DeviceNameErrorText(): string {
     let errorText: string = null;
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('required')) {
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('required') && this.AddDeviceFormGroup.touched) {
       errorText = 'Device name is required\r\n';
     }
 
     if (this.AddDeviceFormGroup.get('deviceName').hasError('maxlength')) {
-      errorText = 'Device name cannot be longer than 128 characters\r\n';
+      errorText = 'Device name cannot be longer than 90 characters\r\n';
     }
 
     if (this.AddDeviceFormGroup.get('deviceName').hasError('pattern')) {
@@ -112,11 +113,17 @@ export class LcuDeviceDataFlowManageElementComponent
     if (this.AddDeviceFormGroup.get('deviceName').hasError('duplicateName')) {
       errorText = ' Device name already exists \r\n';
     }
+    if((this.State.DevicesConfig?.Status?.Code === 1) &&
+       (this.DeviceNameToAdd === this.AddDeviceFormGroup.controls.deviceName.value)){
+      errorText = ' Device name already exists \r\n';
+    }
 
     return errorText;
   }
 
   public DeviceNames: string[];
+
+  public DeviceNameToAdd: string;
 
   public FreeboardURL: string;
 
@@ -157,6 +164,8 @@ export class LcuDeviceDataFlowManageElementComponent
   ) {
     super(injector);
 
+    this.DeviceNameToAdd = '';
+
     this.State = {};
 
     this.PipeDate = DataPipeConstants.DATE_TIME_ZONE_FMT;
@@ -195,15 +204,23 @@ export class LcuDeviceDataFlowManageElementComponent
   public EnrollDeviceSubmit() {
     this.State.DevicesConfig.Loading = true;
 
+    this.DeviceNameToAdd = this.AddDeviceFormGroup.controls.deviceName.value;
+
     this.iotEnsCtxt.EnrollDevice({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
     });
 
-    this.AddDeviceFormGroup.reset();
   }
 
   public get AddDeviceFGDeviceName(): AbstractControl{
     return this.AddDeviceFormGroup.get('deviceName');
+  }
+
+  public CancelAddingDevice(){
+    this.ToggleAddingDevice();
+    this.AddDeviceFormGroup.reset();
+    this.State.DevicesConfig.Status = null;
+
   }
 
   public DeviceSASTokensModal(): void {
@@ -543,9 +560,6 @@ export class LcuDeviceDataFlowManageElementComponent
 
     this.setupFreeboard();
 
-    this.DeviceNames =
-      this.State?.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
-
     if (this.State?.Telemetry) {
       this.convertToDate(this.State?.Telemetry.LastSyncedAt);
     }
@@ -562,7 +576,15 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected setAddingDevice() {
-    this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
+    if(this.State?.DevicesConfig?.Status?.Code === 1){
+      this.AddingDevice = true;
+    }
+    else{
+      this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
+      // if(this.AddDeviceFormGroup){
+      //   this.AddDeviceFormGroup.reset();
+      // }
+    }
   }
 
   protected setConnectedDevicesInfoCardFlex() {
@@ -590,7 +612,7 @@ export class LcuDeviceDataFlowManageElementComponent
         '',
         Validators.compose([
           Validators.required,
-          Validators.maxLength(128),
+          Validators.maxLength(90),
           Validators.pattern(regex),
           this.deviceNameValidator(),
         ]),
