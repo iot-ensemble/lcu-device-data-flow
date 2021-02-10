@@ -60,7 +60,7 @@ export class DevicesTableComponent implements OnInit{//}, OnChanges {
   // //  Life Cycle
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log('CHANGES: ', changes);
+    // console.log('CHANGES: ', changes);
     if (changes.DevicesConfig) {
       this.updateDevicesDataSource();
     }
