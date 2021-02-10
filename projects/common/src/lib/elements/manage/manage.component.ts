@@ -212,6 +212,13 @@ export class LcuDeviceDataFlowManageElementComponent
 
   }
 
+  public EnrollNewDevice(){
+    if(this.AddDeviceFormGroup){
+        this.AddDeviceFormGroup.reset();
+      }
+      this.ToggleAddingDevice();
+  }
+
   public get AddDeviceFGDeviceName(): AbstractControl{
     return this.AddDeviceFormGroup.get('deviceName');
   }
@@ -220,7 +227,6 @@ export class LcuDeviceDataFlowManageElementComponent
     this.ToggleAddingDevice();
     this.AddDeviceFormGroup.reset();
     this.State.DevicesConfig.Status = null;
-
   }
 
   public DeviceSASTokensModal(): void {
@@ -571,6 +577,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.stateHandlerSub = this.iotEnsCtxt.Context.subscribe((state) => {
       this.State = Object.assign(this.State, state);
 
+      // console.log("State: ", this.State)
+
       this.handleStateChanged();
     });
   }
@@ -581,9 +589,7 @@ export class LcuDeviceDataFlowManageElementComponent
     }
     else{
       this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
-      // if(this.AddDeviceFormGroup){
-      //   this.AddDeviceFormGroup.reset();
-      // }
+      
     }
   }
 
