@@ -30,6 +30,6 @@ import { environment } from '../environments/environment';
     },
   ],
   bootstrap: [AppComponent],
-  exports: [LcuDeviceDataFlowModule],
+  exports: [],
 })
 export class AppModule {}

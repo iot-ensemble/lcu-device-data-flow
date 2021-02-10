@@ -14,7 +14,7 @@ import {
 } from '@iot-ensemble/lcu-device-data-flow-common';
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/internal/operators/map';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'lcu-dynamic',

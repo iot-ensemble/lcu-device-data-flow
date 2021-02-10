@@ -56,7 +56,7 @@ import { EventDirective } from './directives/analytics/event.directive';
     EventDirective,
   ],
   imports: [
-  FathymSharedModule,
+    FathymSharedModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
@@ -108,7 +108,7 @@ export class LcuDeviceDataFlowModule {
         IoTEnsembleStateContext,
         AnimationService,
         GenericModalService,
-        GtagService
+        GtagService,
       ],
     };
   }

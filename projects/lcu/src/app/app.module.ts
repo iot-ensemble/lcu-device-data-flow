@@ -32,7 +32,8 @@ import 'zone.js/dist/zone';
       useValue: FathymSharedModule.DefaultServiceSettings(environment),
     },
   ],
-  exports: [LcuDeviceDataFlowModule],
+  exports: [],
+
 })
 export class AppModule implements DoBootstrap {
   constructor(protected injector: Injector) {}
