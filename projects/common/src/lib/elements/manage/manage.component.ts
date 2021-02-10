@@ -571,6 +571,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.stateHandlerSub = this.iotEnsCtxt.Context.subscribe((state) => {
       this.State = Object.assign(this.State, state);
 
+      console.log("State: ", this.State)
+
       this.handleStateChanged();
     });
   }
@@ -578,12 +580,15 @@ export class LcuDeviceDataFlowManageElementComponent
   protected setAddingDevice() {
     if(this.State?.DevicesConfig?.Status?.Code === 1){
       this.AddingDevice = true;
+      console.log("setting adding device to true")
     }
     else{
       this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
       // if(this.AddDeviceFormGroup){
       //   this.AddDeviceFormGroup.reset();
       // }
+      console.log("setting adding device to: ", this.AddingDevice)
+
     }
   }
 

@@ -345,6 +345,11 @@ export class LcuDeviceDataFlowAdminElementComponent
           else if(!device.ActivelySendingData){
             device.ActivelySendingData = false;
           }
+
+          else{
+            device.ActivelySendingData = false;
+
+          }
       }
     });
   }

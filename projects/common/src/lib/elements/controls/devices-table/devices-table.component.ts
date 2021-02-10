@@ -59,12 +59,12 @@ export class DevicesTableComponent implements OnInit{//}, OnChanges {
 
   // //  Life Cycle
 
-  // public ngOnChanges(changes: SimpleChanges): void {
-  //   // console.log('CHANGES: ', changes);
-  //   if (changes.DevicesConfig) {
-  //     // this.updateDevicesDataSource();
-  //   }
-  // }
+  public ngOnChanges(changes: SimpleChanges): void {
+    console.log('CHANGES: ', changes);
+    if (changes.DevicesConfig) {
+      this.updateDevicesDataSource();
+    }
+  }
 
   public ngOnInit(): void {}
 
@@ -74,155 +74,155 @@ export class DevicesTableComponent implements OnInit{//}, OnChanges {
   //  * a checkmark to display to the user that the content was succesfully copied
   //  * @ param deviceInfo
   //  */
-  // public CopyClick(deviceInfo: IoTEnsembleDeviceInfo): void {
-  //   ClipboardCopyFunction.ClipboardCopy(deviceInfo.ConnectionString);
+  public CopyClick(deviceInfo: IoTEnsembleDeviceInfo): void {
+    ClipboardCopyFunction.ClipboardCopy(deviceInfo.ConnectionString);
 
-  //   this.gtag.Event('click', {
-  //     event_category: 'copy',
-  //     event_label: 'Device Connection String'
-  //   });
+    this.gtag.Event('click', {
+      event_category: 'copy',
+      event_label: 'Device Connection String'
+    });
 
-  //   deviceInfo.$IsCopySuccessIcon = true;
+    deviceInfo.$IsCopySuccessIcon = true;
 
-  //   setTimeout(() => {
-  //     deviceInfo.$IsCopySuccessIcon = false;
-  //   }, 2000);
-  // }
+    setTimeout(() => {
+      deviceInfo.$IsCopySuccessIcon = false;
+    }, 2000);
+  }
 
-  // public IssueSASToken(device: IoTEnsembleDeviceInfo): void {
-  //   this.IssuedSASToken.emit(device.DeviceName);
-  // }
+  public IssueSASToken(device: IoTEnsembleDeviceInfo): void {
+    this.IssuedSASToken.emit(device.DeviceName);
+  }
 
-  // public HandlePageEvent(event: any): void {
-  //   console.log("PaGe EvEnT: ", event);
-  //   this.PageEvent.emit(event);
-  // }
+  public HandlePageEvent(event: any): void {
+    console.log("PaGe EvEnT: ", event);
+    this.PageEvent.emit(event);
+  }
 
-  // public RevokeClick(device: IoTEnsembleDeviceInfo): void {
-  //   if (
-  //     confirm(`Are you sure you want to remove device '${device.DeviceName}'?`)
-  //   ) {
-  //     this.Revoked.emit(device.DeviceID);
-  //   }
-  // }
+  public RevokeClick(device: IoTEnsembleDeviceInfo): void {
+    if (
+      confirm(`Are you sure you want to remove device '${device.DeviceName}'?`)
+    ) {
+      this.Revoked.emit(device.DeviceID);
+    }
+  }
 
-  // //  Helpers
-  // /**
-  //  * Setup all features of the grid
-  //  */
-  // protected setupGrid(): void {
-  //   const columndefs = this.setupGridColumns();
+  //  Helpers
+  /**
+   * Setup all features of the grid
+   */
+  protected setupGrid(): void {
+    const columndefs = this.setupGridColumns();
 
-  //   const features = this.setupGridFeatures();
+    const features = this.setupGridFeatures();
 
-  //   this.GridParameters = new DataGridConfigModel(
-  //     of(this.Devices),
-  //     columndefs,
-  //     features
-  //   );
-  // }
+    this.GridParameters = new DataGridConfigModel(
+      of(this.Devices),
+      columndefs,
+      features
+    );
+  }
 
-  // /**
-  //  * Create grid columns
-  //  */
-  // protected setupGridColumns(): Array<ColumnDefinitionModel> {
-  //   return [
-  //     new ColumnDefinitionModel({
-  //       ColType: 'DeviceName',
-  //       Title: 'Device Name',
-  //       ShowValue: true,
-  //     }),
+  /**
+   * Create grid columns
+   */
+  protected setupGridColumns(): Array<ColumnDefinitionModel> {
+    return [
+      new ColumnDefinitionModel({
+        ColType: 'DeviceName',
+        Title: 'Device Name',
+        ShowValue: true,
+      }),
 
-  //     new ColumnDefinitionModel({
-  //       ColType: 'ConnectionString',
-  //       Title: 'Connection String',
-  //       ShowValue: true,
-  //       ShowIcon: true,
-  //       Pipe: DataPipeConstants.PIPE_STRING_SLICE_SEVENTY,
-  //     }),
+      new ColumnDefinitionModel({
+        ColType: 'ConnectionString',
+        Title: 'Connection String',
+        ShowValue: true,
+        ShowIcon: true,
+        Pipe: DataPipeConstants.PIPE_STRING_SLICE_SEVENTY,
+      }),
 
-  //     new ColumnDefinitionModel({
-  //       ColType: 'copy',
-  //       ColWidth: '10px',
-  //       Title: '',
-  //       ShowValue: false,
-  //       ShowIcon: true,
-  //       IconColor: 'orange-accent-text',
-  //       IconConfigFunc: (rowData: IoTEnsembleDeviceInfo) => {
-  //         return rowData.$IsCopySuccessIcon ? 'done' : 'content_copy';
-  //       },
-  //       Action: {
-  //         ActionHandler: this.CopyClick.bind(this),
-  //         ActionType: 'button',
-  //         ActionTooltip: 'Copy Connection String',
-  //       },
-  //     }),
+      new ColumnDefinitionModel({
+        ColType: 'copy',
+        ColWidth: '10px',
+        Title: '',
+        ShowValue: false,
+        ShowIcon: true,
+        IconColor: 'orange-accent-text',
+        IconConfigFunc: (rowData: IoTEnsembleDeviceInfo) => {
+          return rowData.$IsCopySuccessIcon ? 'done' : 'content_copy';
+        },
+        Action: {
+          ActionHandler: this.CopyClick.bind(this),
+          ActionType: 'button',
+          ActionTooltip: 'Copy Connection String',
+        },
+      }),
 
-  //     new ColumnDefinitionModel({
-  //       ColType: 'issue-sas-token',
-  //       ColWidth: '10px',
-  //       Title: '',
-  //       ShowValue: false,
-  //       ShowIcon: true,
-  //       IconColor: 'yellow-accent-text',
-  //       IconConfigFunc: () => 'build_circle',
-  //       Action: {
-  //         ActionHandler: this.IssueSASToken.bind(this),
-  //         ActionType: 'button',
-  //         ActionTooltip: 'Issue SAS Token',
-  //       },
-  //     }),
+      new ColumnDefinitionModel({
+        ColType: 'issue-sas-token',
+        ColWidth: '10px',
+        Title: '',
+        ShowValue: false,
+        ShowIcon: true,
+        IconColor: 'yellow-accent-text',
+        IconConfigFunc: () => 'build_circle',
+        Action: {
+          ActionHandler: this.IssueSASToken.bind(this),
+          ActionType: 'button',
+          ActionTooltip: 'Issue SAS Token',
+        },
+      }),
 
-  //     new ColumnDefinitionModel({
-  //       ColType: 'actions',
-  //       ColWidth: '10px',
-  //       Title: '',
-  //       ShowValue: false,
-  //       ShowIcon: true,
-  //       IconColor: 'red-accent-text',
-  //       IconConfigFunc: () => 'delete',
-  //       Action: {
-  //         ActionHandler: this.RevokeClick.bind(this),
-  //         ActionType: 'button',
-  //         ActionTooltip: 'Revoke',
-  //       },
-  //     }),
-  //   ];
-  // }
-  // /**
-  //  * Setup grid features, such as pagination, row colors, etc.
-  //  */
-  // protected setupGridFeatures(): DataGridFeaturesModel {
-  //   const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
-  //     {
-  //       Length: this.DevicesConfig.TotalDevices,
-  //       PageIndex: this.DevicesConfig.Page - 1,
-  //       PageSize: this.DevicesConfig.PageSize,
-  //       PageSizeOptions: [5, 10, 25],
-  //     }
-  //   );
+      new ColumnDefinitionModel({
+        ColType: 'actions',
+        ColWidth: '10px',
+        Title: '',
+        ShowValue: false,
+        ShowIcon: true,
+        IconColor: 'red-accent-text',
+        IconConfigFunc: () => 'delete',
+        Action: {
+          ActionHandler: this.RevokeClick.bind(this),
+          ActionType: 'button',
+          ActionTooltip: 'Revoke',
+        },
+      }),
+    ];
+  }
+  /**
+   * Setup grid features, such as pagination, row colors, etc.
+   */
+  protected setupGridFeatures(): DataGridFeaturesModel {
+    const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
+      {
+        Length: this.DevicesConfig.TotalDevices,
+        PageIndex: this.DevicesConfig.Page - 1,
+        PageSize: this.DevicesConfig.PageSize,
+        PageSizeOptions: [5, 10, 25],
+      }
+    );
 
-  //   const features: DataGridFeaturesModel = new DataGridFeaturesModel({
-  //     NoData: {
-  //       ShowInline: true
-  //     },
-  //     Paginator: paginationDetails,
-  //     Filter: false,
-  //     ShowLoader: true,
-  //     Highlight: 'rowHighlight',
-  //     // RowColorEven: 'gray',
-  //     // RowColorOdd: 'light-gray',
-  //   });
+    const features: DataGridFeaturesModel = new DataGridFeaturesModel({
+      NoData: {
+        ShowInline: true
+      },
+      Paginator: paginationDetails,
+      Filter: false,
+      ShowLoader: true,
+      Highlight: 'rowHighlight',
+      // RowColorEven: 'gray',
+      // RowColorOdd: 'light-gray',
+    });
 
-  //   return features;
-  // }
+    return features;
+  }
 
-  // protected updateDevicesDataSource(): void {
-  //   if (this.DevicesConfig) {
-  //     console.log("updating devices config: ",this.DevicesConfig )
-  //     this.Devices = this.DevicesConfig.Devices;
+  protected updateDevicesDataSource(): void {
+    if (this.DevicesConfig) {
+      console.log("updating devices config: ",this.DevicesConfig )
+      this.Devices = this.DevicesConfig.Devices;
 
-  //     this.setupGrid();
-  //   }
-  // }
+      this.setupGrid();
+    }
+  }
 }
