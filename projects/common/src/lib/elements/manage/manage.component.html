@@ -64,8 +64,9 @@
 
   <!-- Connected Devices -->
   <div class="connected section">
-    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+    <div fxLayout="row" fxLayout.lt-md="column">
       <mat-card
+        class="margin-right-1"
         fxLayout="column"
         [fxFlex]="ConnectedDevicesInfoCardFlex"
         fxFlex.lt-md="100%"
@@ -94,6 +95,7 @@
               Max number of devices reached
             </mat-card-subtitle>
           </mat-card-header>
+
           <div
             fxLayout="row"
             fxFlexOrder="2"
@@ -308,7 +310,6 @@
 
         <div
           fxLayout="row"
-          fxLayoutGap="10px"
           fxFlexOrder="2"
           fxFlexOrder.lt-sm="1"
           fxLayoutAlign="end start"
