@@ -1,5 +1,4 @@
-<mat-toolbar 
-  color="primary">
+<mat-toolbar color="primary">
   <!-- <button
     mat-icon-button
     class="menu-button"
@@ -8,24 +7,18 @@
     <mat-icon>menu</mat-icon>
   </button> -->
 
-  <div 
-    style="height: 60px;" 
-    ngClass.gt-xs="fathym-full-logo" 
-    ngClass.xs="fathym-logo">
-  </div>
-  
-  <div 
-    fxFlex
-    fxLayoutGap.lt-sm="5px"
-    fxLayoutGap.gt-sm="10px"
-    >
-  <a mat-button href="/">{{ Text }}</a>
+  <div
+    style="height: 60px"
+    ngClass.gt-xs="fathym-full-logo"
+    ngClass.xs="fathym-logo"
+  ></div>
 
-  <div 
-    fxFlex 
-    fxLayoutAlign="end">
-    <a mat-button href="{{BillingLink}}">Upgrade</a>
-    <a mat-button href="/.oauth/logout">Sign Out</a>
+  <div fxFlex>
+    <a mat-button href="/">{{ Text }}</a>
+
+    <div fxFlex fxLayoutAlign="end">
+      <a mat-button href="{{ BillingLink }}">Upgrade</a>
+      <a mat-button href="/.oauth/logout">Sign Out</a>
+    </div>
   </div>
-</div>
 </mat-toolbar>

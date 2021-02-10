@@ -15,7 +15,7 @@
         </button>
         <mat-menu #menu="matMenu">
           <div *ngFor="let theme of Themes">
-            <div fxLayout="row" fxLayoutGap="10px" fxFlex fxLayoutAlign="start center" mat-menu-item
+            <div fxLayout="row" fxFlex fxLayoutAlign="start center" mat-menu-item
               (click)="PickTheme(theme.Color)">
               <mat-icon [ngClass]="theme.ColorSwatch">{{theme.Icon}}</mat-icon>
               <span>{{theme.Label}}</span>
@@ -24,11 +24,10 @@
         </mat-menu>
       </span>
     </mat-toolbar>
-  
+
     <div class="lcu-content mat-drawer-container">
       <div class="lcu-card-container" fxLayout="row" fxLayout.lt-md="column">
         <router-outlet></router-outlet>
       </div>
     </div>
   </div>
-  
