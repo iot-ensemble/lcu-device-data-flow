@@ -25,7 +25,8 @@
 		"build": "npm run build:common && npm run build:lcu",
 		"test": "ng test",
 		"lint": "ng lint",
-		"e2e": "ng e2e"
+		"e2e": "ng e2e",
+		"moveto": "Move-Item F:\\Git\\Open` Source\\iot-ensemble\\lcu-device-data-flow\\dist\\lcu\\wc\\lcu-device-data-flow.lcu.js F:\\Git\\Open` Source\\lowcodeunit\\app-host\\projects\\app-host\\src\\assets -force"
 	},
 	"private": false,
 	"dependencies": {
@@ -79,6 +80,7 @@
 		"karma-jasmine": "~4.0.1",
 		"karma-jasmine-html-reporter": "^1.5.4",
 		"mkdirp": "^1.0.4",
+		"move-file-cli": "^2.0.0",
 		"ng-packagr": "^11.0.3",
 		"protractor": "~7.0.0",
 		"rimraf": "^3.0.2",

@@ -70,6 +70,17 @@
         [fxFlex]="ConnectedDevicesInfoCardFlex"
         fxFlex.lt-md="100%"
       >
+        {{ ConnectedDevicesInfoCardFlex }}
+      </mat-card>
+    </div>
+  </div>
+  <!-- <div class="connected section">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+      <mat-card
+        fxLayout="column"
+        [fxFlex]="ConnectedDevicesInfoCardFlex"
+        fxFlex.lt-md="100%"
+      >
         <div fxLayout="row" fxLayout.lt-sm="column">
           <mat-card-header
             fxFlex
@@ -302,11 +313,16 @@
         </mat-card>
       </form>
     </div>
-  </div>
+  </div> -->
   <!--^^^ Connected Devices ^^^-->
 
   <!-- Telemetry -->
   <div class="telemetry section">
+    <mat-card fxLayout="column">
+      <div fxLayout="row" fxLayout.lt-sm="column" class="margin-bottom-3"></div>
+    </mat-card>
+  </div>
+  <!-- <div class="telemetry section">
     <mat-card fxLayout="column">
       <div fxLayout="row" fxLayout.lt-sm="column" class="margin-bottom-3">
         <mat-card-header
@@ -342,22 +358,8 @@
 
             Last Updated: {{ LastSyncedAt }}
           </mat-card-subtitle>
-
-          <!-- <div
-          fxFlex
-          fxLayout="row"
-          fxLayoutGap="20px"
-          fxLayoutAlign="end center"
-        > -->
-          <!-- <lcu-refresh-select
-                    [telemetry]="State.Telemetry"
-                    (refresh-rate-changed)="RefreshRateChanged($event)"
-                  >
-                  </lcu-refresh-select> -->
-
-          <!-- </div> -->
         </mat-card-header>
-        <!-- header buttons -->
+
         <div
           fxLayout="row"
           fxLayoutGap="10px"
@@ -367,29 +369,24 @@
           class="margin-bottom-3"
         >
           <div fxFlex>
-              <mat-icon 
-                class="cursor-pointer"
-                color="primary"
-                matTooltip="Refresh Telemetry Data"
-                (click)="UpdateTelemetryPage(1)">refresh</mat-icon>
+            <mat-icon
+              class="cursor-pointer"
+              color="primary"
+              matTooltip="Refresh Telemetry Data"
+              (click)="UpdateTelemetryPage(1)"
+              >refresh</mat-icon
+            >
           </div>
-            <!-- <button
-              mat-button
+          <div>
+            <mat-icon
+              id="telemetry-download-element"
+              class="cursor-pointer"
               color="primary"
               matTooltip="Download Telemetry Data"
               (click)="DownloadTelemetryModal()"
-            > -->
-            <div>
-              <mat-icon
-                id="telemetry-download-element"
-                class="cursor-pointer"
-                color="primary"
-                matTooltip="Download Telemetry Data"
-                (click)="DownloadTelemetryModal()">download</mat-icon>
-                <!-- svgIcon="download" -->
-                <!-- <mat-icon id="telemetry-download-element">download</mat-icon> -->
-            <!-- </button> -->
-            </div>
+              >download</mat-icon
+            >
+          </div>
           <lcu-enabled-toggle
             class="margin-right-3"
             [enabled]="State.Telemetry?.Enabled"
@@ -407,7 +404,7 @@
           >
             <mat-icon matTooltip="More info">help_outline</mat-icon>
           </a>
-          </div>
+        </div>
       </div>
 
       <mat-card-content
@@ -433,11 +430,11 @@
         </button>
       </mat-card-actions>
     </mat-card>
-  </div>
+  </div> -->
   <!--^^^ Telemetry ^^^-->
 
   <!-- Storage Access -->
-  <div class="storage-access section">
+  <!-- <div class="storage-access section">
     <mat-card fxLayout="column">
       <div fxLayout="row" fxLayout.lt-sm="column">
         <mat-card-header
@@ -456,7 +453,7 @@
 
           <mat-card-title>Storage Access</mat-card-title>
         </mat-card-header>
-        <!-- header buttons -->
+
         <div
           fxLayout="row"
           fxFlexOrder="2"
@@ -499,7 +496,7 @@
 
       <mat-card-actions></mat-card-actions>
     </mat-card>
-  </div>
+  </div> -->
   <!--^^^ Storage Access ^^^-->
 
   <!-- Dashboard -->
@@ -522,7 +519,7 @@
 
           <mat-card-title>Devices Dashboard</mat-card-title>
         </mat-card-header>
-        <!-- header buttons -->
+
         <div
           fxLayout="row"
           fxFlexOrder="2"

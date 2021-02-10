@@ -90,11 +90,7 @@ export class LcuDeviceDataFlowManageElementComponent
 
   public AddingDevice: boolean;
 
-  public get ConnectedDevicesInfoCardFlex(): string {
-    const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
-
-    return this.AddingDevice ? maxDeviceFlex : '100%';
-  }
+  public ConnectedDevicesInfoCardFlex: string;
 
   public DashboardIFrameURL: SafeResourceUrl;
 
@@ -189,7 +185,7 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   //  API Methods
-  
+
   public ColdQuery() {
     this.State.Loading = true;
 
@@ -553,6 +549,8 @@ export class LcuDeviceDataFlowManageElementComponent
     if (this.State?.Telemetry) {
       this.convertToDate(this.State?.Telemetry.LastSyncedAt);
     }
+
+    this.setConnectedDevicesInfoCardFlex();
   }
 
   protected setupStateHandler() {
@@ -565,6 +563,12 @@ export class LcuDeviceDataFlowManageElementComponent
 
   protected setAddingDevice() {
     this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
+  }
+
+  protected setConnectedDevicesInfoCardFlex() {
+    const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
+
+    this.ConnectedDevicesInfoCardFlex = this.AddingDevice ? maxDeviceFlex : '100%';
   }
 
   protected setDashboardIFrameURL() {
