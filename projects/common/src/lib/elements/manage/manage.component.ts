@@ -352,6 +352,8 @@ export class LcuDeviceDataFlowManageElementComponent
     // payloadForm.DeviceName = 'blah;
 
     // setTimeout(() => {
+
+    // let sendMessageModalService: GenericModalService<SendMessageDialogComponent>
     const modalConfig: GenericModalModel = new GenericModalModel({
       ModalType: 'data', // type of modal we want (data, confirm, info)
       CallbackAction: (val: any) => {}, // function exposed to the modal
@@ -369,35 +371,31 @@ export class LcuDeviceDataFlowManageElementComponent
      * Pass modal config to service open function
      */
     this.genericModalService.Open(modalConfig);
-
-    this.genericModalService.ModalInstance.FilterValue.toString
-
     
-
     this.genericModalService.ModalComponent.afterOpened().subscribe(
       (res: any) => {
         console.log('MODAL OPEN', res);
+
+        this.genericModalService.ModalInstance.FilterValue.subscribe((filterValue: string) => {
+      
+          this.iotEnsCtxt.ListAllDeviceNames(this.State.UserEnterpriseLookup, filterValue)
+          .then((obs: any) => {
+            // console.log("obs: ", obs)
+            if (obs.body?.Status?.Code === 0) 
+            {
+              this.genericModalService.ModalInstance.DeviceOptions = obs.body.DeviceNames;
+
+            } else 
+              {
+                console.log("error: ", obs.body.Status);      
+               }
+          });
+        })
       }
     );
 
-    this.genericModalService.ModalInstance.FilterValue.subscribe((filterValue: string) => {
-      // do something
-      console.log("FiLtEr VaLuE!!!!: ", filterValue)
-      this.iotEnsCtxt.ListAllDeviceNames(this.State.UserEnterpriseLookup, filterValue).subscribe(result => { 
-        console.log("RESULT : ", result)
-              if (result.Status.Code === 0) {
-              
-                 this.DeviceNames = result.DeviceNames;
-              
-              } else {
-              console.log("error: ", result.Status);
-              
-              }
-              
-              });
-    });
-
-    this.genericModalService.ModalComponent.afterClosed().subscribe(
+   
+  this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: any) => {
         console.log('MODAL CLOSED', res);
       }

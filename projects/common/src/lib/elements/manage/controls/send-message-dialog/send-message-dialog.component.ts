@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IoTEnsembleTelemetryPayload } from '../../../../state/iot-ensemble.state';
 import { GenericModalModel } from '../../../../models/generice-modal.model';
@@ -15,8 +15,11 @@ export class SendMessageDialogComponent implements OnInit {
   //  Properties
   public DeviceNames: string[];
 
-  @Output('filter-value-change')
-  public FilterValueChange: EventEmitter<string>;
+  @Output('filter-value')
+  public FilterValue: EventEmitter<string>;
+
+  @Input('device-options')
+  public DeviceOptions: Array<string>;
 
   //  Constructors
   constructor(
@@ -24,7 +27,7 @@ export class SendMessageDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<SendMessageDialogComponent>
   ) {
 
-    this.FilterValueChange = new EventEmitter<string>();
+    this.FilterValue = new EventEmitter<string>();
 
   }
 
@@ -33,14 +36,14 @@ export class SendMessageDialogComponent implements OnInit {
     this.DeviceNames = this.data.Data.DeviceNames;
   }
 
+
   //  API Methods
   public Cancel() {
     this.dialogRef.close(null);
   }
 
   public FilterValueChanged(filterValue: string){
-    console.log('Filter value changed: ', filterValue);
-    this.FilterValueChange.emit(filterValue);
+    this.FilterValue.emit(filterValue);
   }
 
   public SendDeviceMessage(payload: IoTEnsembleTelemetryPayload) {

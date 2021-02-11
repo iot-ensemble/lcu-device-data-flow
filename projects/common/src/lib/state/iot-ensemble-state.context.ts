@@ -104,8 +104,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     });
   }
 
-  public ListAllDeviceNames(childEntLookup: string, filter: string): any {
-    console.log('calling ListAllDeviceNames');
+  public ListAllDeviceNames(childEntLookup: string, filter: string): Promise<object> {
+    console.log('calling ListAllDeviceNames', childEntLookup, filter);
 
     const args = {
       ChildEntLookup: childEntLookup,

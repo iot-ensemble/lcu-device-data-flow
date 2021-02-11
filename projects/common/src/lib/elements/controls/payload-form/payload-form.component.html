@@ -8,7 +8,7 @@
       [matAutocomplete]="auto"
     >
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let deviceOption of FilteredDeviceOptions | async" [value]="deviceOption">
+      <mat-option *ngFor="let deviceOption of DeviceOptions" [value]="deviceOption">
         {{ deviceOption }}
       </mat-option>
     </mat-autocomplete>

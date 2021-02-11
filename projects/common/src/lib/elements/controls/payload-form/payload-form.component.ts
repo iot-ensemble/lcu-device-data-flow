@@ -1,7 +1,6 @@
-import { Component, OnInit, Output, EventEmitter, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, ElementRef, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IoTEnsembleTelemetryPayload } from './../../../state/iot-ensemble.state';
 
 @Component({
@@ -22,7 +21,11 @@ export class PayloadFormComponent implements OnInit {
   @Input('device-options')
   public DeviceOptions: string[];
 
-  public FilteredDeviceOptions: Observable<string[]>;
+  // @Input('filtered-device-options')
+  // public FilteredDeviceOptions: Observable<string[]>;
+
+  // public FilteredDeviceOptions: string[];
+
 
   @Output('filter-value')
   public FilterValue: EventEmitter<string>;
@@ -33,7 +36,9 @@ export class PayloadFormComponent implements OnInit {
   public Sent: EventEmitter<IoTEnsembleTelemetryPayload>;
 
   //  Constructors
-  constructor(protected el: ElementRef, protected formBldr?: FormBuilder) {
+  constructor(protected el: ElementRef, 
+    protected formBldr?: FormBuilder, 
+    @Inject(MAT_DIALOG_DATA) protected data?: any) {
     this.Canceled = new EventEmitter();
 
     this.FilterValue = new EventEmitter();
@@ -44,11 +49,19 @@ export class PayloadFormComponent implements OnInit {
   //  Life Cycle
   public ngOnInit() {
     this.setupPayloadForm();
-    this.FilteredDeviceOptions = this.PayloadFormGroup.get('deviceName').valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this.filter(value))
-      );
+    
+    this.caseInsensitiveSort(this.data.Data.DeviceNames);
+
+    this.PayloadFormGroup.get('deviceName').valueChanges.subscribe((filterValue: string)=>{
+      this.FilterValue.emit(filterValue);
+    })
+  }
+
+  public ngOnChanges(){
+    if(this.DeviceOptions){
+      this.caseInsensitiveSort(this.DeviceOptions);
+      this.data.Data.DeviceNames = this.DeviceOptions;
+    }
   }
 
   //  API Methods
@@ -75,11 +88,11 @@ export class PayloadFormComponent implements OnInit {
     } as IoTEnsembleTelemetryPayload;
   }
 
-  private filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    this.FilterValue.emit(filterValue);
-
-    return this.DeviceOptions.filter(option => option.toLowerCase().includes(filterValue));
+  protected caseInsensitiveSort(arr: Array<string>){
+    this.DeviceOptions = arr.sort(function(a, b) {
+      return a.toLowerCase().localeCompare(b.toLowerCase());
+    });
+    
   }
 
   protected setupPayloadForm() {
@@ -92,4 +105,6 @@ export class PayloadFormComponent implements OnInit {
       sensorReadings: ['{ "Temperature": 75, "Humidity": 102 }', Validators.required],
     });
   }
+
+  
 }
