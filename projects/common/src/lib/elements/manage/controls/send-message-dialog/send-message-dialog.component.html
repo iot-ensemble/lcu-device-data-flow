@@ -4,6 +4,7 @@
   <lcu-payload-form
     [device-options]="DeviceNames"
     (canceled)="Cancel()"
-    (sent)="SendDeviceMesaage($event)"
+    (filter-value)="FilterValueChanged($event)"
+    (sent)="SendDeviceMessage($event)"
   ></lcu-payload-form>
 </div>

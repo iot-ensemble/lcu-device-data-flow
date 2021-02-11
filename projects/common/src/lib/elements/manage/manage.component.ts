@@ -45,7 +45,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GenericModalService } from '../../services/generic-modal.service';
 import { GenericModalModel } from '../../models/generice-modal.model';
@@ -370,11 +370,32 @@ export class LcuDeviceDataFlowManageElementComponent
      */
     this.genericModalService.Open(modalConfig);
 
+    this.genericModalService.ModalInstance.FilterValue.toString
+
+    
+
     this.genericModalService.ModalComponent.afterOpened().subscribe(
       (res: any) => {
         console.log('MODAL OPEN', res);
       }
     );
+
+    this.genericModalService.ModalInstance.FilterValue.subscribe((filterValue: string) => {
+      // do something
+      console.log("FiLtEr VaLuE!!!!: ", filterValue)
+      this.iotEnsCtxt.ListAllDeviceNames(this.State.UserEnterpriseLookup, filterValue).subscribe(result => { 
+        console.log("RESULT : ", result)
+              if (result.Status.Code === 0) {
+              
+                 this.DeviceNames = result.DeviceNames;
+              
+              } else {
+              console.log("error: ", result.Status);
+              
+              }
+              
+              });
+    });
 
     this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: any) => {

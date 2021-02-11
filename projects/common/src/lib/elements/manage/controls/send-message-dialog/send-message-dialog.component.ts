@@ -1,7 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IoTEnsembleTelemetryPayload } from '../../../../state/iot-ensemble.state';
 import { GenericModalModel } from '../../../../models/generice-modal.model';
+import { filter } from 'jszip';
 
 @Component({
   selector: 'lcu-send-message-dialog',
@@ -14,11 +15,18 @@ export class SendMessageDialogComponent implements OnInit {
   //  Properties
   public DeviceNames: string[];
 
+  @Output('filter-value-change')
+  public FilterValueChange: EventEmitter<string>;
+
   //  Constructors
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: GenericModalModel,
     public dialogRef: MatDialogRef<SendMessageDialogComponent>
-  ) {}
+  ) {
+
+    this.FilterValueChange = new EventEmitter<string>();
+
+  }
 
   //  Life Cycle
   public ngOnInit(): void {
@@ -30,7 +38,12 @@ export class SendMessageDialogComponent implements OnInit {
     this.dialogRef.close(null);
   }
 
-  public SendDeviceMesaage(payload: IoTEnsembleTelemetryPayload) {
+  public FilterValueChanged(filterValue: string){
+    console.log('Filter value changed: ', filterValue);
+    this.FilterValueChange.emit(filterValue);
+  }
+
+  public SendDeviceMessage(payload: IoTEnsembleTelemetryPayload) {
     this.dialogRef.close(payload);
   }
 
