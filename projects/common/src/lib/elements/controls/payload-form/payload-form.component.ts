@@ -49,6 +49,7 @@ export class PayloadFormComponent implements OnInit {
   //  Life Cycle
   public ngOnInit() {
     this.setupPayloadForm();
+    this.FilterValue.emit('');
     
     this.caseInsensitiveSort(this.data.Data.DeviceNames);
 
