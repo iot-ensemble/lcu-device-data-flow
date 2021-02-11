@@ -1,8 +1,0 @@
-{
-	"name": "@iot-ensemble/lcu-device-data-flow-app-host",
-	"version": "0.0.2",
-	"peerDependencies": {
-		"@angular/common": "^10.2.0",
-		"@angular/core": "^10.2.0"
-	}
-}
