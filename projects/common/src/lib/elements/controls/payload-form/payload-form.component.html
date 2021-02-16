@@ -1,17 +1,17 @@
 <form [formGroup]="PayloadFormGroup" (ngSubmit)="Send()">
   <mat-form-field class="mat-full-width">
-    <mat-select
+    <input
+      matInput
       formControlName="deviceName"
       placeholder="The Name of your Device"
       required
+      [matAutocomplete]="auto"
     >
-      <mat-option
-        [value]="deviceOption"
-        *ngFor="let deviceOption of DeviceOptions"
-      >
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let deviceOption of DeviceOptions" [value]="deviceOption">
         {{ deviceOption }}
       </mat-option>
-    </mat-select>
+    </mat-autocomplete>
   </mat-form-field>
 
   <mat-form-field class="mat-full-width">

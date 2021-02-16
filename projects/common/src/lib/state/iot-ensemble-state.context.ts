@@ -104,6 +104,22 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     });
   }
 
+  public ListAllDeviceNames(childEntLookup: string, filter: string): Promise<object> {
+    // console.log('calling ListAllDeviceNames', childEntLookup, filter);
+
+    const args = {
+      ChildEntLookup: childEntLookup,
+      Filter: filter
+    };
+
+    this.gtagEvent('ListAllDeviceNames', args);
+
+    return this.Execute({
+      Arguments: args,
+      Type: 'ListAllDeviceNames',
+    });
+  }
+
   public RevokeDeviceEnrollment(deviceId: string): void {
     console.log('calling RevokeDeviceEnrollment');
 
