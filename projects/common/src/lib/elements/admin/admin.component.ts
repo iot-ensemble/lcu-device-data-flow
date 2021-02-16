@@ -78,13 +78,15 @@ export class LcuDeviceDataFlowAdminElementComponent
     }
   }
 
-  public RevokeChildEnterprise(ent: any): void{
+  public RemoveChildEnterprise(ent: IoTEnsembleChildEnterprise): void{
     if (
-      confirm(`Are you sure you want to remove child enterprise '${ent}'?`)
+      confirm(`Are you sure you want to remove child enterprise '${ent.Name}'?`)
     ) {
       // this.State.Loading = true;
-      console.log("revoking ", ent);
-      // this.iotCtxt.RevokeDeviceEnrollment(device.DeviceID);
+      console.log("removing child ent ", ent);
+      this.State.Loading = true;
+
+      this.adminCtxt.RemoveChildEnterprise(ent.Lookup);
     }
   }
 
@@ -237,9 +239,9 @@ export class LcuDeviceDataFlowAdminElementComponent
         IconColor: 'red-accent-text',
         IconConfigFunc: () => 'delete',
         Action: {
-          ActionHandler: this.RevokeChildEnterprise.bind(this),
+          ActionHandler: this.RemoveChildEnterprise.bind(this),
           ActionType: 'button',
-          ActionTooltip: 'Revoke',
+          ActionTooltip: 'Remove Child Enterprise',
         },
       }),
       
