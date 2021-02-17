@@ -14,10 +14,11 @@
     (page-event)="HandlePageEvent($event)"
   ></lcu-data-grid>
 
-  <div *ngIf="ActiveChildEnterprise">
+  <div *ngIf="State.ActiveEnterpriseConfig?.ActiveEnterprise">
     <!-- <pre>{{ ActiveChildEnterprise | json }}</pre> -->
+    <lcu-loader [loading]="State.Loading"></lcu-loader>
 
-    <h2>Selected Enterprise</h2>
+    <h2>Selected Enterprise: {{ State.ActiveEnterpriseConfig.ActiveEnterprise.Name }}</h2>
 
     <lcu-data-grid
     expand

@@ -86,6 +86,20 @@ export class IoTEnsembleAdminStateContext extends StateContext<IoTEnsembleAdminS
     });
   }
 
+  public UpdateActiveEnterpriseSync(page: number, pageSize: number) {
+    const args = {
+      Page: page,
+      PageSize: pageSize,
+    };
+
+    this.gtagEvent('UpdateActiveEnterpriseSync', args);
+
+    this.Execute({
+      Arguments: args,
+      Type: 'UpdateActiveEnterpriseSync',
+    });
+  }
+
   //  Helpers
   protected defaultValue() {
     return { Loading: true } as IoTEnsembleState;
