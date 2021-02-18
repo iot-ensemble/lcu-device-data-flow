@@ -439,6 +439,8 @@
           <lcu-api-access
             [api-keys]="State.Storage?.APIKeys"
             [open-api-source]="State.Storage?.OpenAPISource"
+            [refresh-rate]="State.Telemetry?.RefreshRate"
+            [total-payloads]="State.Telemetry?.TotalPayloads"
             (regenerated)="RegenerateAPIKey($event)"
           ></lcu-api-access>
         </mat-card-content>

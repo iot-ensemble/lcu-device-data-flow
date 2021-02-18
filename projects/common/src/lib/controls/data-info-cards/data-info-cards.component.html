@@ -1,0 +1,33 @@
+
+  <div class="margin-top-4" fxLayout="row" fxLayoutAlign="center center"  fxFlex style="margin-bottom:-20px;">
+    <!--Interval    |    Telemetry    |     Retention
+         30 sec     |       31,356    |        1day -->
+
+         <mat-card>
+           <mat-card-header>
+             <mat-card-title>Interval</mat-card-title>
+           </mat-card-header>
+           <mat-card-content fxLayout="row" fxLayoutAlign="center center">{{ RefreshRate }}</mat-card-content>
+           
+         </mat-card>
+
+
+         <div class="divider-fill-vert"></div>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Telemetry</mat-card-title>
+            </mat-card-header>
+            <mat-card-content fxLayout="row" fxLayoutAlign="center center">{{ TotalPayloads }}</mat-card-content>
+          </mat-card>
+ 
+ 
+          <div class="divider-fill-vert"></div>
+
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Retention</mat-card-title>
+              </mat-card-header> 
+              <mat-card-content fxLayout="row" fxLayoutAlign="center center">{{ DataRetention }}</mat-card-content>           
+            </mat-card>
+  </div>

@@ -7,12 +7,11 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { ClipboardCopyFunction, DataPipeConstants } from '@lcu/common';
+import { ClipboardCopyFunction } from '@lcu/common';
 import {
   ColumnDefinitionModel,
   DataGridConfigModel,
   DataGridFeaturesModel,
-  DataGridPaginationModel,
 } from '@lowcodeunit/data-grid';
 import {
   IoTEnsembleAPIKeyData,
@@ -34,11 +33,22 @@ export class ApiAccessComponent implements OnChanges, OnInit {
 
   public GridParameters: DataGridConfigModel;
 
+  @Input('data-retention')
+  public DataRetention: string;
+
   @Input('open-api-source')
   public OpenAPISource: string;
 
+  @Input('refresh-rate')
+  public RefreshRate: number;
+
   @Output('regenerated')
   public Regenerated: EventEmitter<string>;
+
+  @Input('total-payloads')
+  public TotalPayloads: number;
+
+  
 
   protected toggleKeyVisibility: boolean;
 

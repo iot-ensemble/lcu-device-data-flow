@@ -32,6 +32,7 @@ import { SwaggerUIComponent } from './controls/swagger-ui/swagger-ui.component';
 import { GtagService } from './services/gtag.service';
 import { PageViewDirective } from './directives/analytics/page-view.directive';
 import { EventDirective } from './directives/analytics/event.directive';
+import { DataInfoCardsComponent } from './controls/data-info-cards/data-info-cards.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { EventDirective } from './directives/analytics/event.directive';
     SwaggerUIComponent,
     PageViewDirective,
     EventDirective,
+    DataInfoCardsComponent
   ],
   imports: [
     FathymSharedModule,
@@ -85,6 +87,7 @@ import { EventDirective } from './directives/analytics/event.directive';
     SwaggerUIComponent,
     PageViewDirective,
     EventDirective,
+    DataInfoCardsComponent
   ],
   entryComponents: [
     LcuDeviceDataFlowManageElementComponent,
@@ -98,6 +101,7 @@ import { EventDirective } from './directives/analytics/event.directive';
     SendMessageDialogComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
+    DataInfoCardsComponent
   ],
 })
 export class LcuDeviceDataFlowModule {
