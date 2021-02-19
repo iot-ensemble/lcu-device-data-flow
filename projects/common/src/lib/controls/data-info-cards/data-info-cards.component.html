@@ -1,33 +1,57 @@
-
-  <div class="margin-top-4" fxLayout="row" fxLayoutAlign="center center"  fxFlex style="margin-bottom:-20px;">
-    <!--Interval    |    Telemetry    |     Retention
-         30 sec     |       31,356    |        1day -->
-
-         <mat-card>
-           <mat-card-header>
-             <mat-card-title>Interval</mat-card-title>
-           </mat-card-header>
-           <mat-card-content fxLayout="row" fxLayoutAlign="center center">{{ RefreshRate }}</mat-card-content>
-           
-         </mat-card>
-
-
-         <div class="divider-fill-vert"></div>
-
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>Telemetry</mat-card-title>
-            </mat-card-header>
-            <mat-card-content fxLayout="row" fxLayoutAlign="center center">{{ TotalPayloads }}</mat-card-content>
-          </mat-card>
- 
- 
-          <div class="divider-fill-vert"></div>
-
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Retention</mat-card-title>
-              </mat-card-header> 
-              <mat-card-content fxLayout="row" fxLayoutAlign="center center">{{ DataRetention }}</mat-card-content>           
-            </mat-card>
+<div class="stats-container" fxLayout="column">
+  <div class="stats-header">
+    <h2>Stats</h2>
   </div>
+
+
+  <div class="stats-body" fxLayout="column" fxLayoutAlign="space-between start">
+
+    <div class="data-block" fxLayout="row" *ngFor="let info of DataInfo">
+
+      <div class="icon-container" fxFlex="20">
+        <mat-icon class="data-icon" >{{info.Icon}}</mat-icon>
+      </div>
+
+      <div class="data-info" fxLayout="column" fxFlex="80">
+        <h3>{{info.Title}}</h3>
+        <div class="mat-card-content-bold">{{ info.TotalCount }} {{ info.Units }}</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- COMMENTED OUT FOR BACKUP -->
+
+<!-- <div  fxLayout="column" fxLayoutAlign="space-between center"  fxFlex style="margin-bottom:-20px;">
+
+  <mat-card class="mat-card-margin-70" fxLayout="column" fxLayoutAlign="center center">
+    <mat-card-header>
+      <mat-card-title>Interval</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mat-card-content-bold" fxLayout="row" fxLayoutAlign="center center">{{ DataInterval }} sec</mat-card-content>
+    
+  </mat-card>
+
+
+  <div class="divider-fill-vert"></div>
+
+   <mat-card class="mat-card-margin-70" fxLayout="column" fxLayoutAlign="center center">
+     <mat-card-header>
+       <mat-card-title>Telemetry</mat-card-title>
+     </mat-card-header>
+     <mat-card-content class="mat-card-content-bold" fxLayout="row" fxLayoutAlign="center center">{{ TotalPayloads }}</mat-card-content>
+   </mat-card>
+
+
+   <div class="divider-fill-vert"></div>
+
+     <mat-card class="mat-card-margin-70" fxLayout="column" fxLayoutAlign="center center">
+       <mat-card-header>
+         <mat-card-title>Retention</mat-card-title>
+       </mat-card-header> 
+       <mat-card-content class="mat-card-content-bold" fxLayout="row" fxLayoutAlign="center center">{{ DataRetention }} {{ DayString }}</mat-card-content>           
+     </mat-card>
+</div> -->

@@ -430,16 +430,12 @@
         </div>
 
         <mat-card-content>
-          <div class="margin-left-5 margin-top-2">
-            Use the API keys to get your data downstream to the dashboards and
-            services of your choice for visualization, application development,
-            ML/AI, and more.
-          </div>
 
           <lcu-api-access
             [api-keys]="State.Storage?.APIKeys"
             [open-api-source]="State.Storage?.OpenAPISource"
-            [refresh-rate]="State.Telemetry?.RefreshRate"
+            [data-interval]="State.DataInterval"
+            [data-retention]="State.DataRetention"
             [total-payloads]="State.Telemetry?.TotalPayloads"
             (regenerated)="RegenerateAPIKey($event)"
           ></lcu-api-access>

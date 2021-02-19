@@ -39,8 +39,8 @@ export class ApiAccessComponent implements OnChanges, OnInit {
   @Input('open-api-source')
   public OpenAPISource: string;
 
-  @Input('refresh-rate')
-  public RefreshRate: number;
+  @Input('data-interval')
+  public DataInterval: number;
 
   @Output('regenerated')
   public Regenerated: EventEmitter<string>;
