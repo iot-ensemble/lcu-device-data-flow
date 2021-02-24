@@ -17,7 +17,7 @@ import {
   DynamicComponentModel,
 } from '@lowcodeunit/data-grid';
 import { debug } from 'console';
-import { of } from 'rxjs/internal/observable/of';
+import { of } from 'rxjs';
 import { IoTEnsembleTelemetry } from '../../../state/iot-ensemble.state';
 import { PayloadComponent } from '../../dynamic/payload/payload.component';
 import { IoTEnsembleTelemetryPayload } from './../../../state/iot-ensemble.state';

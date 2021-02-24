@@ -72,11 +72,15 @@ export class IoTEnsembleConnectedDevicesConfig {
 
   public SASTokens?: { [deviceName: string]: string };
 
+  public Status?: Status;
+
   public TotalDevices?: number;
 }
 
 export class IoTEnsembleDeviceInfo {
   [prop: string]: any;
+
+  public ActivelySendingData?: boolean;
 
   public AuthenticationType?: string;
 
@@ -89,6 +93,7 @@ export class IoTEnsembleDeviceInfo {
   public DeviceName?: string;
 
   public LastStatusUpdate?: Status;
+
 }
 
 export class IoTEnsembleTelemetry {

@@ -23,7 +23,7 @@ import { GtagService } from './../../../services/gtag.service';
   templateUrl: './devices-table.component.html',
   styleUrls: ['./devices-table.component.scss'],
 })
-export class DevicesTableComponent implements OnInit, OnChanges {
+export class DevicesTableComponent implements OnInit{//}, OnChanges {
   //  Fields
 
   //  Properties
@@ -57,7 +57,7 @@ export class DevicesTableComponent implements OnInit, OnChanges {
     this.Revoked = new EventEmitter();
   }
 
-  //  Life Cycle
+  // //  Life Cycle
 
   public ngOnChanges(changes: SimpleChanges): void {
     // console.log('CHANGES: ', changes);
@@ -68,12 +68,12 @@ export class DevicesTableComponent implements OnInit, OnChanges {
 
   public ngOnInit(): void {}
 
-  //  API Methods
-  /**
-   * Copies the connection string to the clipboard while temporarily setting the copy icon to
-   * a checkmark to display to the user that the content was succesfully copied
-   * @ param deviceInfo
-   */
+  // //  API Methods
+  // /**
+  //  * Copies the connection string to the clipboard while temporarily setting the copy icon to
+  //  * a checkmark to display to the user that the content was succesfully copied
+  //  * @ param deviceInfo
+  //  */
   public CopyClick(deviceInfo: IoTEnsembleDeviceInfo): void {
     ClipboardCopyFunction.ClipboardCopy(deviceInfo.ConnectionString);
 

@@ -4,17 +4,19 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FathymSharedModule, LCUServiceSettings } from '@lcu/common';
 import { environment } from '../environments/environment';
 import {
-  LcuSetupModule,
-  LcuSetupManageElementComponent,
-  SELECTOR_LCU_SETUP_MANAGE_ELEMENT,
-  LcuSetupAdminElementComponent,
-  SELECTOR_LCU_SETUP_ADMIN_ELEMENT,
-  LcuSetupDevicesElementComponent,
-  SELECTOR_LCU_SETUP_DEVICES_ELEMENT,
-  LcuSetupSetupElementComponent,
-  SELECTOR_LCU_SETUP_SETUP_ELEMENT,
-} from '@iot-ensemble/lcu-setup-common';
+  LcuDeviceDataFlowModule,
+  LcuDeviceDataFlowManageElementComponent,
+  SELECTOR_LCU_DEVICE_DATA_FLOW_MANAGE_ELEMENT,
+  LcuDeviceDataFlowAdminElementComponent,
+  SELECTOR_LCU_DEVICE_DATA_FLOW_ADMIN_ELEMENT,
+  LcuDeviceDataFlowDevicesElementComponent,
+  SELECTOR_LCU_DEVICE_DATA_FLOW_DEVICES_ELEMENT,
+  LcuDeviceDataFlowSetupElementComponent,
+  SELECTOR_LCU_DEVICE_DATA_FLOW_SETUP_ELEMENT,
+} from '@iot-ensemble/lcu-device-data-flow-common';
 import { createCustomElement } from '@angular/elements';
+
+import 'zone.js/dist/zone';
 
 @NgModule({
   declarations: [],
@@ -22,7 +24,7 @@ import { createCustomElement } from '@angular/elements';
     BrowserModule,
     BrowserAnimationsModule,
     FathymSharedModule.forRoot(),
-    LcuSetupModule.forRoot(),
+    LcuDeviceDataFlowModule.forRoot(),
   ],
   providers: [
     {
@@ -30,34 +32,35 @@ import { createCustomElement } from '@angular/elements';
       useValue: FathymSharedModule.DefaultServiceSettings(environment),
     },
   ],
-  exports: [LcuSetupModule],
+  exports: [],
+
 })
 export class AppModule implements DoBootstrap {
   constructor(protected injector: Injector) {}
 
   public ngDoBootstrap() {
-    const manage = createCustomElement(LcuSetupManageElementComponent, {
+    const manage = createCustomElement(LcuDeviceDataFlowManageElementComponent, {
       injector: this.injector,
     });
 
-    customElements.define(SELECTOR_LCU_SETUP_MANAGE_ELEMENT, manage);
+    customElements.define(SELECTOR_LCU_DEVICE_DATA_FLOW_MANAGE_ELEMENT, manage);
 
-    const admin = createCustomElement(LcuSetupAdminElementComponent, {
+    const admin = createCustomElement(LcuDeviceDataFlowAdminElementComponent, {
       injector: this.injector,
     });
 
-    customElements.define(SELECTOR_LCU_SETUP_ADMIN_ELEMENT, admin);
+    customElements.define(SELECTOR_LCU_DEVICE_DATA_FLOW_ADMIN_ELEMENT, admin);
 
-    const devices = createCustomElement(LcuSetupDevicesElementComponent, {
+    const devices = createCustomElement(LcuDeviceDataFlowDevicesElementComponent, {
       injector: this.injector,
     });
 
-    customElements.define(SELECTOR_LCU_SETUP_DEVICES_ELEMENT, devices);
+    customElements.define(SELECTOR_LCU_DEVICE_DATA_FLOW_DEVICES_ELEMENT, devices);
 
-    const setup = createCustomElement(LcuSetupSetupElementComponent, {
+    const setup = createCustomElement(LcuDeviceDataFlowSetupElementComponent, {
       injector: this.injector,
     });
 
-    customElements.define(SELECTOR_LCU_SETUP_SETUP_ELEMENT, setup);
+    customElements.define(SELECTOR_LCU_DEVICE_DATA_FLOW_SETUP_ELEMENT, setup);
   }
 }

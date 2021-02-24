@@ -2,17 +2,22 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FathymSharedModule, LCUServiceSettings, MaterialModule } from '@lcu/common';
+import {
+  FathymSharedModule,
+  LCUServiceSettings,
+  MaterialModule,
+} from '@lcu/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AdminComponent } from './controls/admin/admin.component';
 import { HomeComponent } from './controls/home/home.component';
-import { DocumentationComponent } from './controls/documentation/documentation.component';
+import { ManageComponent } from './controls/manage/manage.component';
 import { LcuDocumentationModule } from '@lowcodeunit/lcu-documentation-common';
-import { LcuSetupModule } from '@iot-ensemble/lcu-setup-common';
+import { LcuDeviceDataFlowModule } from '@iot-ensemble/lcu-device-data-flow-common';
 import { environment } from '../environments/environment';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, DocumentationComponent,],
+  declarations: [AppComponent, HomeComponent, AdminComponent, ManageComponent],
   imports: [
     AppRoutingModule,
     BrowserModule,
@@ -21,7 +26,7 @@ import { environment } from '../environments/environment';
     MaterialModule,
     FlexLayoutModule,
     LcuDocumentationModule.forRoot(),
-    LcuSetupModule.forRoot(),
+    LcuDeviceDataFlowModule.forRoot(),
   ],
   providers: [
     {
@@ -30,6 +35,6 @@ import { environment } from '../environments/environment';
     },
   ],
   bootstrap: [AppComponent],
-  exports: [LcuSetupModule],
+  exports: [],
 })
 export class AppModule {}

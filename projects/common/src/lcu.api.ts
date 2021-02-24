@@ -1,4 +1,4 @@
-export * from './lib/lcu-setup.module';
+export * from './lib/lcu-device-data-flow.module';
 export * from './lib/elements/manage/manage.component';
 export * from './lib/elements/admin/admin.component';
 export * from './lib/elements/devices/devices.component';

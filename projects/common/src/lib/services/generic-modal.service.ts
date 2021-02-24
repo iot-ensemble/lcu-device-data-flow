@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { ComponentRef, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { take } from 'rxjs/internal/operators/take';
-import { map } from 'rxjs/internal/operators/map';
 import { GenericModalModel } from '../models/generice-modal.model';
 
 @Injectable({
@@ -50,7 +49,7 @@ export class GenericModalService<T> {
   public Close(val: any): void {
     this.ModalComponent.close(val);
   }
-  
+
 
   /**
    * Event after the modal closes

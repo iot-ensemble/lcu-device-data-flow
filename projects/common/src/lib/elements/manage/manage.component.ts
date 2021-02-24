@@ -15,7 +15,6 @@ import {
   ComponentFactoryResolver,
   ViewContainerRef,
   ViewChild,
-  ComponentRef,
 } from '@angular/core';
 import {
   LCUElementContext,
@@ -34,6 +33,7 @@ import {
   IoTEnsembleDeviceInfo,
   IoTEnsembleDeviceEnrollment,
   IoTEnsembleTelemetryPayload,
+  IoTEnsembleState,
 } from './../../state/iot-ensemble.state';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {
@@ -45,7 +45,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GenericModalService } from '../../services/generic-modal.service';
 import { GenericModalModel } from '../../models/generice-modal.model';
@@ -54,70 +54,85 @@ import { SendMessageDialogComponent } from './controls/send-message-dialog/send-
 import { SasTokenDialogComponent } from './controls/sas-token-dialog/sas-token-dialog.component';
 import { TelemetryDownloadDialogComponent } from './controls/telemetry-download-dialog/telemetry-download-dialog.component';
 import { ColdQueryModel } from '../../models/cold-query.model';
-import { SVGToMatIconModel, SvgToMatIconService } from '@lowcodeunit/lcu-icons-common';
+import {
+  SVGToMatIconModel,
+  SvgToMatIconService,
+} from '@lowcodeunit/lcu-icons-common';
+import { IoTEnsembleStateContext } from '../../state/iot-ensemble-state.context';
+import { JsonHubProtocol } from '@aspnet/signalr';
 
 declare var freeboard: any;
 
 declare var window: any;
 
-export class LcuSetupManageElementState {}
+export class LcuDeviceDataFlowManageElementState {}
 
-export class LcuSetupManageContext extends LCUElementContext<LcuSetupManageElementState> {}
+export class LcuDeviceDataFlowManageContext extends LCUElementContext<LcuDeviceDataFlowManageElementState> {}
 
-export const SELECTOR_LCU_SETUP_MANAGE_ELEMENT = 'lcu-setup-manage-element';
+export const SELECTOR_LCU_DEVICE_DATA_FLOW_MANAGE_ELEMENT = 'lcu-device-data-flow-manage-element';
 
 @Component({
-  selector: SELECTOR_LCU_SETUP_MANAGE_ELEMENT,
+  selector: SELECTOR_LCU_DEVICE_DATA_FLOW_MANAGE_ELEMENT,
   templateUrl: './manage.component.html',
   styleUrls: ['./manage.component.scss'],
 })
-export class LcuSetupManageElementComponent
-  extends LcuElementComponent<LcuSetupManageContext>
-  implements OnChanges, OnInit, AfterViewInit, AfterContentInit, OnDestroy {
+export class LcuDeviceDataFlowManageElementComponent
+  extends LcuElementComponent<LcuDeviceDataFlowManageContext>
+  implements OnInit, OnDestroy {
   //  Fields
-  protected componentRef: ComponentRef<any>;
+  protected basePath: string;
 
   protected devicesSasTokensOpened: boolean;
+
+  protected stateHandlerSub: Subscription;
 
   //  Properties
   public AddDeviceFormGroup: FormGroup;
 
   public AddingDevice: boolean;
 
-  protected basePath: string;
-
-  public get ConnectedDevicesInfoCardFlex(): string {
-    const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
-
-    return this.AddingDevice ? maxDeviceFlex : '100%';
-  }
-
-  @Input('dashboard')
-  public Dashboard: IoTEnsembleDashboardConfiguration;
+  public ConnectedDevicesInfoCardFlex: string;
 
   public DashboardIFrameURL: SafeResourceUrl;
 
+  public get DeviceNameErrorText(): string {
+    let errorText: string = null;
+
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('required') && this.AddDeviceFormGroup.touched) {
+      errorText = 'Device name is required\r\n';
+    }
+
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('maxlength')) {
+      errorText = 'Device name cannot be longer than 90 characters\r\n';
+    }
+
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('pattern')) {
+      errorText = `A case-sensitive string of ASCII 7-bit alphanumeric characters plus certain special characters: - . % _ * ? ! ( ) , : = @ $ ' \r\n`;
+    }
+
+    if (this.AddDeviceFormGroup.get('deviceName').hasError('duplicateName')) {
+      errorText = ' Device name already exists \r\n';
+    }
+    if((this.State.DevicesConfig?.Status?.Code === 1) &&
+       (this.DeviceNameToAdd === this.AddDeviceFormGroup.controls.deviceName.value)){
+      errorText = ' Device name already exists \r\n';
+    }
+
+    return errorText;
+  }
+
   public DeviceNames: string[];
 
-  @Input('devices-config')
-  public DevicesConfig: IoTEnsembleConnectedDevicesConfig;
-
-  @Input('emulated')
-  public Emulated: EmulatedDeviceInfo;
-
-  @Output('enroll-device')
-  public EnrollDevice: EventEmitter<IoTEnsembleDeviceEnrollment>;
+  public DeviceNameToAdd: string;
 
   public FreeboardURL: string;
-
-  @Output('issued-device-sas-token')
-  public IssuedDeviceSASToken: EventEmitter<string>;
 
   public LastSyncedAt: Date;
 
   public get MaxDevicesReached(): boolean {
     return (
-      this.DevicesConfig?.TotalDevices >= this.DevicesConfig?.MaxDevicesCount
+      this.State?.DevicesConfig?.TotalDevices >=
+      this.State?.DevicesConfig?.MaxDevicesCount
     );
   }
 
@@ -129,47 +144,14 @@ export class LcuSetupManageElementComponent
 
   public PipeDate: DataPipeConstants;
 
-  @Output('refreshed')
-  public Refreshed: EventEmitter<string>;
-
-  @Output('regenerated-api-key')
-  public RegeneratedAPIKey: EventEmitter<string>;
-
-  @Output('revoke-device-enrollment')
-  public RevokeDeviceEnrollment: EventEmitter<string>;
-
-  @Output('sent-device-message')
-  public SentDeviceMessage: EventEmitter<IoTEnsembleTelemetryPayload>;
-
-  @Input('storage')
-  public Storage: IoTEnsembleStorageConfiguration;
-
-  @Input('telemetry')
-  public Telemetry: IoTEnsembleTelemetry;
-
-  @Output('telemetry-download')
-  public TelemetryDownload: EventEmitter<ColdQueryModel>;
-
-  @Output('toggle-device-telemetry-enabled')
-  public ToggleTelemetryEnabled: EventEmitter<boolean>;
-
-  @Output('toggle-emulated-enabled')
-  public ToggleEmulatedEnabled: EventEmitter<boolean>;
-
-  @Output('devices-page-event')
-  public DevicesPageEvent: EventEmitter<any>;
-
-  @Output('telemetry-page-event')
-  public TelemetryPageEvent: EventEmitter<any>;
-
-  @Output('update-refresh-rate')
-  public UpdateRefreshRate: EventEmitter<number>;
+  public State: IoTEnsembleState;
 
   // @Output('update-telemetry-page')
   // public UpdateTelemetryPage: EventEmitter<number>;
 
   //  Constructors
   constructor(
+    protected iotEnsCtxt: IoTEnsembleStateContext,
     protected dialog: MatDialog,
     protected genericModalService: GenericModalService<PayloadFormComponent>,
     protected injector: Injector,
@@ -182,60 +164,28 @@ export class LcuSetupManageElementComponent
   ) {
     super(injector);
 
-    this.DevicesPageEvent = new EventEmitter();
+    this.DeviceNameToAdd = '';
 
-    this.EnrollDevice = new EventEmitter();
-
-    this.IssuedDeviceSASToken = new EventEmitter();
+    this.State = {};
 
     this.PipeDate = DataPipeConstants.DATE_TIME_ZONE_FMT;
-
-    this.Refreshed = new EventEmitter();
-
-    this.RegeneratedAPIKey = new EventEmitter();
-
-    this.RevokeDeviceEnrollment = new EventEmitter();
-
-    this.SentDeviceMessage = new EventEmitter();
-
-    this.TelemetryDownload = new EventEmitter();
-
-    this.ToggleTelemetryEnabled = new EventEmitter();
-
-    this.ToggleEmulatedEnabled = new EventEmitter();
-
-    this.TelemetryPageEvent = new EventEmitter();
-
-    this.UpdateRefreshRate = new EventEmitter();
   }
 
   //  Life Cycle
-  public ngAfterContentInit(): void {
-    // this.setupFreeboard();
-  }
-
-  public ngOnDestroy(): void {}
-
-  public ngAfterViewInit(): void {
-    // this.setupFreeboard();
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-   
-    this.handleStateChanged(changes);
+  public ngOnDestroy(): void {
+    this.stateHandlerSub?.unsubscribe();
   }
 
   public ngOnInit() {
     super.ngOnInit();
 
+    this.setupStateHandler();
+
     this.setupAddDeviceForm();
 
-    this.handleStateChanged({}, true);
-
-    const icons: Array<SVGToMatIconModel> =
-    [
+    const icons: Array<SVGToMatIconModel> = [
       { Name: 'download', IconPath: 'download.svg' },
-      { Name: 'phone', IconPath: 'phone.svg' }
+      { Name: 'phone', IconPath: 'phone.svg' },
     ];
 
     this.basePath = '/assets/icons/svgs/';
@@ -244,32 +194,47 @@ export class LcuSetupManageElementComponent
   }
 
   //  API Methods
-  public get DeviceNameErrorText(): string {
-    var errorText: string = null;
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('required')) {
-      errorText = 'Device name is required\r\n';
-    }
+  public ColdQuery() {
+    this.State.Loading = true;
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('maxlength')) {
-      errorText = 'Device name cannot be longer than 128 characters\r\n';
-    }
+    this.iotEnsCtxt.ColdQuery();
+  }
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('pattern')) {
-      errorText =
-        "A case-sensitive string of ASCII 7-bit alphanumeric characters plus certain special characters: - . % _ * ? ! ( ) , : = @ $ ' \r\n";
-    }
+  public EnrollDeviceSubmit() {
+    this.State.DevicesConfig.Loading = true;
 
-    if (this.AddDeviceFormGroup.get('deviceName').hasError('duplicateName')) {
-      errorText = ' Device name already exists \r\n';
-    }
+    this.DeviceNameToAdd = this.AddDeviceFormGroup.controls.deviceName.value;
 
-    return errorText;
+    this.iotEnsCtxt.EnrollDevice({
+      DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
+    });
+
+  }
+
+  public EnrollNewDevice(){
+    if(this.AddDeviceFormGroup){
+        this.AddDeviceFormGroup.reset();
+      }
+      this.ToggleAddingDevice();
+  }
+
+  public get AddDeviceFGDeviceName(): AbstractControl{
+    return this.AddDeviceFormGroup.get('deviceName');
+  }
+
+  public CancelAddingDevice(){
+    this.ToggleAddingDevice();
+    this.AddDeviceFormGroup.reset();
+    this.State.DevicesConfig.Status = null;
   }
 
   public DeviceSASTokensModal(): void {
     // debugger;
-    if (!this.devicesSasTokensOpened && !!this.DevicesConfig?.SASTokens) {
+    if (
+      !this.devicesSasTokensOpened &&
+      !!this.State?.DevicesConfig?.SASTokens
+    ) {
       /**
        * Acces component properties not working - shannon
        *
@@ -283,7 +248,7 @@ export class LcuSetupManageElementComponent
         CallbackAction: (val: any) => {}, // function exposed to the modal
         Component: SasTokenDialogComponent, // set component to be used inside the modal
         Data: {
-          SASTokens: this.DevicesConfig?.SASTokens,
+          SASTokens: this.State?.DevicesConfig?.SASTokens,
         },
         LabelCancel: 'Close',
         // LabelAction: 'OK',
@@ -295,7 +260,7 @@ export class LcuSetupManageElementComponent
 
       this.genericModalService.ModalComponent.afterClosed().subscribe(
         (res: any) => {
-          this.Refreshed.emit('Devices');
+          this.Refresh('Devices');
 
           this.devicesSasTokensOpened = false;
         }
@@ -306,8 +271,11 @@ export class LcuSetupManageElementComponent
   }
 
   public DeviceTablePageEvent(event: any) {
-    console.log('PAGE EVENT', event);
-    this.DevicesPageEvent.emit(event);
+    if (event.pageIndex + 1 !== this.State.DevicesConfig.Page) {
+      this.UpdateDeviceTablePageIndex(event.pageIndex + 1);
+    } else if (event.pageSize !== this.State.DevicesConfig.PageSize) {
+      this.UpdateDeviceTablePageSize(event.pageSize);
+    }
   }
 
   public DownloadTelemetryModal(): void {
@@ -322,7 +290,7 @@ export class LcuSetupManageElementComponent
       CallbackAction: (val: any) => {}, // function exposed to the modal
       Component: TelemetryDownloadDialogComponent, // set component to be used inside the modal
       Data: {
-        DeviceNames: this.Telemetry.Payloads,
+        Devices: this.State?.DevicesConfig.Devices,
       },
       LabelCancel: 'Cancel',
       LabelAction: 'OK',
@@ -344,7 +312,7 @@ export class LcuSetupManageElementComponent
     this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: ColdQueryModel) => {
         console.log('TELEMETRY MODAL CLOSED', res);
-        this.TelemetryDownload.emit(res);
+        this.TelemetryDownload(res);
       }
     );
 
@@ -359,20 +327,19 @@ export class LcuSetupManageElementComponent
       });
   }
 
-  public EnrollDeviceSubmit() {
-    this.EnrollDevice.emit({
-      DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
-    });
-    this.AddDeviceFormGroup.reset();
-  }
-
   public HandleTelemetryPageEvent(event: any) {
-    this.TelemetryPageEvent.emit(event);
+    if (event.pageIndex + 1 !== this.State.Telemetry.Page) {
+      this.UpdateTelemetryPage(event.pageIndex + 1);
+    } else if (event.pageSize !== this.State.Telemetry.PageSize) {
+      this.UpdateTelemetryPageSize(event.pageSize);
+    }
   }
 
   public IssueDeviceSASToken(deviceName: string) {
-  
-    this.IssuedDeviceSASToken.emit(deviceName);
+    this.State.DevicesConfig.Loading = true;
+
+    //  TODO:  Pass through expiry time in some way?
+    this.iotEnsCtxt.IssueDeviceSASToken(deviceName, 0);
   }
 
   public PayloadFormModal(): void {
@@ -385,6 +352,8 @@ export class LcuSetupManageElementComponent
     // payloadForm.DeviceName = 'blah;
 
     // setTimeout(() => {
+
+    // let sendMessageModalService: GenericModalService<SendMessageDialogComponent>
     const modalConfig: GenericModalModel = new GenericModalModel({
       ModalType: 'data', // type of modal we want (data, confirm, info)
       CallbackAction: (val: any) => {}, // function exposed to the modal
@@ -402,14 +371,31 @@ export class LcuSetupManageElementComponent
      * Pass modal config to service open function
      */
     this.genericModalService.Open(modalConfig);
-
+    
     this.genericModalService.ModalComponent.afterOpened().subscribe(
       (res: any) => {
         console.log('MODAL OPEN', res);
+
+        this.genericModalService.ModalInstance.FilterValue.subscribe((filterValue: string) => {
+      
+          this.iotEnsCtxt.ListAllDeviceNames(this.State.UserEnterpriseLookup, filterValue)
+          .then((obs: any) => {
+            // console.log("obs: ", obs)
+            if (obs.body?.Status?.Code === 0) 
+            {
+              this.genericModalService.ModalInstance.DeviceOptions = obs.body.DeviceNames;
+
+            } else 
+              {
+                console.log("error: ", obs.body.Status);      
+               }
+          });
+        })
       }
     );
 
-    this.genericModalService.ModalComponent.afterClosed().subscribe(
+   
+  this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: any) => {
         console.log('MODAL CLOSED', res);
       }
@@ -427,20 +413,41 @@ export class LcuSetupManageElementComponent
     // }, 1000);
   }
 
-  public RefreshRateChanged(event: any) {
-    this.UpdateRefreshRate.emit(event);
+  public Refresh(ctxt: string) {
+    const loadingCtxt = this.State[ctxt] || this.State;
+
+    loadingCtxt.Loading = true;
+
+    this.iotEnsCtxt.$Refresh();
+  }
+
+  public RefreshRateChanged(rate: number) {
+    this.State.Telemetry.Loading = true;
+
+    this.iotEnsCtxt.UpdateTelemetrySync(
+      rate,
+      this.State.Telemetry.Page,
+      this.State.Telemetry.PageSize
+    );
   }
 
   public RegenerateAPIKey(keyName: string) {
-    this.RegeneratedAPIKey.emit(keyName);
+    // this.State.Loading = true;
+
+    alert('Implement regenerate: ' + keyName);
+    // this.iotEnsCtxt.RegenerateAPIKey(keyName);
   }
 
   public RevokeDeviceEnrollmentClick(deviceId: string) {
-    this.RevokeDeviceEnrollment.emit(deviceId);
+    this.State.DevicesConfig.Loading = true;
+
+    this.iotEnsCtxt.RevokeDeviceEnrollment(deviceId);
   }
 
   public SendDeviceMesaage(payload: IoTEnsembleTelemetryPayload) {
-    this.SentDeviceMessage.emit(payload);
+    this.State.Telemetry.Loading = true;
+
+    this.iotEnsCtxt.SendDeviceMessage(payload.DeviceID, payload);
   }
 
   // public TelemetryDownloadSelected(){
@@ -457,16 +464,96 @@ export class LcuSetupManageElementComponent
 
   // }
 
+  public TelemetryDownload(query: ColdQueryModel) {
+    console.log('ColdQueryModelCall: ', query);
+
+    if (!query.Zip) {
+      this.iotEnsCtxt
+        .ColdQuery(
+          query.StartDate,
+          query.EndDate,
+          query.PageSize,
+          query.PageSize,
+          query.SelectedDeviceIds,
+          query.IncludeEmulated,
+          query.DataType,
+          query.ResultType,
+          query.Flatten,
+          query.Zip
+        )
+        .then((obs: any) => {
+          console.log('OBS: ', obs);
+          const blob = new Blob([JSON.stringify(obs.body)], {
+            type: 'text/json',
+          });
+          const url = window.URL.createObjectURL(blob);
+
+          const link = document.createElement('a');
+          link.download = 'telemetry.json';
+          link.href = url;
+          link.click();
+        });
+    }
+  }
+
   public ToggleAddingDevice() {
     this.AddingDevice = !this.AddingDevice;
   }
 
-  public ToggleTelemetryEnabledChanged(enabled: boolean) {
-    this.ToggleTelemetryEnabled.emit(enabled);
+  public ToggleEmulatedEnabledChanged(enabled: boolean) {
+    this.State.Emulated.Loading = true;
+
+    this.iotEnsCtxt.ToggleEmulatedEnabled();
   }
 
-  public ToggleEmulatedEnabledChanged(enabled: boolean) {
-    this.ToggleEmulatedEnabled.emit(enabled);
+  public ToggleTelemetryEnabledChanged(enabled: boolean) {
+    this.State.Telemetry.Loading = true;
+
+    this.iotEnsCtxt.ToggleTelemetrySync();
+  }
+
+  public UpdateDeviceTablePageSize(pageSize: number) {
+    this.State.DevicesConfig.Loading = true;
+
+    this.iotEnsCtxt.UpdateConnectedDevicesSync(
+      this.State.DevicesConfig.Page,
+      pageSize
+    );
+  }
+
+  public UpdateDeviceTablePageIndex(page: number) {
+    this.State.DevicesConfig.Loading = true;
+
+    this.iotEnsCtxt.UpdateConnectedDevicesSync(
+      page,
+      this.State.DevicesConfig.PageSize
+    );
+  }
+
+  public UpdateTelemetryPage(page: number) {
+    this.State.Telemetry.Loading = true;
+
+    this.iotEnsCtxt.UpdateTelemetrySync(
+      this.State.Telemetry.RefreshRate,
+      page,
+      this.State.Telemetry.PageSize
+    );
+  }
+
+  public UpdateTelemetryPageSize(pageSize: number) {
+    this.State.Telemetry.Loading = true;
+
+    this.iotEnsCtxt.UpdateTelemetrySync(
+      this.State.Telemetry.RefreshRate,
+      this.State.Telemetry.Page,
+      pageSize
+    );
+  }
+
+  public WarmQuery() {
+    this.State.Loading = true;
+
+    this.iotEnsCtxt.WarmQuery(null, null, null, null, null, true);
   }
 
   //  Helpers
@@ -478,39 +565,63 @@ export class LcuSetupManageElementComponent
     }
   }
 
-  protected handleStateChanged(changes: SimpleChanges, force: boolean = false) {
-    if (changes.DevicesConfig || force) {
-      // debugger;
-      this.DeviceSASTokensModal();
+  /**
+   * Custom Validator to determine if the device name already exists by checking the deviceNames array
+   */
+  protected deviceNameValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null =>
+      !this.DeviceNames.includes(control.value)
+        ? null
+        : { duplicateName: control.value };
+  }
 
-      this.DeviceNames =
-        this.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
-
-      this.setAddingDevice();
-    }
-
-    if (changes.Dashboard || force) {
-      this.setupFreeboard();
-    }
+  protected handleStateChanged() {
+    this.DeviceSASTokensModal();
 
     this.DeviceNames =
-      this.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
+      this.State?.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
 
-    if (changes.Telemetry || force) {
-      if (this.Telemetry) {
-        this.convertToDate(this.Telemetry.LastSyncedAt);
-      }
+    this.setAddingDevice();
+
+    this.setupFreeboard();
+
+    if (this.State?.Telemetry) {
+      this.convertToDate(this.State?.Telemetry.LastSyncedAt);
     }
+
+    this.setConnectedDevicesInfoCardFlex();
+  }
+
+  protected setupStateHandler() {
+    this.stateHandlerSub = this.iotEnsCtxt.Context.subscribe((state) => {
+      this.State = Object.assign(this.State, state);
+
+      // console.log("State: ", this.State)
+
+      this.handleStateChanged();
+    });
   }
 
   protected setAddingDevice() {
-    this.AddingDevice = (this.DevicesConfig?.Devices?.length || 0) <= 0;
+    if(this.State?.DevicesConfig?.Status?.Code === 1){
+      this.AddingDevice = true;
+    }
+    else{
+      this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
+      
+    }
+  }
+
+  protected setConnectedDevicesInfoCardFlex() {
+    const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
+
+    this.ConnectedDevicesInfoCardFlex = this.AddingDevice ? maxDeviceFlex : '100%';
   }
 
   protected setDashboardIFrameURL() {
-    const source = this.Dashboard?.FreeboardConfig
-      ? JSON.stringify(this.Dashboard?.FreeboardConfig)
-      : '';
+    const source = this.State?.Dashboard?.FreeboardConfig
+      ? JSON.stringify(this.State?.Dashboard?.FreeboardConfig)
+      : '{}';
 
     this.FreeboardURL = this.lcuSvcSettings.State.FreeboardURL || '/freeboard';
 
@@ -526,27 +637,18 @@ export class LcuSetupManageElementComponent
         '',
         Validators.compose([
           Validators.required,
-          Validators.maxLength(128),
+          Validators.maxLength(90),
           Validators.pattern(regex),
-          this.DeviceNameValidator(),
+          this.deviceNameValidator(),
         ]),
       ],
     });
-  }
-  /**
-   * Custom Validator to determine if the device name already exists by checking the deviceNames array
-   */
-  protected DeviceNameValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null =>
-      !this.DeviceNames.includes(control.value)
-        ? null
-        : { duplicateName: control.value };
   }
 
   protected setupFreeboard() {
     this.setDashboardIFrameURL();
 
-    if (this.Dashboard && this.Dashboard.FreeboardConfig) {
+    if (this.State?.Dashboard && this.State?.Dashboard.FreeboardConfig) {
       //   // freeboard.initialize(true);
       //   // const dashboard = freeboard.loadDashboard(
       //   //   this.State.Dashboard.FreeboardConfig,
