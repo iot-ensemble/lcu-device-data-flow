@@ -1,20 +1,34 @@
-<div class="stats-container" fxLayout="column">
+<div class="stats-container" fxLayout="column" fxFill>
   <div class="stats-header">
     <h2>Stats</h2>
   </div>
 
 
-  <div class="stats-body" fxLayout="column" fxLayoutAlign="space-between start">
+  <div class="stats-body" fxLayout="column" fxLayoutAlign="space-between start" fxFill>
 
-    <div class="data-block" fxLayout="row" *ngFor="let info of DataInfo">
+    <div class="data-block" fxLayout="row" *ngFor="let info of DataInfo" fxFill>
 
-      <div class="icon-container" fxFlex="20">
-        <mat-icon class="data-icon" >{{info.Icon}}</mat-icon>
+      <div 
+        class="icon-container" 
+        fxFlex="20" 
+        fxFlex.lt-sm="25" 
+        fxLayout="row" 
+        fxLayoutAlign="center center">
+
+        <mat-icon class="data-icon" fxFill>{{info.Icon}}</mat-icon>
+
       </div>
 
-      <div class="data-info" fxLayout="column" fxFlex="80">
+      <div 
+        class="data-info" 
+        fxLayout="column" 
+        fxFlex="80" 
+        fxFlex.lt-sm="75">
+
         <h3>{{info.Title}}</h3>
-        <div class="mat-card-content-bold">{{ info.TotalCount }} {{ info.Units }}</div>
+
+        <div *ngIf="info.TotalCount">{{ info.TotalCount }} {{ info.Units }}</div>
+
       </div>
 
     </div>

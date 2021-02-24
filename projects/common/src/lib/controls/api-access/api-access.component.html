@@ -19,15 +19,6 @@
     </div>
   </div>
 
-  <div class="divider-fill-hor margin-top-4"></div>
-
-
-  <!-- <lcu-data-info-cards
-    [data-retention]="DataRetention"
-    [data-interval]="DataInterval"
-    [total-payloads]="TotalPayloads">
-  </lcu-data-info-cards>  -->
-
 
   <div class="margin-top-4">
     <div fxFlex></div>
@@ -53,16 +44,22 @@
           Warm APIs, as well as test to see the responses. 
           (Warm Query will return 100 payloads by default unless specified)
         </p>
-        <div class="margin-top-4" fxLayout="row" fxLayoutAlign="space-between start">
+        <div 
+          class="margin-top-4" 
+          fxLayout="row" 
+          fxLayoutAlign="space-between start"
+          fxLayout.lt-sm = "column"
+          fxLayoutAlign.lt-sm="space-between center">
+
           <lcu-data-info-cards
-          fxFlex="30"
+            fxFlex="20"
             [data-retention]="DataRetention"
             [data-interval]="DataInterval"
             [total-payloads]="TotalPayloads">
           </lcu-data-info-cards> 
 
           <lcu-swagger-ui
-            fxFlex="70"
+            fxFlex="80"
             [source]="OpenAPISource"
             [auth-key]="APIKeys[0]?.Key"
             *ngIf="APIKeys?.length > 0">

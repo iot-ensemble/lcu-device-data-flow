@@ -1,21 +1,26 @@
 .stats-container{
-    background-color: white;
+    background-color: ghostwhite;
     color:black;
     border-radius: 10px;
 
     .stats-header{
         padding: 10px 20px 20px 10px;
         background-color: rgb(12, 170, 170);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
     }
 
     .stats-body{
         padding: 10px 20px 20px 10px;
 
         .data-block{
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            margin-top: 10px;
 
             .icon-container{
                 background-color: #c6c6c6;
+                border-radius: 10px;
+                text-align: center;
 
                 .data-icon{
                     font-size: 35px;

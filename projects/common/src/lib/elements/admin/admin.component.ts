@@ -94,9 +94,9 @@ export class LcuDeviceDataFlowAdminElementComponent
       console.log("removing child ent ", ent);
       //TODO: comment back in when remove is fully hooked up
 
-      // this.State.Loading = true;
+      this.State.Loading = true;
 
-      // this.adminCtxt.RemoveChildEnterprise(ent.Lookup);
+      this.adminCtxt.RemoveChildEnterprise(ent.Lookup);
     }
   }
 

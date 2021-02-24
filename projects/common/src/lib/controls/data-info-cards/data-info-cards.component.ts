@@ -27,25 +27,27 @@ export class DataInfoCardsComponent implements OnInit {
     this.buildDataInfoArray();
   }
 
-  protected buildDataInfoArray(){
-    // this.DataInfo = new Array<DataInfoModel>( );
+  ngOnChanges(): void{
+    this.buildDataInfoArray();
+  }
 
+  protected buildDataInfoArray(){
 
     this.DataInfo = [
       {
       Icon:"update", 
-      Title:"Data Interval", 
+      Title:"Interval", 
       TotalCount: this.DataInterval, 
       Units:"secs"
      },
      {
-      Icon: "folder", 
+      Icon: "storage", 
       Title: "Telemetry", 
       TotalCount: this.TotalPayloads
      },
      {
-      Icon: "date_range", 
-      Title: "Data Retention", 
+      Icon: "memory", 
+      Title: "Retention", 
       TotalCount: this.DataRetention, 
       Units: this.DayString
      }
