@@ -24,7 +24,6 @@ import { RefreshSelectComponent } from './controls/refresh-select/refresh-select
 import { PayloadFormComponent } from './elements/controls/payload-form/payload-form.component';
 import { GenericModalComponent } from './elements/generic/generic-modal/generic-modal.component';
 import { SendMessageDialogComponent } from './elements/manage/controls/send-message-dialog/send-message-dialog.component';
-import { ApiAccessComponent } from './controls/api-access/api-access.component';
 import { SasTokenDialogComponent } from './elements/manage/controls/sas-token-dialog/sas-token-dialog.component';
 import { TelemetryDownloadDialogComponent } from './elements/manage/controls/telemetry-download-dialog/telemetry-download-dialog.component';
 import { AnimationService } from './services/animation.service';
@@ -32,6 +31,7 @@ import { SwaggerUIComponent } from './controls/swagger-ui/swagger-ui.component';
 import { GtagService } from './services/gtag.service';
 import { PageViewDirective } from './directives/analytics/page-view.directive';
 import { EventDirective } from './directives/analytics/event.directive';
+import { AppHostModule } from '@lowcodeunit/app-host-common';
 
 @NgModule({
   declarations: [
@@ -48,7 +48,6 @@ import { EventDirective } from './directives/analytics/event.directive';
     PayloadFormComponent,
     GenericModalComponent,
     SendMessageDialogComponent,
-    ApiAccessComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
     SwaggerUIComponent,
@@ -64,6 +63,7 @@ import { EventDirective } from './directives/analytics/event.directive';
     MaterialModule,
     DataGridModule,
     PipeModule,
+    AppHostModule
   ],
   exports: [
     LcuDeviceDataFlowManageElementComponent,
@@ -79,7 +79,6 @@ import { EventDirective } from './directives/analytics/event.directive';
     PayloadFormComponent,
     GenericModalComponent,
     SendMessageDialogComponent,
-    ApiAccessComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
     SwaggerUIComponent,
