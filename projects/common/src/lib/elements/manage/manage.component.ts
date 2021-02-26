@@ -45,7 +45,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GenericModalService } from '../../services/generic-modal.service';
 import { GenericModalModel } from '../../models/generice-modal.model';
@@ -352,6 +352,8 @@ export class LcuDeviceDataFlowManageElementComponent
     // payloadForm.DeviceName = 'blah;
 
     // setTimeout(() => {
+
+    // let sendMessageModalService: GenericModalService<SendMessageDialogComponent>
     const modalConfig: GenericModalModel = new GenericModalModel({
       ModalType: 'data', // type of modal we want (data, confirm, info)
       CallbackAction: (val: any) => {}, // function exposed to the modal
@@ -369,14 +371,31 @@ export class LcuDeviceDataFlowManageElementComponent
      * Pass modal config to service open function
      */
     this.genericModalService.Open(modalConfig);
-
+    
     this.genericModalService.ModalComponent.afterOpened().subscribe(
       (res: any) => {
         console.log('MODAL OPEN', res);
+
+        this.genericModalService.ModalInstance.FilterValue.subscribe((filterValue: string) => {
+      
+          this.iotEnsCtxt.ListAllDeviceNames(this.State.UserEnterpriseLookup, filterValue)
+          .then((obs: any) => {
+            // console.log("obs: ", obs)
+            if (obs.body?.Status?.Code === 0) 
+            {
+              this.genericModalService.ModalInstance.DeviceOptions = obs.body.DeviceNames;
+
+            } else 
+              {
+                console.log("error: ", obs.body.Status);      
+               }
+          });
+        })
       }
     );
 
-    this.genericModalService.ModalComponent.afterClosed().subscribe(
+   
+  this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: any) => {
         console.log('MODAL CLOSED', res);
       }

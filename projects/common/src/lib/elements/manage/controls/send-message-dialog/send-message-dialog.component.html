@@ -2,8 +2,9 @@
   <h2>Send a Device Message</h2>
 
   <lcu-payload-form
-    [device-options]="DeviceNames"
+    [device-options]="DeviceOptions"
     (canceled)="Cancel()"
-    (sent)="SendDeviceMesaage($event)"
+    (filter-value)="FilterValueChanged($event)"
+    (sent)="SendDeviceMessage($event)"
   ></lcu-payload-form>
 </div>

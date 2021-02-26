@@ -1,5 +1,3 @@
-import { Status } from '@lcu/common';
-import { logging } from 'protractor';
 import { IoTEnsembleDeviceInfo } from './iot-ensemble.state';
 
 export class IoTEnsembleAdminState {
