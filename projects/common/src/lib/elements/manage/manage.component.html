@@ -1,230 +1,149 @@
-<div fxFlexFill class="manage">
+<div class="manage">
   <ng-container *ngIf="!State.Loading">
     <!-- Emulated Devices -->
-    <div class="emulated section">
-      <mat-card fxLayout="column">
-        <div fxLayout="row" fxLayout.lt-sm="column">
-          <mat-card-header
-            fxFlex
-            fxFlexOrder="1"
-            fxFlexOrder.lt-sm="2"
-            fxLayout="row"
-          >
-            <div
-              mat-card-avatar
-              fxLayoutAlign="center center"
-              class="orange-accent margin-bottom-3"
-            >
-              <mat-icon>contactless</mat-icon>
-            </div>
+    <app-host-dashboard-card-element
+      class="emulated section"
+      [context]="{ Title: 'Emulated Devices', Icon: 'contactless' }"
+    >
+      <nav>
+        <lcu-enabled-toggle
+          class="margin-right-3"
+          [enabled]="State.Emulated?.Enabled"
+          [loading]="State.Emulated?.Loading"
+          (enabled-toggled)="ToggleEmulatedEnabledChanged($event)"
+        >
+        </lcu-enabled-toggle>
 
-            <mat-card-title> Emulated Devices </mat-card-title>
-          </mat-card-header>
+        <a
+          href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
+          target="_blank"
+          lcuEvent="click"
+          label="Emulated Devices"
+          category="help"
+        >
+          <mat-icon matTooltip="More info">help_outline</mat-icon>
+        </a>
+      </nav>
 
-          <!-- header buttons -->
-          <div
-            fxLayout="row"
-            fxFlexOrder="2"
-            fxFlexOrder.lt-sm="1"
-            fxLayoutAlign="end start"
-            class="margin-bottom-3"
-          >
-            <lcu-enabled-toggle
-              class="margin-right-3"
-              [enabled]="State.Emulated?.Enabled"
-              [loading]="State.Emulated?.Loading"
-              (enabled-toggled)="ToggleEmulatedEnabledChanged($event)"
-            >
-            </lcu-enabled-toggle>
-
-            <a
-              href="https://www.iot-ensemble.com/docs/getting-started/emulated-data"
-              target="_blank"
-              lcuEvent="click"
-              label="Emulated Devices"
-              category="help"
-            >
-              <mat-icon matTooltip="More info">help_outline</mat-icon>
-            </a>
-          </div>
-        </div>
-        <mat-card-content class="margin-left-5">
-          <p>
-            To see the dashboard in action without connecting a device, enable
-            the emulated device data. When enabled, emulated data will be
-            provided in your data queries. The emulated device we are showing
-            here is for smart room detection and provides data on the
-            temperature, humidity and occupancy of a room.
-          </p>
-        </mat-card-content>
-
-        <mat-card-actions> </mat-card-actions>
-      </mat-card>
-    </div>
+      <div class="margin-left-5">
+        <p>
+          To see the dashboard in action without connecting a device, enable the
+          emulated device data. When enabled, emulated data will be provided in
+          your data queries. The emulated device we are showing here is for
+          smart room detection and provides data on the temperature, humidity
+          and occupancy of a room.
+        </p>
+      </div>
+    </app-host-dashboard-card-element>
     <!--^^^ Emulated Devices ^^^-->
 
     <!-- Connected Devices -->
-    <div class="connected section">
-      <div fxLayout="row" fxLayout.lt-md="column">
-        <mat-card
-          class="margin-right-1"
-          fxLayout="column"
-          [fxFlex]="ConnectedDevicesInfoCardFlex"
-          fxFlex.lt-md="100%"
+    <app-host-dashboard-card-element
+      class="connected section"
+      [context]="{ Title: 'Connected Devices', Icon: 'loop' }"
+    >
+      <span class="card-subtitle" *ngIf="MaxDevicesReached && AddingDevice">
+        Max number of devices reached
+      </span>
+
+      <nav>
+        <lcu-loader
+          [loading]="State.DevicesConfig?.Loading && !AddingDevice"
+          [diameter]="50"
         >
-          <div fxLayout="row" fxLayout.lt-sm="column">
-            <mat-card-header
-              fxFlex
-              fxFlexOrder="1"
-              fxFlexOrder.lt-sm="2"
-              fxLayout="row"
-            >
-              <div
-                mat-card-avatar
-                fxLayoutAlign="center center"
-                [class.orange-accent]="!AddingDevice"
-                [class.green-accent]="AddingDevice"
+        </lcu-loader>
+
+        <a
+          href="https://www.iot-ensemble.com/docs/getting-started/connecting-first-device"
+          target="_blank"
+          lcuEvent="click"
+          label="Connected Devices"
+          category="help"
+        >
+          <mat-icon matTooltip="More info">help_outline</mat-icon>
+        </a>
+      </nav>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+        <div
+          class="margin-x-1"
+          style="width: 100%"
+          [class.margin-left-5]="
+            AddingDevice || State.DevicesConfig?.Devices?.length <= 0
+          "
+        >
+          <div *ngIf="AddingDevice">
+            <ng-container *ngIf="!MaxDevicesReached">
+              <p class="paragraph-text">
+                To connect a device and see its real-time data flowing through
+                the system, simply enter a device name and enroll it. You will
+                be provided with a connection string for your device.
+              </p>
+            </ng-container>
+
+            <ng-container *ngIf="MaxDevicesReached">
+              <p
+                *ngIf="State.DevicesConfig.MaxDevicesCount < 50"
+                class="paragraph-text"
               >
-                <mat-icon>loop</mat-icon>
-              </div>
-
-              <mat-card-title> Connected Devices </mat-card-title>
-
-              <div fxFlex></div>
-
-              <mat-card-subtitle *ngIf="MaxDevicesReached && AddingDevice">
-                Max number of devices reached
-              </mat-card-subtitle>
-            </mat-card-header>
-
-            <div
-              fxLayout="row"
-              fxFlexOrder="2"
-              fxFlexOrder.lt-sm="1"
-              fxLayoutAlign="end start"
-              class="margin-bottom-3"
-            >
-              <lcu-loader
-                [loading]="State.DevicesConfig?.Loading"
-                [diameter]="50"
+                Click "Upgrade Now" to see other plans where you can connect
+                more than
+                {{ State.DevicesConfig.MaxDevicesCount }}
+                {{
+                  State.DevicesConfig.MaxDevicesCount > 1
+                    ? "devices"
+                    : "device"
+                }}, increase your data velocity, increase your data retention
+                and other great benefits.
+              </p>
+              <p
+                *ngIf="State.DevicesConfig.MaxDevicesCount === 50"
+                class="paragraph-text"
               >
-              </lcu-loader>
-              <a
-                href="https://www.iot-ensemble.com/docs/getting-started/connecting-first-device"
-                target="_blank"
-                lcuEvent="click"
-                label="Connected Devices"
-                category="help"
-              >
-                <mat-icon matTooltip="More info">help_outline</mat-icon>
-              </a>
-            </div>
+                Please contact Fathym at
+                <a href="mailto: sales@fathym.com" color="primary">
+                  sales@fathym.com</a
+                >
+                for enterprise packages.
+              </p>
+            </ng-container>
           </div>
 
-          <mat-card-content
-            [class.margin-left-5]="
-              AddingDevice || State.DevicesConfig?.Devices?.length <= 0
-            "
-          >
-            <div *ngIf="AddingDevice">
-              <ng-container *ngIf="!MaxDevicesReached">
-                <p class="paragraph-text">
-                  To connect a device and see its real-time data flowing through
-                  the system, simply enter a device name and enroll it. You will
-                  be provided with a connection string for your device.
-                </p>
-              </ng-container>
-
-              <ng-container *ngIf="MaxDevicesReached">
-                <p
-                  *ngIf="State.DevicesConfig.MaxDevicesCount < 50"
-                  class="paragraph-text"
-                >
-                  Click "Upgrade Now" to see other plans where you can connect
-                  more than
-                  {{ State.DevicesConfig.MaxDevicesCount }}
-                  {{
-                    State.DevicesConfig.MaxDevicesCount > 1
-                      ? "devices"
-                      : "device"
-                  }}, increase your data velocity, increase your data retention
-                  and other great benefits.
-                </p>
-                <p
-                  *ngIf="State.DevicesConfig.MaxDevicesCount === 50"
-                  class="paragraph-text"
-                >
-                  Please contact Fathym at
-                  <a href="mailto: sales@fathym.com" color="primary">
-                    sales@fathym.com</a
-                  >
-                  for enterprise packages.
-                </p>
-              </ng-container>
-            </div>
-
-            <div class="device-list" *ngIf="!AddingDevice">
-              <lcu-devices-table
-                [devices-config]="State.DevicesConfig"
-                (issued-sas-token)="IssueDeviceSASToken($event)"
-                (page-event)="DeviceTablePageEvent($event)"
-                (revoked)="RevokeDeviceEnrollmentClick($event)"
-              >
-              </lcu-devices-table>
-            </div>
-          </mat-card-content>
-
-          <mat-card-actions>
-            <div fxFlex></div>
-
-            <button
-              mat-raised-button
-              color="accent"
-              (click)="EnrollNewDevice()"
-              *ngIf="!AddingDevice"
+          <div class="device-list" *ngIf="!AddingDevice">
+            <lcu-devices-table
+              [devices-config]="State.DevicesConfig"
+              (issued-sas-token)="IssueDeviceSASToken($event)"
+              (page-event)="DeviceTablePageEvent($event)"
+              (revoked)="RevokeDeviceEnrollmentClick($event)"
             >
-              Enroll New Device
-            </button>
+            </lcu-devices-table>
+          </div>
+        </div>
 
-            <ng-container *ngIf="AddingDevice && MaxDevicesReached">
-              <a
-                mat-button
-                href="https://www.iot-ensemble.com/docs/getting-started/buy-and-scale"
-                target="_blank"
-                *ngIf="AddingDevice"
-                color="accent"
-              >
-                Read Documentation
-              </a>
+        <ng-container *ngIf="AddingDevice && !MaxDevicesReached">
+          <div
+            class="divider-fill-vert margin-x-5"
+            fxShow
+            [fxHide.lt-md]="true"
+          ></div>
 
-              <a
-                *ngIf="State.DevicesConfig.MaxDevicesCount < 50"
-                mat-raised-button
-                href="/billing/iot"
-                color="accent"
-                target="_blank"
-              >
-                Upgrade now
-              </a>
+          <div
+            class="divider-fill-hor margin-y-5"
+            fxHide
+            [fxShow.lt-md]="true"
+          ></div>
 
-              <a mat-button color="warn" (click)="ToggleAddingDevice()">
-                <mat-icon>cancel</mat-icon>
-                Cancel
-              </a>
-            </ng-container>
-          </mat-card-actions>
-        </mat-card>
+          <div class="margin-x-1" fxFlex="50%" fxFlex.lt-md="100%">
+            <lcu-loader
+              [loading]="State.DevicesConfig?.Loading"
+              [diameter]="100"
+            >
+            </lcu-loader>
 
-        <form
-          class="margin-left-1"
-          fxFlex="50%"
-          fxFlex.lt-md="100%"
-          [formGroup]="AddDeviceFormGroup"
-          (ngSubmit)="EnrollDeviceSubmit()"
-          *ngIf="AddingDevice && !MaxDevicesReached"
-        >
-          <mat-card>
-            <mat-card-content>
+            <form
+              [formGroup]="AddDeviceFormGroup"
+              *ngIf="!State.DevicesConfig?.Loading"
+            >
               <div>
                 <div class="device-adding">
                   <h2>Enroll a New Device</h2>
@@ -243,190 +162,102 @@
                   {{ DeviceNameErrorText }}
                 </mat-error>
               </div>
-            </mat-card-content>
-
-            <mat-card-actions>
-              <div fxFlex></div>
-
-              <ng-container>
-                <button
-                  mat-raised-button
-                  type="submit"
-                  color="primary"
-                  *ngIf="!State.DevicesConfig?.Loading && !DeviceNameErrorText"
-                  [disabled]="!AddDeviceFormGroup.valid"
-                >
-                  Enroll Device
-                </button>
-
-                <a mat-button color="warn" (click)="CancelAddingDevice()">
-                  <mat-icon>cancel</mat-icon>
-                  Cancel
-                </a>
-              </ng-container>
-            </mat-card-actions>
-          </mat-card>
-        </form>
+            </form>
+          </div>
+        </ng-container>
       </div>
-    </div>
+
+      <span class="card-actions">
+        <div fxFlex></div>
+
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="EnrollNewDevice()"
+          *ngIf="!AddingDevice"
+        >
+          Enroll New Device
+        </button>
+
+        <ng-container *ngIf="AddingDevice && MaxDevicesReached">
+          <a
+            mat-button
+            href="https://www.iot-ensemble.com/docs/getting-started/buy-and-scale"
+            target="_blank"
+            *ngIf="AddingDevice"
+            color="accent"
+          >
+            Read Documentation
+          </a>
+
+          <a
+            *ngIf="State.DevicesConfig.MaxDevicesCount < 50"
+            mat-raised-button
+            href="/billing/iot"
+            color="accent"
+            target="_blank"
+          >
+            Upgrade now
+          </a>
+
+          <a mat-button color="warn" (click)="ToggleAddingDevice()">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </a>
+        </ng-container>
+
+        <ng-container
+          *ngIf="
+            !State.DevicesConfig?.Loading && AddingDevice && !MaxDevicesReached
+          "
+        >
+          <button
+            mat-raised-button
+            type="submit"
+            color="primary"
+            (click)="EnrollDeviceSubmit()"
+            [disabled]="!AddDeviceFormGroup.valid || DeviceNameErrorText"
+          >
+            Enroll Device
+          </button>
+
+          <a mat-button color="warn" (click)="CancelAddingDevice()">
+            <mat-icon>cancel</mat-icon>
+            Cancel
+          </a>
+        </ng-container>
+      </span>
+    </app-host-dashboard-card-element>
     <!--^^^ Connected Devices ^^^-->
 
     <!-- Telemetry -->
-    <div class="telemetry section">
-      <mat-card fxLayout="column">
-        <div fxLayout="row" fxLayout.lt-sm="column" class="margin-bottom-3">
-          <mat-card-header
-            class="border-bottom"
-            fxFlex
-            fxFlexOrder="1"
-            fxFlexOrder.lt-sm="2"
-            fxLayout="row"
+    <app-host-dashboard-card-element
+      class="telemetry section"
+      [context]="{ Title: 'Devices Telemetry', Icon: 'compare_arrows' }"
+    >
+      <span class="card-subtitle">
+        <div matTooltip="Updates successful" class="margin-right-1">
+          <mat-icon
+            [class.success-dot]="State.Telemetry?.Enabled"
+            [class.error-dot]="!State.Telemetry?.Enabled"
           >
-            <div
-              mat-card-avatar
-              fxLayoutAlign="center center"
-              class="orange-accent"
-            >
-              <mat-icon>compare_arrows</mat-icon>
-            </div>
-
-            <mat-card-title>Devices Telemetry</mat-card-title>
-
-            <mat-card-subtitle
-              fxLayout="row"
-              fxLayoutAlign="start"
-              class="telemetry-update margin-top-2"
-            >
-              <div matTooltip="Updates successful">
-                <mat-icon
-                  [class.success-dot]="State.Telemetry?.Enabled"
-                  [class.error-dot]="!State.Telemetry?.Enabled"
-                >
-                  stop_circle
-                </mat-icon>
-              </div>
-
-              Last Updated: {{ LastSyncedAt }}
-            </mat-card-subtitle>
-          </mat-card-header>
-
-          <div
-            fxLayout="row"
-            fxFlexOrder="2"
-            fxFlexOrder.lt-sm="1"
-            fxLayoutAlign="end start"
-            class="margin-bottom-3"
-          >
-            <div fxFlex>
-              <mat-icon
-                class="cursor-pointer"
-                color="primary"
-                matTooltip="Refresh Telemetry Data"
-                (click)="UpdateTelemetryPage(1)"
-                >refresh</mat-icon
-              >
-            </div>
-            <div>
-              <mat-icon
-                id="telemetry-download-element"
-                class="cursor-pointer"
-                color="primary"
-                matTooltip="Download Telemetry Data"
-                (click)="DownloadTelemetryModal()"
-                >download</mat-icon
-              >
-            </div>
-            <lcu-enabled-toggle
-              class="margin-right-3"
-              [enabled]="State.Telemetry?.Enabled"
-              enabled-text="Live"
-              [loading]="State.Telemetry?.Loading"
-              (enabled-toggled)="ToggleTelemetryEnabledChanged($event)"
-            >
-            </lcu-enabled-toggle>
-            <a
-              href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#devices-telemetry"
-              target="_blank"
-              lcuEvent="click"
-              label="Device Telemetry"
-              category="help"
-            >
-              <mat-icon matTooltip="More info">help_outline</mat-icon>
-            </a>
-          </div>
+            stop_circle
+          </mat-icon>
         </div>
 
-        <mat-card-content
-          [class.margin-left-5]="State.Telemetry?.Payloads?.length <= 0"
-        >
-          <lcu-telemetry-list
-            [telemetry]="State.Telemetry"
-            (page-event)="HandleTelemetryPageEvent($event)"
+        Last Updated: {{ LastSyncedAt }}
+      </span>
+
+      <nav>
+        <div>
+          <mat-icon
+            class="cursor-pointer"
+            color="primary"
+            matTooltip="Refresh Telemetry Data"
+            (click)="UpdateTelemetryPage(1)"
           >
-          </lcu-telemetry-list>
-        </mat-card-content>
-
-        <mat-card-actions>
-          <div fxFlex></div>
-
-          <button
-            mat-raised-button
-            color="accent"
-            (click)="PayloadFormModal()"
-            *ngIf="State.DevicesConfig?.Devices?.length >= 1"
-          >
-            Send Device Message
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-    <!--^^^ Telemetry ^^^-->
-
-    <!-- Storage Access -->
-    <div class="storage-access section">
-      <mat-card fxLayout="column">
-        <div fxLayout="row" fxLayout.lt-sm="column">
-          <mat-card-header
-            fxFlex
-            fxFlexOrder="1"
-            fxFlexOrder.lt-sm="2"
-            fxLayout="row"
-          >
-            <div
-              mat-card-avatar
-              fxLayoutAlign="center center"
-              class="orange-accent"
-            >
-              <mat-icon>storage</mat-icon>
-            </div>
-
-            <mat-card-title>Storage Access</mat-card-title>
-          </mat-card-header>
-
-          <div
-            fxLayout="row"
-            fxFlexOrder="2"
-            fxFlexOrder.lt-sm="1"
-            fxLayoutAlign="end start"
-            class="margin-bottom-3"
-          >
-            <div
-              fxFlex
-              fxLayout="row"
-              fxLayoutAlign="end start"
-              class="margin-bottom-3"
-            >
-              <a
-                href="https://www.iot-ensemble.com/docs/getting-started/connecting-downstream-services"
-                target="_blank"
-                lcuEvent="click"
-                label="Storage Access"
-                category="help"
-              >
-                <mat-icon matTooltip="More info">help_outline</mat-icon>
-              </a>
-            </div>
-          </div>
+            refresh
+          </mat-icon>
         </div>
 
         <mat-card-content>
@@ -440,75 +271,128 @@
             (regenerated)="RegenerateAPIKey($event)"
           ></lcu-api-access>
         </mat-card-content>
+        <div>
+          <mat-icon
+            id="telemetry-download-element"
+            class="cursor-pointer"
+            color="primary"
+            matTooltip="Download Telemetry Data"
+            (click)="DownloadTelemetryModal()"
+          >
+            download
+          </mat-icon>
+        </div>
 
-        <mat-card-actions></mat-card-actions>
-      </mat-card>
-    </div>
+        <lcu-enabled-toggle
+          class="margin-right-3"
+          [enabled]="State.Telemetry?.Enabled"
+          enabled-text="Live"
+          [loading]="State.Telemetry?.Loading"
+          (enabled-toggled)="ToggleTelemetryEnabledChanged($event)"
+        >
+        </lcu-enabled-toggle>
+
+        <a
+          href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#devices-telemetry"
+          target="_blank"
+          lcuEvent="click"
+          label="Device Telemetry"
+          category="help"
+        >
+          <mat-icon matTooltip="More info">help_outline</mat-icon>
+        </a>
+      </nav>
+
+      <div [class.margin-left-5]="State.Telemetry?.Payloads?.length <= 0">
+        <lcu-telemetry-list
+          [telemetry]="State.Telemetry"
+          (page-event)="HandleTelemetryPageEvent($event)"
+        >
+        </lcu-telemetry-list>
+      </div>
+
+      <span class="card-actions">
+        <div fxFlex></div>
+
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="PayloadFormModal()"
+          *ngIf="State.DevicesConfig?.Devices?.length >= 1"
+        >
+          Send Device Message
+        </button>
+      </span>
+    </app-host-dashboard-card-element>
+    <!--^^^ Telemetry ^^^-->
+
+    <!-- Storage Access -->
+    <app-host-dashboard-card-element
+      class="storage-access section"
+      [context]="{ Title: 'Storage Access', Icon: 'storage' }"
+    >
+      <nav>
+        <a
+          href="https://www.iot-ensemble.com/docs/getting-started/connecting-downstream-services"
+          target="_blank"
+          lcuEvent="click"
+          label="Storage Access"
+          category="help"
+        >
+          <mat-icon matTooltip="More info">help_outline</mat-icon>
+        </a>
+      </nav>
+
+      <div>
+        <div class="margin-left-5 margin-top-2">
+          Use the API keys to get your data downstream to the dashboards and
+          services of your choice for visualization, application development,
+          ML/AI, and more.
+        </div>
+
+        <lcu-api-access
+          [api-keys]="State.Storage?.APIKeys"
+          [open-api-source]="State.Storage?.OpenAPISource"
+          (regenerated)="RegenerateAPIKey($event)"
+        ></lcu-api-access>
+      </div>
+    </app-host-dashboard-card-element>
     <!--^^^ Storage Access ^^^-->
 
     <!-- Dashboard -->
-    <div class="dashboard section">
-      <mat-card fxLayout="column">
-        <div fxLayout="row" fxLayout.lt-sm="column">
-          <mat-card-header
-            fxFlex
-            fxFlexOrder="1"
-            fxFlexOrder.lt-sm="2"
-            fxLayout="row"
-          >
-            <div
-              mat-card-avatar
-              fxLayoutAlign="center center"
-              class="orange-accent"
-            >
-              <mat-icon>dashboard</mat-icon>
-            </div>
+    <app-host-dashboard-card-element
+      class="dashboard section"
+      [context]="{ Title: 'Devices Dashboard', Icon: 'dashboard' }"
+    >
+      <nav>
+        <a
+          href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#freeboard-dashboard"
+          target="_blank"
+          lcuEvent="click"
+          label="Devices Dashboard"
+          category="help"
+        >
+          <mat-icon matTooltip="More info">help_outline</mat-icon>
+        </a>
+      </nav>
 
-            <mat-card-title>Devices Dashboard</mat-card-title>
-          </mat-card-header>
-
-          <div
-            fxLayout="row"
-            fxFlexOrder="2"
-            fxFlexOrder.lt-sm="1"
-            fxLayoutAlign="end start"
-            class="margin-bottom-3"
-          >
-            <div
-              fxFlex
-              fxLayout="row"
-              fxLayoutAlign="end start"
-              class="margin-bottom-3"
-            >
-              <a
-                href="https://www.iot-ensemble.com/docs/getting-started/viewing-device-data#freeboard-dashboard"
-                target="_blank"
-                lcuEvent="click"
-                label="Devices Dashboard"
-                category="help"
-              >
-                <mat-icon matTooltip="More info">help_outline</mat-icon>
-              </a>
-            </div>
-          </div>
+      <div>
+        <div class="margin-left-5 padding-bottom-2 margin-top-2">
+          Here we have provided an example open-source dashboard Freeboard to
+          show how your data can be visualized. Freeboard provides simple and
+          easy to use dashboards for your devices.
         </div>
-        <mat-card-content>
-          <div class="margin-left-5 padding-bottom-2 margin-top-2">
-            Here we have provided an example open-source dashboard Freeboard to
-            show how your data can be visualized. Freeboard provides simple and
-            easy to use dashboards for your devices.
-          </div>
-          <div class="freeboard-display padding-top-2">
-            <iframe
-              [src]="DashboardIFrameURL"
-              width="100%"
-              height="750px"
-              frameborder="0"
-            ></iframe>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+
+        <div class="freeboard-display padding-top-2">
+          <iframe
+            [src]="DashboardIFrameURL"
+            width="100%"
+            height="750px"
+            frameborder="0"
+          ></iframe>
+        </div>
+      </div>
+    </app-host-dashboard-card-element>
     <!--^^^ Dashboard ^^^-->
 
     <!-- Device Reports -->
@@ -523,9 +407,9 @@
 
   <!-- Loading -->
   <div>
-    <lcu-loader [loading]="State.Loading"></lcu-loader>
+    <lcu-loader [loading]="State?.Loading"></lcu-loader>
 
-    <div *ngIf="State.Loading" class="margin-3 center">
+    <div *ngIf="State?.Loading" class="margin-3 center">
       <p *ngIf="!State.UserEnterpriseLookup">
         Setting up your Dashboard, connecting you to the shared IoT flow, and
         preparing your APIs.
