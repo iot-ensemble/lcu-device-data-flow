@@ -28,6 +28,7 @@ import { GtagService } from './services/gtag.service';
 import { PageViewDirective } from './directives/analytics/page-view.directive';
 import { EventDirective } from './directives/analytics/event.directive';
 import { DataInfoCardsComponent } from './controls/data-info-cards/data-info-cards.component';
+import { AppHostModule } from '@lowcodeunit/app-host-common';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import { DataInfoCardsComponent } from './controls/data-info-cards/data-info-car
     TelemetryDownloadDialogComponent,
     PageViewDirective,
     EventDirective,
-    DataInfoCardsComponent
+    DataInfoCardsComponent,
   ],
   imports: [
     FathymSharedModule,
@@ -56,8 +57,9 @@ import { DataInfoCardsComponent } from './controls/data-info-cards/data-info-car
     ReactiveFormsModule,
     FlexLayoutModule,
     MaterialModule,
-    PipeModule
-    ],
+    PipeModule,
+    AppHostModule
+  ],
   exports: [
     LcuDeviceDataFlowManageElementComponent,
     LcuDeviceDataFlowAdminElementComponent,
@@ -75,7 +77,7 @@ import { DataInfoCardsComponent } from './controls/data-info-cards/data-info-car
     TelemetryDownloadDialogComponent,
     PageViewDirective,
     EventDirective,
-    DataInfoCardsComponent
+    DataInfoCardsComponent,
   ],
   entryComponents: [
     LcuDeviceDataFlowManageElementComponent,
@@ -89,7 +91,7 @@ import { DataInfoCardsComponent } from './controls/data-info-cards/data-info-car
     SendMessageDialogComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
-    DataInfoCardsComponent
+    DataInfoCardsComponent,
   ],
 })
 export class LcuDeviceDataFlowModule {
