@@ -339,11 +339,26 @@
           ML/AI, and more.
         </div>
 
+        <div 
+        class="margin-top-4" 
+        fxLayout="row" 
+        fxLayoutAlign="space-between start"
+        fxLayout.lt-sm = "column"
+        fxLayoutAlign.lt-sm="space-between center"> 
+
+        <lcu-data-info-cards
+            fxFlex="20"
+            [data-retention]="State.DataRetention"
+            [data-interval]="State.DataInterval"
+            [total-payloads]="State.Telemetry?.TotalPayloads">
+          </lcu-data-info-cards>
+
         <lcu-api-access
           [api-keys]="State.Storage?.APIKeys"
           [open-api-source]="State.Storage?.OpenAPISource"
           (regenerated)="RegenerateAPIKey($event)"
         ></lcu-api-access>
+        </div>
       </div>
     </app-host-dashboard-card-element>
     <!--^^^ Storage Access ^^^-->

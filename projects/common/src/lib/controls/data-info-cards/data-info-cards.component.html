@@ -1,0 +1,71 @@
+<div class="stats-container" fxLayout="column" fxFill>
+  <div class="stats-header">
+    <h2>Stats</h2>
+  </div>
+
+
+  <div class="stats-body" fxLayout="column" fxLayoutAlign="space-between start" fxFill>
+
+    <div class="data-block" fxLayout="row" *ngFor="let info of DataInfo" fxFill>
+
+      <div 
+        class="icon-container" 
+        fxFlex="20" 
+        fxFlex.lt-sm="25" 
+        fxLayout="row" 
+        fxLayoutAlign="center center">
+
+        <mat-icon class="data-icon" fxFill>{{info.Icon}}</mat-icon>
+
+      </div>
+
+      <div 
+        class="data-info" 
+        fxLayout="column" 
+        fxFlex="80" 
+        fxFlex.lt-sm="75">
+
+        <h3>{{info.Title}}</h3>
+
+        <div *ngIf="info.TotalCount">{{ info.TotalCount }} {{ info.Units }}</div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- COMMENTED OUT FOR BACKUP -->
+
+<!-- <div  fxLayout="column" fxLayoutAlign="space-between center"  fxFlex style="margin-bottom:-20px;">
+
+  <mat-card class="mat-card-margin-70" fxLayout="column" fxLayoutAlign="center center">
+    <mat-card-header>
+      <mat-card-title>Interval</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mat-card-content-bold" fxLayout="row" fxLayoutAlign="center center">{{ DataInterval }} sec</mat-card-content>
+    
+  </mat-card>
+
+
+  <div class="divider-fill-vert"></div>
+
+   <mat-card class="mat-card-margin-70" fxLayout="column" fxLayoutAlign="center center">
+     <mat-card-header>
+       <mat-card-title>Telemetry</mat-card-title>
+     </mat-card-header>
+     <mat-card-content class="mat-card-content-bold" fxLayout="row" fxLayoutAlign="center center">{{ TotalPayloads }}</mat-card-content>
+   </mat-card>
+
+
+   <div class="divider-fill-vert"></div>
+
+     <mat-card class="mat-card-margin-70" fxLayout="column" fxLayoutAlign="center center">
+       <mat-card-header>
+         <mat-card-title>Retention</mat-card-title>
+       </mat-card-header> 
+       <mat-card-content class="mat-card-content-bold" fxLayout="row" fxLayoutAlign="center center">{{ DataRetention }} {{ DayString }}</mat-card-content>           
+     </mat-card>
+</div> -->

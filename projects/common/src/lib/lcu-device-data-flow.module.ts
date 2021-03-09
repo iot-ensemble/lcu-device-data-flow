@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   FathymSharedModule,
-  LCUServiceSettings,
   MaterialModule,
   PipeModule,
 } from '@lcu/common';
@@ -28,6 +27,7 @@ import { AnimationService } from './services/animation.service';
 import { GtagService } from './services/gtag.service';
 import { PageViewDirective } from './directives/analytics/page-view.directive';
 import { EventDirective } from './directives/analytics/event.directive';
+import { DataInfoCardsComponent } from './controls/data-info-cards/data-info-cards.component';
 import { AppHostModule } from '@lowcodeunit/app-host-common';
 
 @NgModule({
@@ -48,6 +48,7 @@ import { AppHostModule } from '@lowcodeunit/app-host-common';
     TelemetryDownloadDialogComponent,
     PageViewDirective,
     EventDirective,
+    DataInfoCardsComponent,
   ],
   imports: [
     FathymSharedModule,
@@ -76,6 +77,7 @@ import { AppHostModule } from '@lowcodeunit/app-host-common';
     TelemetryDownloadDialogComponent,
     PageViewDirective,
     EventDirective,
+    DataInfoCardsComponent,
   ],
   entryComponents: [
     LcuDeviceDataFlowManageElementComponent,
@@ -89,6 +91,7 @@ import { AppHostModule } from '@lowcodeunit/app-host-common';
     SendMessageDialogComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
+    DataInfoCardsComponent,
   ],
 })
 export class LcuDeviceDataFlowModule {

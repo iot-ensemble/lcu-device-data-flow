@@ -25,15 +25,15 @@ export class LcuDeviceDataFlowAdminElementComponent
   //  Fields
 
   //  Properties
-  public ActiveChildEnterprise: IoTEnsembleChildEnterprise;
+  // public ActiveChildEnterprise: IoTEnsembleChildEnterprise;
 
   public EnterpriseGridParameters: DataGridConfigModel;
 
   public GridParameters: DataGridConfigModel;
 
-  public SelectedEnterpriseDevices: Array<IoTEnsembleDeviceInfo>;
+  // public SelectedEnterpriseDevices: Array<IoTEnsembleDeviceInfo>;
 
-  public SelectedEnterpriseDeviceIds: Array<string>;
+  public ActiveEnterpriseDeviceIds: Array<string>;
 
   public State: IoTEnsembleAdminState;
 
@@ -48,7 +48,7 @@ export class LcuDeviceDataFlowAdminElementComponent
 
     this.State = {};
 
-    this.SelectedEnterpriseDeviceIds =  Array<string>();
+    this.ActiveEnterpriseDeviceIds =  Array<string>();
   }
 
   //  Life Cycle
@@ -60,6 +60,15 @@ export class LcuDeviceDataFlowAdminElementComponent
   }
 
   //  API Methods
+
+  public HandleEnterprisePageEvent(event: any){
+    console.log("handle ent page event: ", event);
+
+    this.State.Loading = true;
+
+    this.adminCtxt.UpdateActiveEnterpriseSync(event.pageIndex + 1, event.pageSize);
+
+  }
 
   public HandlePageEvent(event: any){
     console.log("Handle page event: ", event);
@@ -78,13 +87,16 @@ export class LcuDeviceDataFlowAdminElementComponent
     }
   }
 
-  public RevokeChildEnterprise(ent: any): void{
+  public RemoveChildEnterprise(ent: IoTEnsembleChildEnterprise): void{
     if (
-      confirm(`Are you sure you want to remove child enterprise '${ent}'?`)
+      confirm(`Are you sure you want to remove child enterprise '${ent.Name}'?`)
     ) {
-      // this.State.Loading = true;
-      console.log("revoking ", ent);
-      // this.iotCtxt.RevokeDeviceEnrollment(device.DeviceID);
+      console.log("removing child ent ", ent);
+      //TODO: comment back in when remove is fully hooked up
+
+      this.State.Loading = true;
+
+      this.adminCtxt.RemoveChildEnterprise(ent.Lookup);
     }
   }
 
@@ -117,7 +129,7 @@ export class LcuDeviceDataFlowAdminElementComponent
     const features = this.setupEnterpriseGridFeatures();
 
     this.EnterpriseGridParameters = new DataGridConfigModel(
-      of(this.SelectedEnterpriseDevices),
+      of(this.State.ActiveEnterpriseConfig.ActiveEnterprise.Devices),
       columndefs,
       features
     );
@@ -167,9 +179,9 @@ export class LcuDeviceDataFlowAdminElementComponent
   protected setupEnterpriseGridFeatures(): DataGridFeaturesModel {
     const paginationDetails: DataGridPaginationModel = new DataGridPaginationModel(
       {
-        Length: this.SelectedEnterpriseDevices.length,
-        PageIndex: 0,
-        PageSize: 5,
+        Length: this.State.ActiveEnterpriseConfig.ActiveEnterprise.DeviceCount,
+        PageIndex: this.State.ActiveEnterpriseConfig.Page - 1,
+        PageSize: this.State.ActiveEnterpriseConfig.PageSize,
         PageSizeOptions: [5, 10, 25],
       }
     );
@@ -219,7 +231,7 @@ export class LcuDeviceDataFlowAdminElementComponent
         ShowIcon: true,
         IconColor: 'green-accent-text',
         IconConfigFunc: (enterprise: IoTEnsembleChildEnterprise) => {
-          return enterprise.Lookup === this.State?.EnterpriseConfig?.ActiveEnterpriseLookup ? 'visibility' : 'visibility_off';
+          return enterprise.Lookup === this.State?.ActiveEnterpriseConfig?.ActiveEnterprise?.Lookup ? 'visibility' : 'visibility_off';
         },
         Action: {
           ActionHandler: this.SetActiveEnterprise.bind(this),
@@ -237,9 +249,9 @@ export class LcuDeviceDataFlowAdminElementComponent
         IconColor: 'red-accent-text',
         IconConfigFunc: () => 'delete',
         Action: {
-          ActionHandler: this.RevokeChildEnterprise.bind(this),
+          ActionHandler: this.RemoveChildEnterprise.bind(this),
           ActionType: 'button',
-          ActionTooltip: 'Revoke',
+          ActionTooltip: 'Remove Child Enterprise',
         },
       }),
       
@@ -273,13 +285,13 @@ export class LcuDeviceDataFlowAdminElementComponent
   }
 
   protected handleStateChanged() {
-    console.log(this.State);
+    console.log("State: ",this.State);
 
     if(this.State.EnterpriseConfig?.ChildEnterprises){
       this.setupGrid();
     }
 
-    if(this.State.EnterpriseConfig?.ActiveEnterpriseLookup){
+    if(this.State.ActiveEnterpriseConfig?.ActiveEnterprise?.Lookup){
       this.setupActiveEnterprise();
       this.setupEnterpriseGrid();
 
@@ -290,20 +302,23 @@ export class LcuDeviceDataFlowAdminElementComponent
  * Sets up the active enterprise and calls warmQuery to 
  */
   protected setupActiveEnterprise() {
-    this.ActiveChildEnterprise = this.State.EnterpriseConfig.ChildEnterprises.find(
-      (ce) => {
-        return ce.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseLookup;
-      }
-    );
 
-    this.SelectedEnterpriseDevices = this.ActiveChildEnterprise.Devices;
+    // this.ActiveChildEnterprise = this.State.EnterpriseConfig.ChildEnterprises.find(
+    //   (ce) => {
+    //     return ce.Lookup === this.State.EnterpriseConfig.ActiveEnterpriseConfig.ActiveEnterprise.Lookup;
+    //   }
+    // );
 
-    this.SelectedEnterpriseDeviceIds = new Array<string>();
+    // this.ActiveChildEnterprise = this.State.ActiveEnterpriseConfig.ActiveEnterprise;
 
-    this.SelectedEnterpriseDevices.forEach(device => { 
+    // this.SelectedEnterpriseDevices = this.ActiveChildEnterprise.Devices;
+
+    this.ActiveEnterpriseDeviceIds = new Array<string>();
+
+    this.State.ActiveEnterpriseConfig.ActiveEnterprise.Devices.forEach(device => { 
       //DeviceID has the enterpriseLookup appended to the front of the device name
       //however deviceId when returned from warm query is the deviceName
-      this.SelectedEnterpriseDeviceIds.push(device.DeviceName);
+      this.ActiveEnterpriseDeviceIds.push(device.DeviceName);
       // this.SelectedEnterpriseDeviceIds.push(device.DeviceID);
     });
 
@@ -313,7 +328,7 @@ export class LcuDeviceDataFlowAdminElementComponent
                             new Date(),
                             100, 
                             1, 
-                            this.SelectedEnterpriseDeviceIds, 
+                            this.ActiveEnterpriseDeviceIds, 
                             true)
       .then((obs: any) => {
         console.log('OBS: ', obs);
@@ -326,7 +341,7 @@ export class LcuDeviceDataFlowAdminElementComponent
   //Determine if the payload is recent
   protected determineActiveDevices(obs: any){
     obs.body.Payloads.forEach((payload:any) => {
-      if(this.SelectedEnterpriseDeviceIds.includes(payload.DeviceID)){
+      if(this.ActiveEnterpriseDeviceIds.includes(payload.DeviceID)){
 
         let payloadTimeMins = Math.floor((new Date(payload.EventEnqueuedUtcTime).getTime()/ (1000 * 60)));
         let currentTimeMins = Math.floor((new Date().getTime() / (1000 * 60)));
@@ -334,7 +349,7 @@ export class LcuDeviceDataFlowAdminElementComponent
         // console.log('payload time: ', payloadTimeMins)
         // console.log('current time: ', currentTimeMins)
         
-        let device = this.ActiveChildEnterprise.Devices.find(device => 
+        let device = this.State.ActiveEnterpriseConfig.ActiveEnterprise.Devices.find(device => 
           device.DeviceName === payload.DeviceID);
 
           if(payloadTimeMins >= currentTimeMins - 60){
