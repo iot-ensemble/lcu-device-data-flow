@@ -33,22 +33,11 @@ export class ApiAccessComponent implements OnChanges, OnInit {
 
   public GridParameters: DataGridConfigModel;
 
-  @Input('data-retention')
-  public DataRetention: string;
-
   @Input('open-api-source')
   public OpenAPISource: string;
 
-  @Input('data-interval')
-  public DataInterval: number;
-
   @Output('regenerated')
-  public Regenerated: EventEmitter<string>;
-
-  @Input('total-payloads')
-  public TotalPayloads: number;
-
-  
+  public Regenerated: EventEmitter<string>;  
 
   protected toggleKeyVisibility: boolean;
 
