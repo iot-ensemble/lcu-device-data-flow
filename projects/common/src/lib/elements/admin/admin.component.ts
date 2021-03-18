@@ -103,7 +103,12 @@ export class LcuDeviceDataFlowAdminElementComponent
   public SetActiveEnterprise(enterprise: IoTEnsembleChildEnterprise) {
     this.State.Loading = true;
 
-    this.adminCtxt.SetActiveEnterprise(enterprise.Lookup);
+    if(enterprise){
+      this.adminCtxt.SetActiveEnterprise(enterprise.Lookup);
+    }
+    else{
+      this.adminCtxt.SetActiveEnterprise(null);
+    }
 
   }
 

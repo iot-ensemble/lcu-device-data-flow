@@ -1,11 +1,12 @@
 <lcu-loader [loading]="State.Loading"></lcu-loader>
-
+<div class="table-container">
 <lcu-data-grid
     class="users-panel"
     expand
     [config]="GridParameters"
     (page-event)="HandlePageEvent($event)"
   ></lcu-data-grid>
+</div>
 
   <div *ngIf="State.ActiveEnterpriseConfig?.ActiveEnterprise">
     <!-- <pre>{{ ActiveChildEnterprise | json }}</pre> -->
@@ -20,5 +21,5 @@
     (page-event)="HandleEnterprisePageEvent($event)"
   ></lcu-data-grid>
   
-    <a mat-raised-button (click)="SetActiveEnterprise(null)">Remove Active</a>
+    <a mat-raised-button (click)="SetActiveEnterprise(null)">Hide Active</a>
   </div> 
