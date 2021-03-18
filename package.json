@@ -44,7 +44,7 @@
     "@lcu/common": "^1.69.632",
     "@lowcodeunit-devkit/ng-lcu": "^1.28.161",
     "@lowcodeunit/app-host-common": "1.8.84-api-access",
-    "@lowcodeunit/data-grid": "^1.17.187",
+    "@lowcodeunit/data-grid": "1.18.205-9179-responsive-breakpoints",
     "@lowcodeunit/lazy-element": "^1.20.64",
     "@lowcodeunit/lcu-documentation-common": "^1.6.38",
     "@lowcodeunit/lcu-icons-common": "^1.2.56",
