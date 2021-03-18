@@ -103,6 +103,8 @@ export class IoTEnsembleTelemetry {
 
   public Enabled?: boolean;
 
+  public IsTelemetryTimedOut?: boolean;
+
   public Loading?: boolean;
 
   public Page?: number;

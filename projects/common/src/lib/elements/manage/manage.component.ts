@@ -578,7 +578,13 @@ export class LcuDeviceDataFlowManageElementComponent
       this.convertToDate(this.State?.Telemetry.LastSyncedAt);
     }
 
+    if (this.State?.Telemetry.IsTelemetryTimedOut){
+      this.State.Telemetry.IsTelemetryTimedOut = false;
+    }
+    
     this.setConnectedDevicesInfoCardFlex();
+
+    console.log("State Changed: ", this.State)
   }
 
   protected setupStateHandler() {
