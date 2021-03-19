@@ -218,6 +218,17 @@ export class LcuDeviceDataFlowManageElementComponent
     this.State.DevicesConfig.Status = null;
   }
 
+  public openTimeOutPopUp() : void {
+    const modalConfig: GenericModalModel = new GenericModalModel({
+      ModalType: 'info', // type of modal we want (data, confirm, info)
+      Message: 'Telemetry sync has auto disabled after 30 minutes',
+      LabelCancel: 'Close',
+      // LabelAction: 'OK',
+      Title: 'TIMEOUT',
+      Width: '50%',
+    });
+  }
+
   public DeviceSASTokensModal(): void {
     // debugger;
     if (
@@ -578,10 +589,12 @@ export class LcuDeviceDataFlowManageElementComponent
       this.convertToDate(this.State?.Telemetry.LastSyncedAt);
     }
 
-    if (this.State?.Telemetry.IsTelemetryTimedOut){
+    if (this.State?.Telemetry?.IsTelemetryTimedOut){
+      this.openTimeOutPopUp();
       this.State.Telemetry.IsTelemetryTimedOut = false;
+      console.log("WE TIMING OUT BOIIIIIIIIIIIIIIII");
     }
-    
+
     this.setConnectedDevicesInfoCardFlex();
 
     console.log("State Changed: ", this.State)
