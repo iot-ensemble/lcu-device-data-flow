@@ -45,6 +45,7 @@ import { PayloadFormComponent } from '../controls/payload-form/payload-form.comp
 import { SendMessageDialogComponent } from './controls/send-message-dialog/send-message-dialog.component';
 import { SasTokenDialogComponent } from './controls/sas-token-dialog/sas-token-dialog.component';
 import { TelemetryDownloadDialogComponent } from './controls/telemetry-download-dialog/telemetry-download-dialog.component';
+import { TelemetryTimeoutDialogComponent } from './controls/telemetry-timeout-dialog/telemetry-timeout-dialog.component'
 import { ColdQueryModel } from '../../models/cold-query.model';
 import {
   SVGToMatIconModel,
@@ -106,7 +107,6 @@ export class LcuDeviceDataFlowManageElementComponent
        (this.DeviceNameToAdd === this.AddDeviceFormGroup.controls.deviceName.value)){
       errorText = ' Device name already exists \r\n';
     }
-    
     return errorText;
   }
 
@@ -220,13 +220,14 @@ export class LcuDeviceDataFlowManageElementComponent
 
   public openTimeOutPopUp() : void {
     const modalConfig: GenericModalModel = new GenericModalModel({
-      ModalType: 'info', // type of modal we want (data, confirm, info)
-      Message: 'Telemetry sync has auto disabled after 30 minutes',
+      ModalType: 'data', // type of modal we want (data, confirm, info)
+      Component: TelemetryTimeoutDialogComponent,
       LabelCancel: 'Close',
       // LabelAction: 'OK',
       Title: 'TIMEOUT',
       Width: '50%',
     });
+    this.genericModalService.Open(modalConfig);
   }
 
   public DeviceSASTokensModal(): void {

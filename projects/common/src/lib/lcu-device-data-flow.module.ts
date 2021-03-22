@@ -29,6 +29,7 @@ import { PageViewDirective } from './directives/analytics/page-view.directive';
 import { EventDirective } from './directives/analytics/event.directive';
 import { DataInfoCardsComponent } from './controls/data-info-cards/data-info-cards.component';
 import { AppHostModule } from '@lowcodeunit/app-host-common';
+import { TelemetryTimeoutDialogComponent } from './elements/manage/controls/telemetry-timeout-dialog/telemetry-timeout-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { AppHostModule } from '@lowcodeunit/app-host-common';
     SendMessageDialogComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
+    TelemetryTimeoutDialogComponent,
     PageViewDirective,
     EventDirective,
     DataInfoCardsComponent,
@@ -75,6 +77,7 @@ import { AppHostModule } from '@lowcodeunit/app-host-common';
     SendMessageDialogComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
+    TelemetryTimeoutDialogComponent,
     PageViewDirective,
     EventDirective,
     DataInfoCardsComponent,
@@ -91,6 +94,7 @@ import { AppHostModule } from '@lowcodeunit/app-host-common';
     SendMessageDialogComponent,
     SasTokenDialogComponent,
     TelemetryDownloadDialogComponent,
+    TelemetryTimeoutDialogComponent,
     DataInfoCardsComponent,
   ],
 })
