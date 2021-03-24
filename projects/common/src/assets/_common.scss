@@ -10,8 +10,10 @@ $accent: map-get($global-theme, accent);
 $warn: map-get($global-theme, warn);
 
 $orange-accent: map-get($mat-orange, 500);
-$green-accent: map-get($mat-green, 400);
+$green-accent: map-get($mat-green, A400);
 $yellow-accent: map-get($mat-yellow, 600);
+$purple-accent: map-get($mat-purple, 500);
+$cyan-accent: rgba(map-get($mat-cyan, A100), .75);
 
 $success:  map-get($mat-green, A700);
 
@@ -86,8 +88,16 @@ html, body {
     color: map-get(map-get($mat-green, contrast), 600);
 }
 
+.red-accent-text {
+    color: mat-color($warn);
+}
+
 .orange-accent-text {
     color: $orange-accent;
+}
+
+.cyan-accent-text {
+    color: $cyan-accent;
 }
 
 .yellow-accent-text {
@@ -96,6 +106,10 @@ html, body {
 
 .green-accent-text {
     color: $green-accent;
+}
+
+.purple-accent-text {
+    color: $purple-accent;
 }
 
 .divider-fill-vert {
