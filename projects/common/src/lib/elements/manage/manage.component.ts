@@ -27,6 +27,7 @@ import {
 import {
   IoTEnsembleTelemetryPayload,
   IoTEnsembleState,
+  ColdQueryResultTypes,
 } from './../../state/iot-ensemble.state';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {
@@ -310,9 +311,9 @@ export class LcuDeviceDataFlowManageElementComponent
       .subscribe((payload: IoTEnsembleTelemetryPayload) => {
         console.log('ONAction', payload);
 
-        if (payload) {
-          this.SendDeviceMesaage(payload);
-        }
+        // if (payload) {
+        //   this.SendDeviceMesaage(payload);
+        // }
       });
   }
 
@@ -435,7 +436,6 @@ export class LcuDeviceDataFlowManageElementComponent
 
   public SendDeviceMesaage(payload: IoTEnsembleTelemetryPayload) {
     this.State.Telemetry.Loading = true;
-
     this.iotEnsCtxt.SendDeviceMessage(payload.DeviceID, payload);
   }
 
@@ -456,7 +456,7 @@ export class LcuDeviceDataFlowManageElementComponent
   public TelemetryDownload(query: ColdQueryModel) {
     console.log('ColdQueryModelCall: ', query);
 
-    if (!query.Zip) {
+    if (query.ResultType === ColdQueryResultTypes.JSON && !query.Zip) {
       this.iotEnsCtxt
         .ColdQuery(
           query.StartDate,
@@ -468,7 +468,8 @@ export class LcuDeviceDataFlowManageElementComponent
           query.DataType,
           query.ResultType,
           query.Flatten,
-          query.Zip
+          query.Zip,
+          query.AsFile
         )
         .then((obs: any) => {
           console.log('OBS: ', obs);
@@ -479,6 +480,35 @@ export class LcuDeviceDataFlowManageElementComponent
 
           const link = document.createElement('a');
           link.download = 'telemetry.json';
+          link.href = url;
+          link.click();
+        });
+    }
+    else if (query.ResultType === ColdQueryResultTypes.CSV && !query.Zip) {
+      this.iotEnsCtxt
+        .ColdQuery(
+          query.StartDate,
+          query.EndDate,
+          query.PageSize,
+          query.PageSize,
+          query.SelectedDeviceIds,
+          query.IncludeEmulated,
+          query.DataType,
+          query.ResultType,
+          query.Flatten,
+          query.Zip,
+          query.AsFile
+        )
+        .then((obs: any) => {
+          debugger
+          console.log('CSV OBS: ', obs);
+          const blob = new Blob([JSON.stringify(obs.body)], {
+            type: 'text/csv',
+          });
+          const url = window.URL.createObjectURL(blob);
+
+          const link = document.createElement('a');
+          link.download = 'telemetry.csv';
           link.href = url;
           link.click();
         });

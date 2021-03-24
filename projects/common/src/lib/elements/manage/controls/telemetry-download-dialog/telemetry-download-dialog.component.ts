@@ -5,13 +5,11 @@ import * as FileSaver from 'file-saver';
 import * as JSZip from 'jszip';
 import { ColdQueryModel } from 'projects/common/src/lib/models/cold-query.model';
 import { GenericModalModel } from 'projects/common/src/lib/models/generice-modal.model';
-// import { IoTEnsembleStateContext } from 'projects/common/src/lib/state/iot-ensemble-state.context';
 import {
   ColdQueryDataTypes,
   ColdQueryResultTypes,
   IoTEnsembleState,
 } from 'projects/common/src/lib/state/iot-ensemble.state';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lcu-telemetry-download-dialog',
@@ -31,7 +29,6 @@ export class TelemetryDownloadDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: GenericModalModel,
     protected http: HttpClient,
-    // protected iotEnsCtxt: IoTEnsembleStateContext,
     public dialogRef: MatDialogRef<TelemetryDownloadDialogComponent>
   ) {
     this.deviceIDs = [];
@@ -48,8 +45,30 @@ export class TelemetryDownloadDialogComponent implements OnInit {
   public Close() {
     this.dialogRef.close(null);
   }
+
+  /**
+   * Generate csv file and download
+   */
+   public CSVDownloadSelected() {
+    this.coldQueryConfig = new ColdQueryModel(
+      ColdQueryDataTypes.Telemetry,
+      new Date(),
+      true,
+      false,
+      1,
+      10,
+      ColdQueryResultTypes.CSV,
+      this.deviceIDs,
+      new Date(new Date().setDate(new Date().getDate() - 30)),
+      false,
+      false
+    );
+    this.closeAndDownload();
+   }
+
   /**
    * Create json file and download
+   * 
    */
   public JSONDownloadSelected() {
     this.coldQueryConfig = new ColdQueryModel(
@@ -62,7 +81,8 @@ export class TelemetryDownloadDialogComponent implements OnInit {
       ColdQueryResultTypes.JSON,
       this.deviceIDs,
       new Date(new Date().setDate(new Date().getDate() - 30)),
-      false
+      false,
+      true
     );
     this.closeAndDownload();
   }
@@ -80,6 +100,7 @@ export class TelemetryDownloadDialogComponent implements OnInit {
       ColdQueryResultTypes.JSON,
       this.deviceIDs,
       new Date(new Date().setDate(new Date().getDate() - 30)),
+      true,
       true
     );
     this.closeAndDownload();
@@ -100,7 +121,8 @@ export class TelemetryDownloadDialogComponent implements OnInit {
   //Helpers
 
   protected getDeviceIDs() {
-    this.data.Data.forEach((device) => {
+    console.log("GET DEVICE IDS: ", this.data)
+    this.data.Data.Devices.forEach((device) => {
       this.deviceIDs.push(device.DeviceID);
     });
     console.log('Device IDs: ', this.deviceIDs);

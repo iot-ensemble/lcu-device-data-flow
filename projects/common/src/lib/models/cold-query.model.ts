@@ -28,6 +28,9 @@ export class ColdQueryModel {
 
     Zip: boolean;
 
+    AsFile: boolean;
+     
+         
 
     constructor(DataType: ColdQueryDataTypes, 
                 EndDate: Date, 
@@ -38,7 +41,8 @@ export class ColdQueryModel {
                 ResultType: ColdQueryResultTypes,
                 SelectedDeviceIds: string[], 
                 StartDate: Date, 
-                Zip: boolean) {
+                Zip: boolean,
+                AsFile: boolean) {
 
         this.DataType = DataType;
         this.EndDate = EndDate;
@@ -50,6 +54,7 @@ export class ColdQueryModel {
         this.SelectedDeviceIds = SelectedDeviceIds;
         this.StartDate = StartDate;
         this.Zip = Zip;
+        this.AsFile = AsFile;
 
     }
 }

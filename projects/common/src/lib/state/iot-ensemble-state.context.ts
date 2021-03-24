@@ -33,7 +33,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     dataType: ColdQueryDataTypes = ColdQueryDataTypes.Telemetry,
     resultType: ColdQueryResultTypes = ColdQueryResultTypes.JSON,
     flatten: boolean = false,
-    zip: boolean = false
+    zip: boolean = false,
+    asFile: boolean = false
   ): Promise<object> {
     console.log(
       'Calling ColdQuery',
@@ -46,7 +47,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
       dataType,
       resultType,
       flatten,
-      zip
+      zip,
+      asFile
     );
 
     const args = {
@@ -60,6 +62,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
       SelectedDeviceIDs: selectedDeviceIds,
       StartDate: startDate,
       Zip: zip,
+      AsFile: asFile
     };
 
     this.gtagEvent('ColdQuery', args);
