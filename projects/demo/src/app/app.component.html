@@ -1,7 +1,8 @@
-<div [className]="ThemeClass | async" style="height: 100%">
-  <mat-toolbar color="primary" class="lcu-toolbar">
-    <a mat-raised-button href="manage">Manage</a>
-
+<div [className]="ThemeClass | async" fxFlex>
+  <mat-toolbar 
+  color="primary" 
+  class="lcu-toolbar">
+    <a class="margin-right-3" mat-raised-button href="manage">Manage</a>
     <a mat-raised-button href="admin">Admin</a>
   </mat-toolbar>
 

@@ -405,11 +405,20 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   public Refresh(ctxt: string) {
+
     const loadingCtxt = this.State[ctxt] || this.State;
 
     loadingCtxt.Loading = true;
 
     this.iotEnsCtxt.$Refresh();
+  
+    /**
+     * as per a discussion with Mike,
+     * placing this here to circumvent, bug 9297, for now - shannon
+     *
+     */
+    loadingCtxt.Loading = false;
+    //
   }
 
   public RefreshRateChanged(rate: number) {
@@ -596,6 +605,7 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected handleStateChanged() {
+
     this.DeviceSASTokensModal();
 
     this.DeviceNames =
