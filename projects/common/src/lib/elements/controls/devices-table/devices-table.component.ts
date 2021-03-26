@@ -138,6 +138,7 @@ export class DevicesTableComponent implements OnInit{//}, OnChanges {
         Title: 'Connection String',
         ShowValue: true,
         ShowIcon: true,
+        Tooltip: true,
         Pipe: DataPipeConstants.PIPE_STRING_SLICE_SEVENTY,
       }),
 
