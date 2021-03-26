@@ -1,10 +1,13 @@
 import { Status } from '@lcu/common';
-import { logging } from 'protractor';
 
 export class IoTEnsembleState {
   public AccessLicenseType?: string;
 
   public AccessPlanGroup?: string;
+
+  public DataInterval?: number;
+
+  public DataRetention?: number;
 
   public DevicesConfig?: IoTEnsembleConnectedDevicesConfig;
 
@@ -97,6 +100,7 @@ export class IoTEnsembleDeviceInfo {
 }
 
 export class IoTEnsembleTelemetry {
+
   public Enabled?: boolean;
 
   public Loading?: boolean;
