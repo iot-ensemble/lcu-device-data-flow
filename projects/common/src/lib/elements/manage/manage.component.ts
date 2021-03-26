@@ -326,6 +326,7 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   public IssueDeviceSASToken(deviceName: string) {
+
     this.State.DevicesConfig.Loading = true;
 
     //  TODO:  Pass through expiry time in some way?
