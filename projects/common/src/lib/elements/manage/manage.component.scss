@@ -5,40 +5,37 @@
   font-size: 1em;
 }
 
-:host {
-
+:host ::ng-deep {
   .manage-header {
   }
 
   .manage {
     .section {
-      margin: .5rem 0;
+      display: block;
+      margin: 0.5rem 0;
     }
 
-    .devices {
-      .emulated {
-      }
-
-      .connected {
-        .deviceId,
-        .connStr {
-          // width: 300px;
-          // margin: 0.5em;
-        }
-      }
-
-      // .dashboard {
-        // iframe {
-          // width: 100%;
-        // }
-      // }
-
-      // .telemetry {
-      // }
+    .emulated {
     }
 
     .connected {
       .device-list {
+      }
+
+      .deviceId,
+      .connStr {
+        // width: 300px;
+        // margin: 0.5em;
+      }
+
+      .divider-fill-vert {
+        height: 150px;
+      }
+    }
+
+    .telemetry {
+      .card-subtitle {
+        display: flex;
       }
     }
 
@@ -58,7 +55,7 @@
     }
 
     .error-dot {
-      @include info-dot(mat-color($warn))
+      @include info-dot(mat-color($warn));
     }
   }
 }

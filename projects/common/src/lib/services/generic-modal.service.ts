@@ -8,7 +8,7 @@ import { GenericModalModel } from '../models/generice-modal.model';
   providedIn: 'root'
 })
 
-// TODO: May need to create a unique ID to isolate and
+// TODO: May need to create a unique ID to isolate
 // multiple modals - shannon
 
 /**

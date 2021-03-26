@@ -92,9 +92,10 @@ export class SasTokenDialogComponent implements OnInit {
       new ColumnDefinitionModel({
         ColType: 'SASToken',
         Title: 'SAS Token',
-        ColWidth: '35%',
-        ShowValue: true,
         Tooltip: true,
+        WordBreak: true,
+        ShowValue: true,
+        ColWidth: '50%',
         Pipe: DataPipeConstants.PIPE_STRING_SLICE_FIFTY
       }),
       // new ColumnDefinitionModel(
@@ -152,7 +153,7 @@ export class SasTokenDialogComponent implements OnInit {
       ShowLoader: true,
       RowColorEven: 'gray',
       RowColorOdd: 'light-gray',
-      MobileBreakpoint: '600px'
+      MobileBreakpoint: '1100px'
     });
 
     return features;

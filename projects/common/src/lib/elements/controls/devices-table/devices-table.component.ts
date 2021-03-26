@@ -210,6 +210,7 @@ export class DevicesTableComponent implements OnInit{//}, OnChanges {
       Filter: false,
       ShowLoader: true,
       Highlight: 'rowHighlight',
+      MobileBreakpoint: '800px'
       // RowColorEven: 'gray',
       // RowColorOdd: 'light-gray',
     });

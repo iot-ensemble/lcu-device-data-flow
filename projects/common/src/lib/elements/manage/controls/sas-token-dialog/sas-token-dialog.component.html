@@ -1,14 +1,13 @@
-<div lcuPageView="#sas-token-dialog" [screen-view]="true">
+<div 
+lcuPageView="#sas-token-dialog" 
+[screen-view]="true">
   <h2>Devices SAS Tokens</h2>
 
-  <div class="table-container">
+  <!-- <div class="table-container"> -->
     <lcu-data-grid expand [config]="GridParameters"> </lcu-data-grid>
-  </div>
+  <!-- </div> -->
 
-  <div 
-    fxLayout="row" 
-    fxLayoutAlign="end center" 
-    class="margin-top-3">
+  <div fxLayoutAlign="end" class="margin-top-2">
     <button mat-raised-button (click)="Close()">Close</button>
   </div>
 </div>

@@ -15,6 +15,7 @@ import { ManageComponent } from './controls/manage/manage.component';
 import { LcuDocumentationModule } from '@lowcodeunit/lcu-documentation-common';
 import { LcuDeviceDataFlowModule } from '@iot-ensemble/lcu-device-data-flow-common';
 import { environment } from '../environments/environment';
+import { AppHostModule } from '@lowcodeunit/app-host-common';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, AdminComponent, ManageComponent],
@@ -25,8 +26,8 @@ import { environment } from '../environments/environment';
     FathymSharedModule.forRoot(),
     MaterialModule,
     FlexLayoutModule,
-    LcuDocumentationModule.forRoot(),
     LcuDeviceDataFlowModule.forRoot(),
+    AppHostModule.forRoot()
   ],
   providers: [
     {

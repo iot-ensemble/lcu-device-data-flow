@@ -1,4 +1,12 @@
 <div>
+
+  <div class="margin-left-5 margin-top-2">
+    Use the API keys to get your data downstream to the dashboards and
+    services of your choice for visualization, application development,
+    ML/AI, and more.
+  </div>
+
+
   <div class="margin-top-4">
     <mat-card-header>
       <mat-card-title>
@@ -10,6 +18,7 @@
       <lcu-data-grid expand [config]="GridParameters"> </lcu-data-grid>
     </div>
   </div>
+
 
   <div class="margin-top-4">
     <div fxFlex></div>
@@ -32,10 +41,18 @@
         <p>
           Here we have embedded Swagger so that you
           can see the parameters available for the Cold and
-          Warm APIs, as well as test to see the responses.
+          Warm APIs, as well as test to see the responses. 
+          (Warm Query will return 100 payloads by default unless specified)
         </p>
-        <div class="margin-top-4">
+        <div 
+          class="margin-top-4" 
+          fxLayout="row" 
+          fxLayoutAlign="space-between start"
+          fxLayout.lt-sm = "column"
+          fxLayoutAlign.lt-sm="space-between center"> 
+
           <lcu-swagger-ui
+            fxFlex="80"
             [source]="OpenAPISource"
             [auth-key]="APIKeys[0]?.Key"
             *ngIf="APIKeys?.length > 0">
