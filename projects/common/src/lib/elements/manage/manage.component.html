@@ -109,7 +109,7 @@
             </ng-container>
           </div>
 
-          <div class="device-list" *ngIf="!AddingDevice">
+          <div class="device-list" *ngIf="!AddingDevice" style="background-color: red;">
             <lcu-devices-table
               [devices-config]="State.DevicesConfig"
               (issued-sas-token)="IssueDeviceSASToken($event)"
@@ -341,17 +341,15 @@
 
         <div 
         class="margin-top-4" 
-        fxLayout="row" 
-        fxLayoutAlign="space-around start"
-        fxLayout.lt-md = "column"
-        fxLayoutAlign.lt-md="space-between center"> 
+    
+        > 
 
-        <lcu-data-info-cards
+        <!-- <lcu-data-info-cards
             fxFlex="20"
             [data-retention]="State.DataRetention"
             [data-interval]="State.DataInterval"
             [total-payloads]="State.Telemetry?.TotalPayloads">
-          </lcu-data-info-cards>
+          </lcu-data-info-cards> -->
 
         <lcu-api-access
           [api-keys]="State.Storage?.APIKeys"
