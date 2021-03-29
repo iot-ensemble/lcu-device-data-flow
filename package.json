@@ -43,7 +43,7 @@
     "@aspnet/signalr": "^1.1.4",
     "@lcu/common": "^1.69.632",
     "@lowcodeunit-devkit/ng-lcu": "^1.28.161",
-    "@lowcodeunit/app-host-common": "1.19.127-9127-update-link-theme",
+    "@lowcodeunit/app-host-common": "1.20.132",
     "@lowcodeunit/data-grid": "^1.20.236",
     "@lowcodeunit/lazy-element": "^1.20.64",
     "@lowcodeunit/lcu-documentation-common": "^1.6.38",
