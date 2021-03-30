@@ -593,12 +593,9 @@ export class LcuDeviceDataFlowManageElementComponent
     if (this.State?.Telemetry?.IsTelemetryTimedOut){
       this.openTimeOutPopUp();
       this.State.Telemetry.IsTelemetryTimedOut = false;
-      console.log("WE TIMING OUT BOIIIIIIIIIIIIIIII");
     }
 
     this.setConnectedDevicesInfoCardFlex();
-
-    console.log("State Changed: ", this.State)
   }
 
   protected setupStateHandler() {
@@ -617,7 +614,7 @@ export class LcuDeviceDataFlowManageElementComponent
     }
     else{
       this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
-      
+
     }
   }
 
