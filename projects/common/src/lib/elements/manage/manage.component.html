@@ -341,15 +341,17 @@
 
         <div 
         class="margin-top-4" 
+        fxLayout="row"
+        fxLayoutAlign="space-around start"
     
         > 
 
-        <!-- <lcu-data-info-cards
+        <lcu-data-info-cards
             fxFlex="20"
             [data-retention]="State.DataRetention"
             [data-interval]="State.DataInterval"
             [total-payloads]="State.Telemetry?.TotalPayloads">
-          </lcu-data-info-cards> -->
+          </lcu-data-info-cards>
 
         <lcu-api-access
           [api-keys]="State.Storage?.APIKeys"
