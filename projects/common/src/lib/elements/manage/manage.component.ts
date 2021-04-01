@@ -205,7 +205,7 @@ export class LcuDeviceDataFlowManageElementComponent
     if(this.AddDeviceFormGroup){
         this.AddDeviceFormGroup.reset();
       }
-      this.ToggleAddingDevice();
+      this.State.DevicesConfig.AddingDevice = true;
   }
 
   public get AddDeviceFGDeviceName(): AbstractControl{
@@ -213,7 +213,7 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   public CancelAddingDevice(){
-    this.ToggleAddingDevice();
+    this.State.DevicesConfig.AddingDevice = false;
     this.AddDeviceFormGroup.reset();
     this.State.DevicesConfig.Status = null;
   }
@@ -496,7 +496,7 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   public ToggleAddingDevice() {
-    this.AddingDevice = !this.AddingDevice;
+    this.State.DevicesConfig.AddingDevice = !this.State.DevicesConfig.AddingDevice;
   }
 
   public ToggleEmulatedEnabledChanged(enabled: boolean) {
@@ -581,8 +581,6 @@ export class LcuDeviceDataFlowManageElementComponent
     this.DeviceNames =
       this.State?.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
 
-    this.setAddingDevice();
-
     this.setupFreeboard();
 
     if (this.State?.Telemetry) {
@@ -602,20 +600,10 @@ export class LcuDeviceDataFlowManageElementComponent
     });
   }
 
-  protected setAddingDevice() {
-    if(this.State?.DevicesConfig?.Status?.Code === 1){
-      this.AddingDevice = true;
-    }
-    else{
-      this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
-      
-    }
-  }
-
   protected setConnectedDevicesInfoCardFlex() {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
 
-    this.ConnectedDevicesInfoCardFlex = this.AddingDevice ? maxDeviceFlex : '100%';
+    this.ConnectedDevicesInfoCardFlex = this.State.DevicesConfig?.AddingDevice ? maxDeviceFlex : '100%';
   }
 
   protected setDashboardIFrameURL() {
