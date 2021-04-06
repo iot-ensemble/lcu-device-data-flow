@@ -1,6 +1,6 @@
 import { Component, Inject, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ClipboardCopyFunction } from '@lcu/common';
+import { ClipboardCopyFunction, DataPipeConstants } from '@lcu/common';
 import {
   ColumnDefinitionModel,
   DataGridConfigModel,
@@ -92,14 +92,36 @@ export class SasTokenDialogComponent implements OnInit {
       new ColumnDefinitionModel({
         ColType: 'SASToken',
         Title: 'SAS Token',
-        ColWidth: '50%',
+        Tooltip: true,
+        WordBreak: true,
         ShowValue: true,
+        ColWidth: '50%',
+        Pipe: DataPipeConstants.PIPE_STRING_SLICE_FIFTY
       }),
-
+      // new ColumnDefinitionModel(
+        // {
+        //   ColType: 'actions',
+        //   ColWidth: '56px',
+        //   ColBGColor: '',
+        //   Title: '',
+        //   ShowValue: true,
+        //   ShowIcon: true,
+        //   IconColor: 'accent-primary-text',
+        //   IconConfigFunc: () => {
+        //     return 'preview'; // function that returns the material icon to display
+        //   },
+        //   Action:
+        //   {
+        //     ActionHandler: this.ViewToken.bind(this),
+        //     ActionLabel: '',
+        //     ActionType: 'button',
+        //     ActionTooltip: 'View'
+        //   }
+        // }),
       new ColumnDefinitionModel({
         ColType: 'copy',
-        ColWidth: '10px',
         Title: '',
+        ColWidth: '56px',
         ShowValue: false,
         ShowIcon: true,
         IconColor: 'orange-accent-text',
@@ -115,6 +137,10 @@ export class SasTokenDialogComponent implements OnInit {
     ];
   }
 
+  protected ViewToken(val: ColumnDefinitionModel): void {
+    val['$IsExpanded'] = !val['$IsExpanded'];
+  }
+  
   protected setupGridFeatures() {
     // const paginationDetails = new DataGridPaginationModel({
     //   PageSize: 10,
@@ -127,6 +153,7 @@ export class SasTokenDialogComponent implements OnInit {
       ShowLoader: true,
       RowColorEven: 'gray',
       RowColorOdd: 'light-gray',
+      MobileBreakpoint: '1100px'
     });
 
     return features;

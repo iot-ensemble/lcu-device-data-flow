@@ -56,10 +56,13 @@
       required></textarea>
   </mat-form-field>
 
-  <div>
-    <div fxFlex></div>
-
+  <div 
+    fxLayout="row" 
+    fxLayout.lt-sm="column"
+    fxLayoutAlign.lt-sm="end end"
+    fxLayoutAlign="end center">
     <button
+      class="margin-right-2"
       mat-raised-button
       type="submit"
       color="primary"
