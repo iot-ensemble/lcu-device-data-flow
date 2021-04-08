@@ -116,6 +116,8 @@ export class LcuDeviceDataFlowManageElementComponent
 
   public FreeboardURL: string;
 
+  protected isTimeoutModalOpen: boolean;
+
   public LastSyncedAt: Date;
 
   public get MaxDevicesReached(): boolean {
@@ -158,6 +160,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.State = {};
 
     this.PipeDate = DataPipeConstants.DATE_TIME_ZONE_FMT;
+
+    this.isTimeoutModalOpen = false;
   }
 
   //  Life Cycle
@@ -227,7 +231,16 @@ export class LcuDeviceDataFlowManageElementComponent
       Title: 'TIMEOUT',
       Width: '50%',
     });
-    this.genericModalService.Open(modalConfig);
+    if(this.isTimeoutModalOpen === false){
+      this.State.Telemetry.IsTelemetryTimedOut=false;
+      this.isTimeoutModalOpen = true;
+      this.genericModalService.Open(modalConfig);
+      this.genericModalService.ModalComponent.afterClosed().subscribe(
+        (res: any) => {
+          this.isTimeoutModalOpen = false;
+        }
+      );
+    }
   }
 
   public DeviceSASTokensModal(): void {
@@ -373,13 +386,13 @@ export class LcuDeviceDataFlowManageElementComponent
      * Pass modal config to service open function
      */
     this.genericModalService.Open(modalConfig);
-    
+
     this.genericModalService.ModalComponent.afterOpened().subscribe(
       (res: any) => {
         console.log('MODAL OPEN', res);
 
         this.genericModalService.ModalInstance.FilterValue.subscribe((filterValue: string) => {
-      
+
           this.iotEnsCtxt.ListAllDeviceNames(this.State.UserEnterpriseLookup, filterValue)
           .then((obs: any) => {
             // console.log("obs: ", obs)
@@ -389,14 +402,14 @@ export class LcuDeviceDataFlowManageElementComponent
 
             } else 
               {
-                console.log("error: ", obs.body.Status);      
+                console.log("error: ", obs.body.Status);
                }
           });
         })
       }
     );
 
-   
+
   this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: any) => {
         console.log('MODAL CLOSED', res);
@@ -422,7 +435,7 @@ export class LcuDeviceDataFlowManageElementComponent
     loadingCtxt.Loading = true;
 
     this.iotEnsCtxt.$Refresh();
-  
+
     /**
      * as per a discussion with Mike,
      * placing this here to circumvent, bug 9297, for now - shannon
@@ -599,12 +612,11 @@ export class LcuDeviceDataFlowManageElementComponent
 
     if (this.State?.Telemetry) {
       this.convertToDate(this.State?.Telemetry.LastSyncedAt);
+      if (this.State?.Telemetry.IsTelemetryTimedOut && this.State?.Telemetry.Enabled){
+        this.openTimeOutPopUp();
+      }
     }
 
-    if (this.State?.Telemetry?.IsTelemetryTimedOut){
-      this.openTimeOutPopUp();
-      this.State.Telemetry.IsTelemetryTimedOut = false;
-    }
 
     this.setConnectedDevicesInfoCardFlex();
   }
