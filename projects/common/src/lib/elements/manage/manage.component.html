@@ -338,29 +338,25 @@
           services of your choice for visualization, application development,
           ML/AI, and more.
         </div>
-
         <div 
         class="margin-top-4" 
-        fxLayout="row"
-        fxLayout.lt-md="column"
-        fxLayoutAlign="space-around start"
-        fxLayoutAlign.lt-md="space-around center"
-
-    
+        fxLayout="column"
+        fxLayout.gt-md="row"
+        fxLayoutAlign.gt-md="space-around start"
+        fxLayoutAlign="space-around center"
+        fxLayoutGap="50px"
         > 
-
-        <lcu-data-info-cards
-            fxFlex="20"
-            [data-retention]="State.DataRetention"
-            [data-interval]="State.DataInterval"
-            [total-payloads]="State.Telemetry?.TotalPayloads">
+          <lcu-data-info-cards
+          fxFlex="20"
+          [data-retention]="State.DataRetention"
+          [data-interval]="State.DataInterval"
+          [total-payloads]="State.Telemetry?.TotalPayloads">
           </lcu-data-info-cards>
-
-        <lcu-api-access
-          [api-keys]="State.Storage?.APIKeys"
-          [open-api-source]="State.Storage?.OpenAPISource"
-          (regenerated)="RegenerateAPIKey($event)"
-        ></lcu-api-access>
+          <lcu-api-access
+            [api-keys]="State.Storage?.APIKeys"
+            [open-api-source]="State.Storage?.OpenAPISource"
+            (regenerated)="RegenerateAPIKey($event)"
+          ></lcu-api-access>
         </div>
       </div>
     </app-host-dashboard-card-element>
