@@ -196,7 +196,8 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
   public UpdateTelemetrySync(
     refreshRate: number,
     page: number,
-    pageSize: number
+    pageSize: number,
+    payloadId: string
   ) {
     console.log('updating telemetry sync page number: ', page);
 
@@ -204,6 +205,7 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
       RefreshRate: refreshRate,
       Page: page,
       PageSize: pageSize,
+      PayloadId: payloadId
     };
 
     this.gtagEvent('UpdateTelemetrySync', args);

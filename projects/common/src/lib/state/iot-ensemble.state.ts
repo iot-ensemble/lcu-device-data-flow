@@ -19,6 +19,8 @@ export class IoTEnsembleState {
 
   public Error?: ErrorContext;
 
+  public ExpandedPayloadId?: string;
+
   public HasAccess?: boolean;
 
   public Loading?: boolean;

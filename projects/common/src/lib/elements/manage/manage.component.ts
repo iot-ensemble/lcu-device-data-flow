@@ -106,7 +106,7 @@ export class LcuDeviceDataFlowManageElementComponent
        (this.DeviceNameToAdd === this.AddDeviceFormGroup.controls.deviceName.value)){
       errorText = ' Device name already exists \r\n';
     }
-    
+
     return errorText;
   }
 
@@ -315,6 +315,15 @@ export class LcuDeviceDataFlowManageElementComponent
         }
       });
   }
+  HandleExpandedPayloadID(event: any)
+  {
+    console.log("handling id " + event);
+    this.iotEnsCtxt.UpdateTelemetrySync(
+      this.State.Telemetry.RefreshRate,
+      this.State.Telemetry.Page,
+      this.State.Telemetry.PageSize,
+      event);
+  }
 
   public HandleTelemetryPageEvent(event: any) {
     if (event.pageIndex + 1 !== this.State.Telemetry.Page) {
@@ -426,7 +435,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       rate,
       this.State.Telemetry.Page,
-      this.State.Telemetry.PageSize
+      this.State.Telemetry.PageSize,
+      null
     );
   }
 
@@ -535,7 +545,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       page,
-      this.State.Telemetry.PageSize
+      this.State.Telemetry.PageSize,
+      null
     );
   }
 
@@ -545,7 +556,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       this.State.Telemetry.Page,
-      pageSize
+      pageSize,
+      null
     );
   }
 
@@ -575,6 +587,8 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected handleStateChanged() {
+    
+    console.log("EXPANDED PAYLOAD ID CHANGE " + this.State.ExpandedPayloadId);
 
     this.DeviceSASTokensModal();
 
@@ -597,7 +611,6 @@ export class LcuDeviceDataFlowManageElementComponent
       this.State = Object.assign(this.State, state);
 
       // console.log("State: ", this.State)
-
       this.handleStateChanged();
     });
   }

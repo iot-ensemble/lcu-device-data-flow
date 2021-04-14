@@ -296,6 +296,7 @@
         <lcu-telemetry-list
           [telemetry]="State.Telemetry"
           (page-event)="HandleTelemetryPageEvent($event)"
+          (payloadId)="HandleExpandedPayloadID($event)"
         >
         </lcu-telemetry-list>
       </div>

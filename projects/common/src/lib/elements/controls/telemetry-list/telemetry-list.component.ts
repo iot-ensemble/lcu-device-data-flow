@@ -32,7 +32,6 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   //  Fields
 
   //  Properties
-
   @Output('downloaded')
   public Downloaded: EventEmitter<IoTEnsembleTelemetryPayload>;
 
@@ -43,6 +42,9 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   @Output('page-event')
   public PageEvent: EventEmitter<any>;
 
+  @Output('payloadId')
+  public PayloadId: EventEmitter<any>;
+
   @Input('telemetry')
   public Telemetry: IoTEnsembleTelemetry;
 
@@ -51,6 +53,8 @@ export class TelemetryListComponent implements OnChanges, OnInit {
     this.Downloaded = new EventEmitter();
 
     this.PageEvent = new EventEmitter();
+
+    this.PayloadId = new EventEmitter();
 
     this.Telemetry = { Payloads: [] };
   }
@@ -92,7 +96,11 @@ export class TelemetryListComponent implements OnChanges, OnInit {
     this.Downloaded.emit(payload);
   }
 
+  public emitPayloadId(payloadId: string): void {
+    this.PayloadId.emit(payloadId);
+  }
   public SetActivePayload(payload: IoTEnsembleTelemetryPayload) {
+    this.emitPayloadId(payload.id)
     payload.$IsExpanded = !payload.$IsExpanded;
 
     this.updateTelemetryDataSource();
