@@ -4,7 +4,7 @@
   </div>
 
 
-  <div class="stats-body" fxLayout="column" fxLayoutAlign="space-between start">
+  <div class="stats-body" fxLayout.lt-lg="column" fxLayout="row" fxLayoutAlign="space-between start">
 
     <div class="data-block" fxLayout="row" *ngFor="let info of DataInfo">
 
@@ -19,7 +19,8 @@
 
       <div 
         class="data-info" 
-        fxLayout="column" 
+        fxLayout="row" 
+        fxLayoutGap="20px"
         fxFlex="80" 
         fxFlex.lt-sm="75">
 

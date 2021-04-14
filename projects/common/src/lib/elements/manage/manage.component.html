@@ -340,19 +340,28 @@
         </div>
         <div 
         class="margin-top-4" 
-        fxLayout="column"
-        fxLayout.gt-md="row"
-        fxLayoutAlign.gt-md="space-around start"
-        fxLayoutAlign="space-around center"
-        fxLayoutGap="50px"
+        fxLayout="row"
+        fxLayout.lt-lg="column"
+        fxLayoutAlign="space-around start"
+        fxLayoutAlign.lt-lg="space-around center"
+        
         > 
-          <lcu-data-info-cards
-          fxFlex="20"
-          [data-retention]="State.DataRetention"
-          [data-interval]="State.DataInterval"
-          [total-payloads]="State.Telemetry?.TotalPayloads">
-          </lcu-data-info-cards>
+        <lcu-data-info-cards
+        fxFlex="50"
+        [data-retention]="State.DataRetention"
+        [data-interval]="State.DataInterval"
+        [total-payloads]="State.Telemetry?.TotalPayloads">
+        </lcu-data-info-cards>
+      </div>
+        <div 
+        class="margin-top-4" 
+        fxLayout="row"
+        fxLayout.lt-lg="column"
+        fxLayoutAlign="space-around start"
+        fxLayoutAlign.lt-lg="space-around center"
+        > 
           <lcu-api-access
+            fxFlex=100
             [api-keys]="State.Storage?.APIKeys"
             [open-api-source]="State.Storage?.OpenAPISource"
             (regenerated)="RegenerateAPIKey($event)"
