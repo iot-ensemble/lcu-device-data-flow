@@ -345,7 +345,7 @@
         fxLayout.lt-md="column"
         fxLayoutAlign="space-around start"
         fxLayoutAlign.lt-md="space-around center"
-
+        
     
         > 
 
@@ -362,6 +362,36 @@
           (regenerated)="RegenerateAPIKey($event)"
         ></lcu-api-access>
         </div>
+        <div 
+        class="margin-top-4" 
+        fxLayout="column"
+        
+        > 
+        <div class="margin-top-4">
+          <div>
+            <mat-card-header class="margin-left-5" >
+              <mat-card-title>
+                Try It
+              </mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content class="margin-top-4" class="margin-left-5">
+              <p  class="margin-left-5">
+                Here we have embedded Swagger so that you can see the parameters available for various APIs, as well as test to see the responses.
+              </p>
+              <div>
+                <lcu-swagger-ui
+                  [source]="State.Storage?.OpenAPISource"
+                  [auth-key]="State.Storage?.APIKeys[0]?.Key"
+                  *ngIf="State.Storage?.APIKeys?.length > 0"
+                >
+                </lcu-swagger-ui>
+              </div>
+            </mat-card-content>
+          </div>
+        </div>
+
+      </div>
       </div>
     </app-host-dashboard-card-element>
     <!--^^^ Storage Access ^^^-->
