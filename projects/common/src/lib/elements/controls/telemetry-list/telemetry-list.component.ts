@@ -188,7 +188,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
       new ColumnDefinitionModel({
         ColType: 'view', // TODO: allow no ColTypes, without setting some random value - shannon
         ColWidth: '10px',
-        ColBGColor: 'rgba(111,222,333,0.00)',
+        ColBGColor: 'rgba(111,222,333,0.0)',
         Title: '', // TODO: allow no Titles, without setting '' - shannon
         ShowValue: false,
         ShowIcon: true,

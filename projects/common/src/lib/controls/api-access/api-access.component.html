@@ -1,4 +1,4 @@
-<div>
+<div style="width: 100% !important; background-color: burlywood;">
 
   <div class="margin-left-5 margin-top-2">
     Use the API keys to get your data downstream to the dashboards and
@@ -14,9 +14,9 @@
       </mat-card-title>
     </mat-card-header>
 
-    <div class="table-container">
+    <!-- <div class="table-container">
       <lcu-data-grid expand [config]="GridParameters"> </lcu-data-grid>
-    </div>
+    </div> -->
   </div>
 
 
@@ -51,12 +51,12 @@
           fxLayout.lt-sm = "column"
           fxLayoutAlign.lt-sm="space-between center"> 
 
-          <lcu-swagger-ui
+          <!-- <lcu-swagger-ui
             fxFlex="80"
             [source]="OpenAPISource"
             [auth-key]="APIKeys[0]?.Key"
             *ngIf="APIKeys?.length > 0">
-          </lcu-swagger-ui>
+          </lcu-swagger-ui> -->
         </div>
       </mat-card-content>
     </div>
