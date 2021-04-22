@@ -19,7 +19,7 @@ export class IoTEnsembleState {
 
   public Error?: ErrorContext;
 
-  public ExpandedPayloadId?: string;
+  public ExpandedPayloadID?: string;
 
   public HasAccess?: boolean;
 

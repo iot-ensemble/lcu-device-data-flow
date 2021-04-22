@@ -112,6 +112,8 @@ export class LcuDeviceDataFlowManageElementComponent
 
   public DeviceNames: string[];
 
+  public names: string[];
+
   public DeviceNameToAdd: string;
 
   public FreeboardURL: string;
@@ -152,7 +154,7 @@ export class LcuDeviceDataFlowManageElementComponent
     protected svgIconsService: SvgToMatIconService
   ) {
     super(injector);
-
+    this.names = ["boo", "ga", "yeet"]
     this.DeviceNameToAdd = '';
 
     this.State = {};
@@ -315,8 +317,10 @@ export class LcuDeviceDataFlowManageElementComponent
         }
       });
   }
-  HandleExpandedPayloadID(event: any)
+  HandleExpandedPayloadID(event: string)
   {
+    if(this.State.ExpandedPayloadID === event)
+      return;
     console.log("handling id " + event);
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
@@ -370,13 +374,13 @@ export class LcuDeviceDataFlowManageElementComponent
      * Pass modal config to service open function
      */
     this.genericModalService.Open(modalConfig);
-    
+
     this.genericModalService.ModalComponent.afterOpened().subscribe(
       (res: any) => {
         console.log('MODAL OPEN', res);
 
         this.genericModalService.ModalInstance.FilterValue.subscribe((filterValue: string) => {
-      
+
           this.iotEnsCtxt.ListAllDeviceNames(this.State.UserEnterpriseLookup, filterValue)
           .then((obs: any) => {
             // console.log("obs: ", obs)
@@ -386,14 +390,14 @@ export class LcuDeviceDataFlowManageElementComponent
 
             } else 
               {
-                console.log("error: ", obs.body.Status);      
+                console.log("error: ", obs.body.Status);
                }
           });
         })
       }
     );
 
-   
+
   this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: any) => {
         console.log('MODAL CLOSED', res);
@@ -419,7 +423,7 @@ export class LcuDeviceDataFlowManageElementComponent
     loadingCtxt.Loading = true;
 
     this.iotEnsCtxt.$Refresh();
-  
+
     /**
      * as per a discussion with Mike,
      * placing this here to circumvent, bug 9297, for now - shannon
@@ -587,8 +591,8 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected handleStateChanged() {
-    
-    console.log("EXPANDED PAYLOAD ID CHANGE " + this.State.ExpandedPayloadId);
+
+    console.log("EXPANDED PAYLOAD ID CHANGE " + JSON.stringify(this.State.ExpandedPayloadID));
 
     this.DeviceSASTokensModal();
 
@@ -621,7 +625,6 @@ export class LcuDeviceDataFlowManageElementComponent
     }
     else{
       this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
-      
     }
   }
 

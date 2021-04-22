@@ -48,6 +48,9 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   @Input('telemetry')
   public Telemetry: IoTEnsembleTelemetry;
 
+  @Input('active')
+  public Expanded: string;
+
   //  Constructors
   constructor(protected gtag: GtagService) {
     this.Downloaded = new EventEmitter();
@@ -57,12 +60,13 @@ export class TelemetryListComponent implements OnChanges, OnInit {
     this.PayloadId = new EventEmitter();
 
     this.Telemetry = { Payloads: [] };
+
   }
 
   //  Life Cycle
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.Telemetry) {
-      this.updateTelemetryDataSource();
+      this.handleStateChange();
     }
   }
 
@@ -100,10 +104,18 @@ export class TelemetryListComponent implements OnChanges, OnInit {
     this.PayloadId.emit(payloadId);
   }
   public SetActivePayload(payload: IoTEnsembleTelemetryPayload) {
-    this.emitPayloadId(payload.id)
-    payload.$IsExpanded = !payload.$IsExpanded;
-
+      if(payload.id === this.Expanded) {
+        payload.$IsExpanded = false;
+        this.emitPayloadId("empty");
+      }
+      else {
+        this.emitPayloadId(payload.id)
+        payload.$IsExpanded = !payload.$IsExpanded;
+      }
     this.updateTelemetryDataSource();
+  }
+  public IsActivePayload(payload: IoTEnsembleTelemetryPayload) {
+    return this.Expanded === payload.id
   }
 
   public HandlePageEvent(event: any): void {
@@ -112,9 +124,16 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   }
 
   //  Helpers
+  protected handleStateChange() {
+    if (this.Telemetry) {
+      this.Telemetry.Payloads.forEach((payload: IoTEnsembleTelemetryPayload) => {
+        payload.$IsExpanded = this.IsActivePayload(payload);});
+    }
+    this.setupGrid()
+  }
   protected updateTelemetryDataSource() {
     if (this.Telemetry) {
-      this.setupGrid();
+      this.setupGrid()
     }
   }
 
