@@ -109,7 +109,7 @@
             </ng-container>
           </div>
 
-          <div class="device-list" *ngIf="!AddingDevice" style="background-color: red;">
+          <div class="device-list" *ngIf="!AddingDevice">
             <lcu-devices-table
               [devices-config]="State.DevicesConfig"
               (issued-sas-token)="IssueDeviceSASToken($event)"
