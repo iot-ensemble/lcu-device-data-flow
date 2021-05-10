@@ -112,8 +112,6 @@ export class LcuDeviceDataFlowManageElementComponent
 
   public DeviceNames: string[];
 
-  public names: string[];
-
   public DeviceNameToAdd: string;
 
   public FreeboardURL: string;
@@ -154,7 +152,6 @@ export class LcuDeviceDataFlowManageElementComponent
     protected svgIconsService: SvgToMatIconService
   ) {
     super(injector);
-    this.names = ["boo", "ga", "yeet"]
     this.DeviceNameToAdd = '';
 
     this.State = {};

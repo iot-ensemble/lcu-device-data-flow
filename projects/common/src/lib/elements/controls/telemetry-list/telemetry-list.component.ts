@@ -1,11 +1,11 @@
 import {
   Component,
-  EventEmitter,
+  OnInit,
   Input,
   OnChanges,
-  OnInit,
-  Output,
   SimpleChanges,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { ClipboardCopyFunction, DataPipeConstants } from '@lcu/common';
 import { MatTableDataSource } from '@angular/material/table';
@@ -37,6 +37,10 @@ export class TelemetryListComponent implements OnChanges, OnInit {
 
   public DynamicComponents: Array<DynamicComponentModel>;
 
+  public ExpandedOnPage: boolean;
+
+  public ExpandedPayload: IoTEnsembleTelemetryPayload;
+
   public GridParameters: DataGridConfigModel;
 
   @Output('page-event')
@@ -49,7 +53,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   public Telemetry: IoTEnsembleTelemetry;
 
   @Input('active')
-  public Expanded: string;
+  public ExpandedId: string;
 
   //  Constructors
   constructor(protected gtag: GtagService) {
@@ -67,6 +71,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.Telemetry) {
       this.handleStateChange();
+      this.ExpandedOnPage = this.isExpandedOnPage();
     }
   }
 
@@ -81,6 +86,9 @@ export class TelemetryListComponent implements OnChanges, OnInit {
    * a checkmark to display to the user that the content was succesfully copied
    * @param payload
    */
+  public ClearExpandedPayload() {
+    this.ExpandedPayload = null;
+  }
   public CopyClick(payload: IoTEnsembleTelemetryPayload) {
     ClipboardCopyFunction.ClipboardCopy(JSON.stringify(payload));
 
@@ -104,7 +112,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
     this.PayloadId.emit(payloadId);
   }
   public SetActivePayload(payload: IoTEnsembleTelemetryPayload) {
-      if(payload.id === this.Expanded) {
+      if(payload.id === this.ExpandedId) {
         payload.$IsExpanded = false;
         this.emitPayloadId("empty");
       }
@@ -112,10 +120,16 @@ export class TelemetryListComponent implements OnChanges, OnInit {
         this.emitPayloadId(payload.id)
         payload.$IsExpanded = !payload.$IsExpanded;
       }
+      if(payload.$IsExpanded) {
+        this. ExpandedOnPage = true;
+        this.ExpandedPayload = payload;
+      } else {
+        this.ExpandedPayload = null;
+      }
     this.updateTelemetryDataSource();
   }
   public IsActivePayload(payload: IoTEnsembleTelemetryPayload) {
-    return this.Expanded === payload.id
+    return this.ExpandedId === payload.id
   }
 
   public HandlePageEvent(event: any): void {
@@ -124,6 +138,19 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   }
 
   //  Helpers
+  protected isExpandedOnPage() {
+    let startRange = 1;
+    if(this.Telemetry.Page > 1) {
+      startRange = this.Telemetry.PageSize * (this.Telemetry.Page - 1) + 1;
+    }
+     const endRange = this.Telemetry.PageSize * this.Telemetry.Page;
+     for(startRange; startRange < endRange; startRange++) {
+       if(this.Telemetry.Payloads[startRange].id === this.ExpandedId) {
+         return true;
+       }
+     }
+     return false;
+  }
   protected handleStateChange() {
     if (this.Telemetry) {
       this.Telemetry.Payloads.forEach((payload: IoTEnsembleTelemetryPayload) => {
