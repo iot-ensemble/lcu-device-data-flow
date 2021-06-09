@@ -61,7 +61,7 @@ export class TelemetryDownloadDialogComponent implements OnInit {
       this.deviceIDs,
       new Date(new Date().setDate(new Date().getDate() - 30)),
       false,
-      false
+      true
     );
     this.closeAndDownload();
    }

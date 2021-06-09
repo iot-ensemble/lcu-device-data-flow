@@ -309,11 +309,6 @@ export class LcuDeviceDataFlowManageElementComponent
     this.genericModalService
       .OnAction()
       .subscribe((payload: IoTEnsembleTelemetryPayload) => {
-        console.log('ONAction', payload);
-
-        // if (payload) {
-        //   this.SendDeviceMesaage(payload);
-        // }
       });
   }
 
@@ -464,6 +459,7 @@ export class LcuDeviceDataFlowManageElementComponent
   // }
 
   public TelemetryDownload(query: ColdQueryModel) {
+    debugger;
     console.log('ColdQueryModelCall: ', query);
 
     if (query.ResultType === ColdQueryResultTypes.JSON && !query.Zip) {
@@ -481,9 +477,9 @@ export class LcuDeviceDataFlowManageElementComponent
           query.Zip,
           query.AsFile
         )
-        .then((obs: any) => {
-          console.log('OBS: ', obs);
-          const blob = new Blob([JSON.stringify(obs.body)], {
+        .then((obs: Blob) => {
+          console.log('JSON OBS: ', obs);
+          const blob = new Blob([JSON.stringify(obs.text)], {
             type: 'text/json',
           });
           const url = window.URL.createObjectURL(blob);
@@ -521,6 +517,27 @@ export class LcuDeviceDataFlowManageElementComponent
           link.download = 'telemetry.csv';
           link.href = url;
           link.click();
+        }, (obs: any) => {
+          debugger;
+          const blob = new Blob([obs.error.text]);
+          const fileName = `telemetry.csv`;
+          if (navigator.msSaveBlob) {
+            // IE 10+
+            navigator.msSaveBlob(blob, fileName);
+          }
+          else {
+            const link = document.createElement('a');
+            // Browsers that support HTML5 download attribute
+            if (link.download !== undefined) {
+              const url = URL.createObjectURL(blob);
+              link.setAttribute('href', url);
+              link.setAttribute('download', fileName);
+              link.style.visibility = 'hidden';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }
+          }
         });
     }
   }

@@ -29,18 +29,16 @@ export class ColdQueryModel {
     Zip: boolean;
 
     AsFile: boolean;
-     
-         
 
-    constructor(DataType: ColdQueryDataTypes, 
-                EndDate: Date, 
-                Flatten: boolean, 
-                IncludeEmulated: boolean, 
-                Page: number, 
-                PageSize: number, 
+    constructor(DataType: ColdQueryDataTypes,
+                EndDate: Date,
+                Flatten: boolean,
+                IncludeEmulated: boolean,
+                Page: number,
+                PageSize: number,
                 ResultType: ColdQueryResultTypes,
-                SelectedDeviceIds: string[], 
-                StartDate: Date, 
+                SelectedDeviceIds: string[],
+                StartDate: Date,
                 Zip: boolean,
                 AsFile: boolean) {
 
