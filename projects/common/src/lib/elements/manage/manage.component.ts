@@ -169,6 +169,7 @@ export class LcuDeviceDataFlowManageElementComponent
 
   public ngOnInit() {
     super.ngOnInit();
+
     this.setupStateHandler();
 
     this.setupAddDeviceForm();
