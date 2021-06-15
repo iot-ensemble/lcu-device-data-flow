@@ -199,7 +199,6 @@ export class IoTEnsembleStateContext extends StateContext<IoTEnsembleState> {
     pageSize: number,
     payloadId: string
   ) {
-    console.log('updating telemetry sync payloadId: ', payloadId);
 
     const args = {
       RefreshRate: refreshRate,
