@@ -112,9 +112,9 @@ export class LcuDeviceDataFlowManageElementComponent
 
   public DeviceNameToAdd: string;
 
-  public FreeboardURL: string;
-
   public EnrollOpen: boolean;
+
+  public FreeboardURL: string;
 
   public LastSyncedAt: Date;
 
@@ -152,6 +152,7 @@ export class LcuDeviceDataFlowManageElementComponent
     protected svgIconsService: SvgToMatIconService
   ) {
     super(injector);
+
     this.DeviceNameToAdd = '';
 
     this.State = {};
@@ -392,7 +393,6 @@ export class LcuDeviceDataFlowManageElementComponent
         })
       }
     );
-
 
   this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: any) => {

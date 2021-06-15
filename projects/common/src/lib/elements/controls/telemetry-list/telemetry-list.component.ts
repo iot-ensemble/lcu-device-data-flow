@@ -1,11 +1,11 @@
 import {
   Component,
-  OnInit,
+  EventEmitter,
   Input,
   OnChanges,
-  SimpleChanges,
+  OnInit,
   Output,
-  EventEmitter,
+  SimpleChanges,
 } from '@angular/core';
 import { ClipboardCopyFunction, DataPipeConstants } from '@lcu/common';
 import { MatTableDataSource } from '@angular/material/table';
@@ -32,6 +32,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   //  Fields
 
   //  Properties
+
   @Output('downloaded')
   public Downloaded: EventEmitter<IoTEnsembleTelemetryPayload>;
 
@@ -64,7 +65,6 @@ export class TelemetryListComponent implements OnChanges, OnInit {
     this.PayloadId = new EventEmitter();
 
     this.Telemetry = { Payloads: [] };
-
   }
 
   //  Life Cycle
@@ -160,7 +160,7 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   }
   protected updateTelemetryDataSource() {
     if (this.Telemetry) {
-      this.setupGrid()
+      this.setupGrid();
     }
   }
 
