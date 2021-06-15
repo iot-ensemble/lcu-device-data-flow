@@ -78,8 +78,6 @@ export class LcuDeviceDataFlowManageElementComponent
   //  Properties
   public AddDeviceFormGroup: FormGroup;
 
-  public AddingDevice: boolean;
-
   public ConnectedDevicesInfoCardFlex: string;
 
   public DashboardIFrameURL: SafeResourceUrl;
@@ -115,6 +113,8 @@ export class LcuDeviceDataFlowManageElementComponent
   public DeviceNameToAdd: string;
 
   public FreeboardURL: string;
+
+  public EnrollOpen: boolean;
 
   public LastSyncedAt: Date;
 
@@ -197,22 +197,22 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.EnrollDevice({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
     });
-
+    this.EnrollOpen = false;
   }
 
   public EnrollNewDevice(){
+    this.EnrollOpen = true;
     if(this.AddDeviceFormGroup){
         this.AddDeviceFormGroup.reset();
       }
-      this.ToggleAddingDevice();
   }
 
   public get AddDeviceFGDeviceName(): AbstractControl{
     return this.AddDeviceFormGroup.get('deviceName');
   }
 
-  public CancelAddingDevice(){
-    this.ToggleAddingDevice();
+  public CancelEnrollOpen(){
+    this.EnrollOpen = false;
     this.AddDeviceFormGroup.reset();
     this.State.DevicesConfig.Status = null;
   }
@@ -506,8 +506,8 @@ export class LcuDeviceDataFlowManageElementComponent
     }
   }
 
-  public ToggleAddingDevice() {
-    this.AddingDevice = !this.AddingDevice;
+  public ToggleEnrollOpen() {
+    this.EnrollOpen = !this.EnrollOpen;
   }
 
   public ToggleEmulatedEnabledChanged(enabled: boolean) {
@@ -588,23 +588,26 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected handleStateChanged() {
-
-    console.log("EXPANDED PAYLOAD ID CHANGE " + JSON.stringify(this.State.ExpandedPayloadID));
-
     this.DeviceSASTokensModal();
 
     this.DeviceNames =
       this.State?.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
 
-    this.setAddingDevice();
-
     this.setupFreeboard();
 
     if (this.State?.Telemetry) {
       this.convertToDate(this.State?.Telemetry.LastSyncedAt);
+      if(this.EnrollOpen === undefined)
+        this.EnrollOpen = this.isEnrollOpen();
     }
 
     this.setConnectedDevicesInfoCardFlex();
+  }
+
+  protected isEnrollOpen() {
+    if(this.State.DevicesConfig.TotalDevices > 0)
+      return false
+    return true;
   }
 
   protected setupStateHandler() {
@@ -616,19 +619,10 @@ export class LcuDeviceDataFlowManageElementComponent
     });
   }
 
-  protected setAddingDevice() {
-    if(this.State?.DevicesConfig?.Status?.Code === 1){
-      this.AddingDevice = true;
-    }
-    else{
-      this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
-    }
-  }
-
   protected setConnectedDevicesInfoCardFlex() {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
 
-    this.ConnectedDevicesInfoCardFlex = this.AddingDevice ? maxDeviceFlex : '100%';
+    this.ConnectedDevicesInfoCardFlex = this.EnrollOpen ? maxDeviceFlex : '100%';
   }
 
   protected setDashboardIFrameURL() {
