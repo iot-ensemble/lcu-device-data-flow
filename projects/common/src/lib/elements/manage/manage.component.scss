@@ -58,4 +58,8 @@
       @include info-dot(mat-color($warn));
     }
   }
+
+  .loading {
+    text-align: center;
+  }
 }
