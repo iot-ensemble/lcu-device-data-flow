@@ -94,7 +94,7 @@ export class DevicesTableComponent implements OnInit{//}, OnChanges {
   }
 
   public HandlePageEvent(event: any): void {
-    console.log("PaGe EvEnT: ", event);
+    console.log('PaGe EvEnT: ', event);
     this.PageEvent.emit(event);
   }
 
@@ -210,6 +210,7 @@ export class DevicesTableComponent implements OnInit{//}, OnChanges {
       Filter: false,
       ShowLoader: true,
       Highlight: 'rowHighlight',
+      MobileBreakpoint: '800px'
       // RowColorEven: 'gray',
       // RowColorOdd: 'light-gray',
     });
@@ -219,7 +220,7 @@ export class DevicesTableComponent implements OnInit{//}, OnChanges {
 
   protected updateDevicesDataSource(): void {
     if (this.DevicesConfig) {
-      console.log("updating devices config: ",this.DevicesConfig )
+      console.log('updating devices config: ',this.DevicesConfig )
       this.Devices = this.DevicesConfig.Devices;
 
       this.setupGrid();

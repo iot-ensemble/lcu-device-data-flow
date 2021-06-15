@@ -25,13 +25,6 @@ import {
   DataPipes,
 } from '@lcu/common';
 import {
-  IoTEnsembleConnectedDevicesConfig,
-  IoTEnsembleDashboardConfiguration,
-  EmulatedDeviceInfo,
-  IoTEnsembleStorageConfiguration,
-  IoTEnsembleTelemetry,
-  IoTEnsembleDeviceInfo,
-  IoTEnsembleDeviceEnrollment,
   IoTEnsembleTelemetryPayload,
   IoTEnsembleState,
 } from './../../state/iot-ensemble.state';
@@ -40,12 +33,11 @@ import {
   AbstractControl,
   FormBuilder,
   FormGroup,
-  PatternValidator,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GenericModalService } from '../../services/generic-modal.service';
 import { GenericModalModel } from '../../models/generice-modal.model';
@@ -59,9 +51,6 @@ import {
   SvgToMatIconService,
 } from '@lowcodeunit/lcu-icons-common';
 import { IoTEnsembleStateContext } from '../../state/iot-ensemble-state.context';
-import { JsonHubProtocol } from '@aspnet/signalr';
-
-declare var freeboard: any;
 
 declare var window: any;
 
@@ -117,7 +106,7 @@ export class LcuDeviceDataFlowManageElementComponent
        (this.DeviceNameToAdd === this.AddDeviceFormGroup.controls.deviceName.value)){
       errorText = ' Device name already exists \r\n';
     }
-
+    
     return errorText;
   }
 
@@ -336,6 +325,7 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   public IssueDeviceSASToken(deviceName: string) {
+
     this.State.DevicesConfig.Loading = true;
 
     //  TODO:  Pass through expiry time in some way?
@@ -414,11 +404,20 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   public Refresh(ctxt: string) {
+
     const loadingCtxt = this.State[ctxt] || this.State;
 
     loadingCtxt.Loading = true;
 
     this.iotEnsCtxt.$Refresh();
+  
+    /**
+     * as per a discussion with Mike,
+     * placing this here to circumvent, bug 9297, for now - shannon
+     *
+     */
+    loadingCtxt.Loading = false;
+    //
   }
 
   public RefreshRateChanged(rate: number) {
@@ -576,6 +575,7 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected handleStateChanged() {
+
     this.DeviceSASTokensModal();
 
     this.DeviceNames =

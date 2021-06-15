@@ -1,13 +1,23 @@
 import { IoTEnsembleDeviceInfo } from './iot-ensemble.state';
 
 export class IoTEnsembleAdminState {
+  public ActiveEnterpriseConfig?: IoTEnsembleActiveEnterpriseConfig;
+
   public EnterpriseConfig?: IoTEnsembleEnterpriseConfig;
 
   public Loading?: boolean;
 }
 
+export class IoTEnsembleActiveEnterpriseConfig {
+  public ActiveEnterprise: IoTEnsembleChildEnterprise;
+
+  public Page: number;
+
+  public PageSize: number;
+}
+
+
 export class IoTEnsembleEnterpriseConfig {
-  public ActiveEnterpriseLookup?: string;
 
   public ChildEnterprises?: IoTEnsembleChildEnterprise[];
 
