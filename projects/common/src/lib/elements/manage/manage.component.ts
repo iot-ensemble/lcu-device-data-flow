@@ -318,7 +318,6 @@ export class LcuDeviceDataFlowManageElementComponent
   {
     if(this.State.ExpandedPayloadID === event)
       return;
-    console.log("handling id " + event);
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       this.State.Telemetry.Page,
@@ -588,9 +587,6 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected handleStateChanged() {
-
-    console.log("EXPANDED PAYLOAD ID CHANGE " + JSON.stringify(this.State.ExpandedPayloadID));
-
     this.DeviceSASTokensModal();
 
     this.DeviceNames =
