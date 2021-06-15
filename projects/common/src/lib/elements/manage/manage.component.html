@@ -42,13 +42,13 @@
       class="connected section"
       [context]="{ Title: 'Connected Devices', Icon: 'loop' }"
     >
-      <span class="card-subtitle" *ngIf="MaxDevicesReached && AddingDevice">
+      <span class="card-subtitle" *ngIf="MaxDevicesReached && EnrollOpen">
         Max number of devices reached
       </span>
 
       <nav>
         <lcu-loader
-          [loading]="State.DevicesConfig?.Loading && !AddingDevice"
+          [loading]="State.DevicesConfig?.Loading && !EnrollOpen"
           [diameter]="50"
         >
         </lcu-loader>
@@ -69,10 +69,10 @@
           class="margin-x-1"
           style="width: 100%"
           [class.margin-left-5]="
-            AddingDevice || State.DevicesConfig?.Devices?.length <= 0
+          EnrollOpen || State.DevicesConfig?.Devices?.length <= 0
           "
         >
-          <div *ngIf="AddingDevice">
+          <div *ngIf="EnrollOpen">
             <ng-container *ngIf="!MaxDevicesReached">
               <p class="paragraph-text">
                 To connect a device and see its real-time data flowing through
@@ -109,7 +109,7 @@
             </ng-container>
           </div>
 
-          <div class="device-list" *ngIf="!AddingDevice">
+          <div class="device-list" *ngIf="!EnrollOpen">
             <lcu-devices-table
               [devices-config]="State.DevicesConfig"
               (issued-sas-token)="IssueDeviceSASToken($event)"
@@ -120,7 +120,7 @@
           </div>
         </div>
 
-        <ng-container *ngIf="AddingDevice && !MaxDevicesReached">
+        <ng-container *ngIf="EnrollOpen && !MaxDevicesReached">
           <div
             class="divider-fill-vert margin-x-5"
             fxShow
@@ -174,17 +174,17 @@
           mat-raised-button
           color="accent"
           (click)="EnrollNewDevice()"
-          *ngIf="!AddingDevice"
+          *ngIf="!EnrollOpen"
         >
           Enroll New Device
         </button>
 
-        <ng-container *ngIf="AddingDevice && MaxDevicesReached">
+        <ng-container *ngIf="EnrollOpen && MaxDevicesReached">
           <a
             mat-button
             href="https://www.iot-ensemble.com/docs/getting-started/buy-and-scale"
             target="_blank"
-            *ngIf="AddingDevice"
+            *ngIf="EnrollOpen"
             color="accent"
           >
             Read Documentation
@@ -208,7 +208,7 @@
 
         <ng-container
           *ngIf="
-            !State.DevicesConfig?.Loading && AddingDevice && !MaxDevicesReached
+            !State.DevicesConfig?.Loading && EnrollOpen && !MaxDevicesReached
           "
         >
           <button
