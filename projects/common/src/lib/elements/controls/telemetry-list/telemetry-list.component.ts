@@ -38,13 +38,23 @@ export class TelemetryListComponent implements OnChanges, OnInit {
 
   public DynamicComponents: Array<DynamicComponentModel>;
 
+  public ExpandedOnPage: boolean;
+
+  public ExpandedPayload: IoTEnsembleTelemetryPayload;
+
   public GridParameters: DataGridConfigModel;
 
   @Output('page-event')
   public PageEvent: EventEmitter<any>;
 
+  @Output('payloadId')
+  public PayloadId: EventEmitter<any>;
+
   @Input('telemetry')
   public Telemetry: IoTEnsembleTelemetry;
+
+  @Input('active')
+  public ExpandedId: string;
 
   //  Constructors
   constructor(protected gtag: GtagService) {
@@ -52,13 +62,16 @@ export class TelemetryListComponent implements OnChanges, OnInit {
 
     this.PageEvent = new EventEmitter();
 
+    this.PayloadId = new EventEmitter();
+
     this.Telemetry = { Payloads: [] };
   }
 
   //  Life Cycle
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes.Telemetry) {
-      this.updateTelemetryDataSource();
+      this.handleStateChange();
+      this.ExpandedOnPage = this.isExpandedOnPage();
     }
   }
 
@@ -73,6 +86,9 @@ export class TelemetryListComponent implements OnChanges, OnInit {
    * a checkmark to display to the user that the content was succesfully copied
    * @param payload
    */
+  public ClearExpandedPayload() {
+    this.ExpandedPayload = null;
+  }
   public CopyClick(payload: IoTEnsembleTelemetryPayload) {
     ClipboardCopyFunction.ClipboardCopy(JSON.stringify(payload));
 
@@ -92,10 +108,28 @@ export class TelemetryListComponent implements OnChanges, OnInit {
     this.Downloaded.emit(payload);
   }
 
+  public emitPayloadId(payloadId: string): void {
+    this.PayloadId.emit(payloadId);
+  }
   public SetActivePayload(payload: IoTEnsembleTelemetryPayload) {
-    payload.$IsExpanded = !payload.$IsExpanded;
-
+      if(payload.id === this.ExpandedId) {
+        payload.$IsExpanded = false;
+        this.emitPayloadId("empty");
+      }
+      else {
+        this.emitPayloadId(payload.id)
+        payload.$IsExpanded = !payload.$IsExpanded;
+      }
+      if(payload.$IsExpanded) {
+        this. ExpandedOnPage = true;
+        this.ExpandedPayload = payload;
+      } else {
+        this.ExpandedPayload = null;
+      }
     this.updateTelemetryDataSource();
+  }
+  public IsActivePayload(payload: IoTEnsembleTelemetryPayload) {
+    return this.ExpandedId === payload.id
   }
 
   public HandlePageEvent(event: any): void {
@@ -104,6 +138,26 @@ export class TelemetryListComponent implements OnChanges, OnInit {
   }
 
   //  Helpers
+  protected isExpandedOnPage() {
+    let startRange = 1;
+    if(this.Telemetry.Page > 1) {
+      startRange = this.Telemetry.PageSize * (this.Telemetry.Page - 1) + 1;
+    }
+     const endRange = this.Telemetry.PageSize * this.Telemetry.Page;
+     for(startRange; startRange < endRange; startRange++) {
+       if(this.Telemetry.Payloads[startRange].id === this.ExpandedId) {
+         return true;
+       }
+     }
+     return false;
+  }
+  protected handleStateChange() {
+    if (this.Telemetry) {
+      this.Telemetry.Payloads.forEach((payload: IoTEnsembleTelemetryPayload) => {
+        payload.$IsExpanded = this.IsActivePayload(payload);});
+    }
+    this.setupGrid()
+  }
   protected updateTelemetryDataSource() {
     if (this.Telemetry) {
       this.setupGrid();

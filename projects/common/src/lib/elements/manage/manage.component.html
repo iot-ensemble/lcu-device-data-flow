@@ -200,7 +200,7 @@
             Upgrade now
           </a>
 
-          <a mat-button color="warn" (click)="ToggleAddingDevice()">
+          <a mat-button color="warn" (click)="ToggleEnrollOpen()">
             <mat-icon>cancel</mat-icon>
             Cancel
           </a>
@@ -221,7 +221,7 @@
             Enroll Device
           </button>
 
-          <a mat-button color="warn" (click)="CancelAddingDevice()">
+          <a mat-button color="warn" (click)="CancelEnrollOpen()">
             <mat-icon>cancel</mat-icon>
             Cancel
           </a>
@@ -295,7 +295,9 @@
       <div [class.margin-left-5]="State.Telemetry?.Payloads?.length <= 0">
         <lcu-telemetry-list
           [telemetry]="State.Telemetry"
+          [active]="State.ExpandedPayloadID"
           (page-event)="HandleTelemetryPageEvent($event)"
+          (payloadId)="HandleExpandedPayloadID($event)"
         >
         </lcu-telemetry-list>
       </div>

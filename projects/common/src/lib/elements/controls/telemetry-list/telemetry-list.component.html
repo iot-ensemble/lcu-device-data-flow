@@ -16,4 +16,19 @@
       </p>
     </div>
   </lcu-data-grid>
+  <ng-container *ngIf="!ExpandedOnPage && ExpandedPayload">
+    <div> 
+      <p>The payload you were looking at has moved off the page, we will keep it open here for now!</p>
+    </div>
+    <div style="background-color: #2a2a2a;">
+      <div fxLayoutAlign="end center">
+        <a mat-button color="warn" (click)="ClearExpandedPayload()">
+          <mat-icon>cancel</mat-icon>
+        </a>
+        </div>
+      <pre>
+        {{ ExpandedPayload | json }}
+      </pre>
+    </div>
+  </ng-container>
 </div>
