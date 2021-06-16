@@ -78,8 +78,6 @@ export class LcuDeviceDataFlowManageElementComponent
   //  Properties
   public AddDeviceFormGroup: FormGroup;
 
-  public AddingDevice: boolean;
-
   public ConnectedDevicesInfoCardFlex: string;
 
   public DashboardIFrameURL: SafeResourceUrl;
@@ -106,7 +104,7 @@ export class LcuDeviceDataFlowManageElementComponent
        (this.DeviceNameToAdd === this.AddDeviceFormGroup.controls.deviceName.value)){
       errorText = ' Device name already exists \r\n';
     }
-    
+
     return errorText;
   }
 
@@ -201,7 +199,6 @@ export class LcuDeviceDataFlowManageElementComponent
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
     });
     this.EnrollOpen = false;
-
   }
 
   public EnrollNewDevice(){
@@ -215,7 +212,7 @@ export class LcuDeviceDataFlowManageElementComponent
     return this.AddDeviceFormGroup.get('deviceName');
   }
 
-  public CancelAddingDevice(){
+  public CancelEnrollOpen(){
     this.EnrollOpen = false;
     this.AddDeviceFormGroup.reset();
     this.State.DevicesConfig.Status = null;
@@ -317,6 +314,16 @@ export class LcuDeviceDataFlowManageElementComponent
           this.SendDeviceMesaage(payload);
         }
       });
+  }
+  HandleExpandedPayloadID(event: string)
+  {
+    if(this.State.ExpandedPayloadID === event)
+      return;
+    this.iotEnsCtxt.UpdateTelemetrySync(
+      this.State.Telemetry.RefreshRate,
+      this.State.Telemetry.Page,
+      this.State.Telemetry.PageSize,
+      event);
   }
 
   public HandleTelemetryPageEvent(event: any) {
@@ -428,7 +435,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       rate,
       this.State.Telemetry.Page,
-      this.State.Telemetry.PageSize
+      this.State.Telemetry.PageSize,
+      null
     );
   }
 
@@ -497,7 +505,7 @@ export class LcuDeviceDataFlowManageElementComponent
     }
   }
 
-  public ToggleAddingDevice() {
+  public ToggleEnrollOpen() {
     this.EnrollOpen = !this.EnrollOpen;
   }
 
@@ -537,7 +545,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       page,
-      this.State.Telemetry.PageSize
+      this.State.Telemetry.PageSize,
+      null
     );
   }
 
@@ -547,7 +556,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       this.State.Telemetry.Page,
-      pageSize
+      pageSize,
+      null
     );
   }
 
@@ -577,7 +587,6 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected handleStateChanged() {
-
     this.DeviceSASTokensModal();
 
     this.DeviceNames =
@@ -605,7 +614,6 @@ export class LcuDeviceDataFlowManageElementComponent
       this.State = Object.assign(this.State, state);
 
       // console.log("State: ", this.State)
-
       this.handleStateChanged();
     });
   }
