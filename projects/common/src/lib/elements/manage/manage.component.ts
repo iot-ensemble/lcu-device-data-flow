@@ -78,8 +78,6 @@ export class LcuDeviceDataFlowManageElementComponent
   //  Properties
   public AddDeviceFormGroup: FormGroup;
 
-  public AddingDevice: boolean;
-
   public ConnectedDevicesInfoCardFlex: string;
 
   public DashboardIFrameURL: SafeResourceUrl;
@@ -106,13 +104,15 @@ export class LcuDeviceDataFlowManageElementComponent
        (this.DeviceNameToAdd === this.AddDeviceFormGroup.controls.deviceName.value)){
       errorText = ' Device name already exists \r\n';
     }
-    
+
     return errorText;
   }
 
   public DeviceNames: string[];
 
   public DeviceNameToAdd: string;
+
+  public EnrollOpen: boolean;
 
   public FreeboardURL: string;
 
@@ -198,22 +198,22 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.EnrollDevice({
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
     });
-
+    this.EnrollOpen = false;
   }
 
   public EnrollNewDevice(){
+    this.EnrollOpen = true;
     if(this.AddDeviceFormGroup){
         this.AddDeviceFormGroup.reset();
       }
-      this.ToggleAddingDevice();
   }
 
   public get AddDeviceFGDeviceName(): AbstractControl{
     return this.AddDeviceFormGroup.get('deviceName');
   }
 
-  public CancelAddingDevice(){
-    this.ToggleAddingDevice();
+  public CancelEnrollOpen(){
+    this.EnrollOpen = false;
     this.AddDeviceFormGroup.reset();
     this.State.DevicesConfig.Status = null;
   }
@@ -315,6 +315,16 @@ export class LcuDeviceDataFlowManageElementComponent
         }
       });
   }
+  HandleExpandedPayloadID(event: string)
+  {
+    if(this.State.ExpandedPayloadID === event)
+      return;
+    this.iotEnsCtxt.UpdateTelemetrySync(
+      this.State.Telemetry.RefreshRate,
+      this.State.Telemetry.Page,
+      this.State.Telemetry.PageSize,
+      event);
+  }
 
   public HandleTelemetryPageEvent(event: any) {
     if (event.pageIndex + 1 !== this.State.Telemetry.Page) {
@@ -361,13 +371,13 @@ export class LcuDeviceDataFlowManageElementComponent
      * Pass modal config to service open function
      */
     this.genericModalService.Open(modalConfig);
-    
+
     this.genericModalService.ModalComponent.afterOpened().subscribe(
       (res: any) => {
         console.log('MODAL OPEN', res);
 
         this.genericModalService.ModalInstance.FilterValue.subscribe((filterValue: string) => {
-      
+
           this.iotEnsCtxt.ListAllDeviceNames(this.State.UserEnterpriseLookup, filterValue)
           .then((obs: any) => {
             // console.log("obs: ", obs)
@@ -377,14 +387,13 @@ export class LcuDeviceDataFlowManageElementComponent
 
             } else 
               {
-                console.log("error: ", obs.body.Status);      
+                console.log("error: ", obs.body.Status);
                }
           });
         })
       }
     );
 
-   
   this.genericModalService.ModalComponent.afterClosed().subscribe(
       (res: any) => {
         console.log('MODAL CLOSED', res);
@@ -410,7 +419,7 @@ export class LcuDeviceDataFlowManageElementComponent
     loadingCtxt.Loading = true;
 
     this.iotEnsCtxt.$Refresh();
-  
+
     /**
      * as per a discussion with Mike,
      * placing this here to circumvent, bug 9297, for now - shannon
@@ -426,7 +435,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       rate,
       this.State.Telemetry.Page,
-      this.State.Telemetry.PageSize
+      this.State.Telemetry.PageSize,
+      null
     );
   }
 
@@ -495,8 +505,8 @@ export class LcuDeviceDataFlowManageElementComponent
     }
   }
 
-  public ToggleAddingDevice() {
-    this.AddingDevice = !this.AddingDevice;
+  public ToggleEnrollOpen() {
+    this.EnrollOpen = !this.EnrollOpen;
   }
 
   public ToggleEmulatedEnabledChanged(enabled: boolean) {
@@ -535,7 +545,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       page,
-      this.State.Telemetry.PageSize
+      this.State.Telemetry.PageSize,
+      null
     );
   }
 
@@ -545,7 +556,8 @@ export class LcuDeviceDataFlowManageElementComponent
     this.iotEnsCtxt.UpdateTelemetrySync(
       this.State.Telemetry.RefreshRate,
       this.State.Telemetry.Page,
-      pageSize
+      pageSize,
+      null
     );
   }
 
@@ -575,21 +587,26 @@ export class LcuDeviceDataFlowManageElementComponent
   }
 
   protected handleStateChanged() {
-
     this.DeviceSASTokensModal();
 
     this.DeviceNames =
       this.State?.DevicesConfig?.Devices?.map((d) => d.DeviceName) || [];
 
-    this.setAddingDevice();
-
     this.setupFreeboard();
 
     if (this.State?.Telemetry) {
       this.convertToDate(this.State?.Telemetry.LastSyncedAt);
+      if(this.EnrollOpen === undefined)
+        this.EnrollOpen = this.isEnrollOpen();
     }
 
     this.setConnectedDevicesInfoCardFlex();
+  }
+
+  protected isEnrollOpen() {
+    if(this.State.DevicesConfig.TotalDevices > 0)
+      return false
+    return true;
   }
 
   protected setupStateHandler() {
@@ -597,25 +614,14 @@ export class LcuDeviceDataFlowManageElementComponent
       this.State = Object.assign(this.State, state);
 
       // console.log("State: ", this.State)
-
       this.handleStateChanged();
     });
-  }
-
-  protected setAddingDevice() {
-    if(this.State?.DevicesConfig?.Status?.Code === 1){
-      this.AddingDevice = true;
-    }
-    else{
-      this.AddingDevice = (this.State?.DevicesConfig?.Devices?.length || 0) <= 0;
-      
-    }
   }
 
   protected setConnectedDevicesInfoCardFlex() {
     const maxDeviceFlex = this.MaxDevicesReached ? '100%' : '50%';
 
-    this.ConnectedDevicesInfoCardFlex = this.AddingDevice ? maxDeviceFlex : '100%';
+    this.ConnectedDevicesInfoCardFlex = this.EnrollOpen ? maxDeviceFlex : '100%';
   }
 
   protected setDashboardIFrameURL() {
