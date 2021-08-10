@@ -106,7 +106,7 @@ export class LcuDeviceDataFlowManageElementComponent
        (this.DeviceNameToAdd === this.AddDeviceFormGroup.controls.deviceName.value)){
       errorText = ' Device name already exists \r\n';
     }
-    
+
     return errorText;
   }
 
@@ -201,7 +201,6 @@ export class LcuDeviceDataFlowManageElementComponent
       DeviceName: this.AddDeviceFormGroup.controls.deviceName.value,
     });
     this.EnrollOpen = false;
-
   }
 
   public EnrollNewDevice(){

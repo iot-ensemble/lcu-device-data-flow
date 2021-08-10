@@ -23,8 +23,6 @@ export class IoTEnsembleAdminStateContext extends StateContext<IoTEnsembleAdminS
 
   protected oldState: IoTEnsembleAdminState = {};
 
-  
-
   // API Methods
   public RemoveChildEnterprise(childEntLookup: string){
     console.log('Admin removing child ent: ', childEntLookup);
@@ -57,6 +55,7 @@ export class IoTEnsembleAdminStateContext extends StateContext<IoTEnsembleAdminS
   }
 
 
+  // tslint:disable-next-line:no-shadowed-variable
   public SetActiveEnterprise(lookup: string) {
     console.log('Setting active enterprise');
 

@@ -19,15 +19,15 @@ import { Observable } from 'rxjs';
   styleUrls: ['./telemetry-download-dialog.component.scss'],
 })
 export class TelemetryDownloadDialogComponent implements OnInit {
-  //Fields
+  // Fields
   protected coldQueryConfig: ColdQueryModel;
 
   protected deviceIDs: Array<string>;
 
-  //Properties
+  // Properties
   public State: IoTEnsembleState;
 
-  //Constructor
+  // Constructor
   constructor(
     @Inject(MAT_DIALOG_DATA) protected data: GenericModalModel,
     protected http: HttpClient,
@@ -38,12 +38,12 @@ export class TelemetryDownloadDialogComponent implements OnInit {
 
   }
 
-  //Life Cycle
+  // Life Cycle
   ngOnInit(): void {
     this.getDeviceIDs();
   }
 
-  //API Methods
+  // API Methods
 
   public Close() {
     this.dialogRef.close(null);
@@ -97,7 +97,7 @@ export class TelemetryDownloadDialogComponent implements OnInit {
     // })
   }
 
-  //Helpers
+  // Helpers
 
   protected getDeviceIDs() {
     this.data.Data.forEach((device) => {
